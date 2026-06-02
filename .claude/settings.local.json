@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cp \"/Users/hyoungwoosong/Downloads/stitch_streaklly 2/prd.md\" /Users/hyoungwoosong/MyProject/streakly/PRD.md)",
+      "Bash(flutter --version)",
+      "Bash(flutter create *)",
+      "Bash(flutter pub *)",
+      "Bash(flutter analyze *)",
+      "Bash(flutter devices *)",
+      "Bash(open -a Simulator)",
+      "Bash(xcrun simctl *)"
+    ]
+  }
+}
