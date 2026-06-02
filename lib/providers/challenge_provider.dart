@@ -6,8 +6,10 @@ import 'package:uuid/uuid.dart';
 import '../models/challenge.dart';
 import '../models/routine.dart';
 import '../models/daily_log.dart';
+import '../models/badge_event.dart';
 import '../services/migration_service.dart';
 import '../services/notification_service.dart';
+import 'badge_provider.dart';
 
 const String _challengesKey = 'challenges';
 const _uuid = Uuid();
@@ -16,6 +18,9 @@ class ChallengeProvider extends ChangeNotifier {
   List<Challenge> _challenges = [];
   int _selectedChallengeIndex = 0;
   bool _isLoading = false;
+  BadgeProvider? _badgeProvider;
+
+  void setBadgeProvider(BadgeProvider bp) => _badgeProvider = bp;
 
   List<Challenge> get challenges => _challenges;
   bool get isLoading => _isLoading;
@@ -162,6 +167,16 @@ class ChallengeProvider extends ChangeNotifier {
 
     await NotificationService.scheduleChallenge(challenge);
 
+    if (subRoutines.isNotEmpty && _badgeProvider != null) {
+      await _badgeProvider!.checkAndAward(
+        BadgeEvent(
+          type: BadgeEventType.subroutineCreated,
+          timestamp: DateTime.now(),
+        ),
+        _challenges,
+      );
+    }
+
     if (_isCloud) {
       try {
         await _insertChallengeToServer(challenge);
@@ -259,6 +274,10 @@ class ChallengeProvider extends ChangeNotifier {
     if (idx == -1) return;
 
     final challenge = _challenges[idx];
+    // 배지 판정을 위해 체크인 전 상태 캡처
+    final prevBestStreak = _challenges.fold<int>(0, (m, c) => c.streak > m ? c.streak : m);
+    final prevStreak = challenge.streak;
+
     final today = challenge.currentDay;
     final updated = List<int>.from(challenge.completedDays);
 
@@ -285,6 +304,27 @@ class ChallengeProvider extends ChangeNotifier {
       }).eq('id', challengeId);
     } else {
       await _saveLocalChallenges();
+    }
+
+    if (_badgeProvider != null && updated.contains(challenge.currentDay)) {
+      final payload = await _buildCheckInPayload(challengeId, prevBestStreak, prevStreak);
+      await _badgeProvider!.checkAndAward(
+        BadgeEvent(
+          type: BadgeEventType.checkIn,
+          timestamp: DateTime.now(),
+          payload: payload,
+        ),
+        _challenges,
+      );
+      if (nowCompleted) {
+        await _badgeProvider!.checkAndAward(
+          BadgeEvent(
+            type: BadgeEventType.challengeCompleted,
+            timestamp: DateTime.now(),
+          ),
+          _challenges,
+        );
+      }
     }
   }
 
@@ -313,6 +353,21 @@ class ChallengeProvider extends ChangeNotifier {
       await _db.from('daily_logs').insert(log.toSupabase());
     } else {
       await _saveLocalChallenges();
+    }
+
+    if (_badgeProvider != null) {
+      final consecutiveDays = await _updateLogStreak();
+      await _badgeProvider!.checkAndAward(
+        BadgeEvent(
+          type: BadgeEventType.logWritten,
+          timestamp: DateTime.now(),
+          payload: {
+            'contentLength': content.length,
+            'consecutiveLogDays': consecutiveDays,
+          },
+        ),
+        _challenges,
+      );
     }
   }
 
@@ -427,5 +482,178 @@ class ChallengeProvider extends ChangeNotifier {
       if (challenge.isCompleted) badges++;
     }
     return badges;
+  }
+
+  // ─────────────────────────────────────────
+  // 배지 payload 헬퍼
+  // ─────────────────────────────────────────
+
+  static const _bp = 'badge_counter_';
+
+  Future<Map<String, dynamic>> _buildCheckInPayload(
+    String challengeId,
+    int prevBestStreak,
+    int prevStreak,
+  ) async {
+    final prefs = await SharedPreferences.getInstance();
+    final now = DateTime.now();
+    final todayStr = '${now.year}-${now.month}-${now.day}';
+
+    // 새벽 체크인 (6시 이전)
+    if (now.hour < 6) {
+      await prefs.setInt('${_bp}early', (prefs.getInt('${_bp}early') ?? 0) + 1);
+    }
+
+    // 야간 체크인 (자정 00시)
+    if (now.hour == 0) {
+      await prefs.setInt('${_bp}late_night', (prefs.getInt('${_bp}late_night') ?? 0) + 1);
+    }
+
+    // 23:59 체크인
+    if (now.hour == 23 && now.minute == 59) {
+      await prefs.setInt('${_bp}midnight', (prefs.getInt('${_bp}midnight') ?? 0) + 1);
+    }
+
+    // 아침 연속 체크인 (9시 이전)
+    if (now.hour < 9) {
+      final lastMorning = prefs.getString('${_bp}last_morning') ?? '';
+      final yesterdayStr = () {
+        final y = now.subtract(const Duration(days: 1));
+        return '${y.year}-${y.month}-${y.day}';
+      }();
+      int morningStreak = prefs.getInt('${_bp}morning_streak') ?? 0;
+      if (lastMorning == yesterdayStr) {
+        morningStreak++;
+      } else if (lastMorning != todayStr) {
+        morningStreak = 1;
+      }
+      await prefs.setInt('${_bp}morning_streak', morningStreak);
+      await prefs.setString('${_bp}last_morning', todayStr);
+    }
+
+    // 알림 시간 ±15분 이내 체크인
+    final challenge = _challenges.firstWhere(
+      (c) => c.id == challengeId,
+      orElse: () => _challenges.first,
+    );
+    if (challenge.reminderTime.isNotEmpty) {
+      try {
+        final parts = challenge.reminderTime.replaceAll(' AM', '').replaceAll(' PM', '').split(':');
+        int h = int.parse(parts[0]);
+        final m = int.parse(parts[1]);
+        if (challenge.reminderTime.contains('PM') && h != 12) h += 12;
+        if (challenge.reminderTime.contains('AM') && h == 12) h = 0;
+        final reminderMinutes = h * 60 + m;
+        final nowMinutes = now.hour * 60 + now.minute;
+        if ((nowMinutes - reminderMinutes).abs() <= 15) {
+          await prefs.setInt('${_bp}on_time', (prefs.getInt('${_bp}on_time') ?? 0) + 1);
+        }
+      } catch (_) {}
+    }
+
+    // 주말/평일 스트릭 (토=6, 일=7)
+    final weekday = now.weekday;
+    if (weekday == 6 || weekday == 7) {
+      final lastWeekendWeek = prefs.getInt('${_bp}last_weekend_week') ?? -1;
+      final currentWeek = _weekNumber(now);
+      if (currentWeek != lastWeekendWeek) {
+        final prevWeekend = prefs.getInt('${_bp}last_weekend_week') ?? -1;
+        int weekendWeeks = prefs.getInt('${_bp}weekend_weeks') ?? 0;
+        if (prevWeekend == currentWeek - 1) {
+          weekendWeeks++;
+        } else {
+          weekendWeeks = 1;
+        }
+        await prefs.setInt('${_bp}weekend_weeks', weekendWeeks);
+        await prefs.setInt('${_bp}last_weekend_week', currentWeek);
+      }
+    } else {
+      final lastWeekdayWeek = prefs.getInt('${_bp}last_weekday_week') ?? -1;
+      final currentWeek = _weekNumber(now);
+      if (currentWeek != lastWeekdayWeek) {
+        final prevWeekday = prefs.getInt('${_bp}last_weekday_week') ?? -1;
+        int weekdayWeeks = prefs.getInt('${_bp}weekday_weeks') ?? 0;
+        if (prevWeekday == currentWeek - 1) {
+          weekdayWeeks++;
+        } else {
+          weekdayWeeks = 1;
+        }
+        await prefs.setInt('${_bp}weekday_weeks', weekdayWeeks);
+        await prefs.setInt('${_bp}last_weekday_week', currentWeek);
+      }
+    }
+
+    // 병렬 체크인 (2개 이상 동시 진행 챌린지 모두 체크인)
+    int parallelDays = prefs.getInt('${_bp}parallel_days') ?? 0;
+    final lastParallel = prefs.getString('${_bp}last_parallel') ?? '';
+    if (lastParallel != todayStr) {
+      final active = todaysChallenges;
+      if (active.length >= 2 && active.every((c) => c.isTodayCompleted)) {
+        parallelDays++;
+        await prefs.setInt('${_bp}parallel_days', parallelDays);
+        await prefs.setString('${_bp}last_parallel', todayStr);
+      }
+    }
+
+    // 풀 스윕 (메인+서브 전부 완료)
+    int fullSweep = prefs.getInt('${_bp}full_sweep') ?? 0;
+    final lastSweep = prefs.getString('${_bp}last_sweep') ?? '';
+    if (lastSweep != todayStr) {
+      final hasSubs = challenge.subRoutines.isNotEmpty;
+      final allSubsDone = hasSubs &&
+          challenge.subRoutines.every((s) => challenge.isSubRoutineCompletedToday(s.id));
+      if (challenge.isTodayCompleted && (!hasSubs || allSubsDone)) {
+        fullSweep++;
+        await prefs.setInt('${_bp}full_sweep', fullSweep);
+        await prefs.setString('${_bp}last_sweep', todayStr);
+      }
+    }
+
+    // 이전 최고 스트릭 갱신
+    final storedBest = prefs.getInt('${_bp}best_streak') ?? 0;
+    final currentBest = _challenges.fold<int>(0, (m, c) => c.streak > m ? c.streak : m);
+    if (currentBest > storedBest) {
+      await prefs.setInt('${_bp}best_streak', currentBest);
+    }
+
+    // streakBrokeRecently: 이전 스트릭이 0이었고 완료된 날이 있었으면 부활 중
+    final streakBrokeRecently = prevStreak == 0 && challenge.completedDays.isNotEmpty;
+
+    return {
+      'prevBestStreak': prevBestStreak,
+      'streakBrokeRecently': streakBrokeRecently,
+      'earlyCheckinCount': prefs.getInt('${_bp}early') ?? 0,
+      'morningCheckinStreak': prefs.getInt('${_bp}morning_streak') ?? 0,
+      'lateNightCheckinCount': prefs.getInt('${_bp}late_night') ?? 0,
+      'onTimeCheckinCount': prefs.getInt('${_bp}on_time') ?? 0,
+      'weekendStreakWeeks': prefs.getInt('${_bp}weekend_weeks') ?? 0,
+      'weekdayStreakWeeks': prefs.getInt('${_bp}weekday_weeks') ?? 0,
+      'midnightCheckinCount': prefs.getInt('${_bp}midnight') ?? 0,
+      'parallelCheckinDays': parallelDays,
+      'fullSweepCount': fullSweep,
+    };
+  }
+
+  Future<int> _updateLogStreak() async {
+    final prefs = await SharedPreferences.getInstance();
+    final now = DateTime.now();
+    final todayStr = '${now.year}-${now.month}-${now.day}';
+    final yesterday = now.subtract(const Duration(days: 1));
+    final yesterdayStr = '${yesterday.year}-${yesterday.month}-${yesterday.day}';
+    final lastLog = prefs.getString('${_bp}last_log_date') ?? '';
+    int streak = prefs.getInt('${_bp}log_streak') ?? 0;
+    if (lastLog == yesterdayStr) {
+      streak++;
+    } else if (lastLog != todayStr) {
+      streak = 1;
+    }
+    await prefs.setInt('${_bp}log_streak', streak);
+    await prefs.setString('${_bp}last_log_date', todayStr);
+    return streak;
+  }
+
+  int _weekNumber(DateTime date) {
+    final firstDayOfYear = DateTime(date.year, 1, 1);
+    return ((date.difference(firstDayOfYear).inDays + firstDayOfYear.weekday) / 7).ceil();
   }
 }

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import '../../theme/app_theme.dart';
 import '../../models/challenge.dart';
+import '../../providers/badge_provider.dart';
 import '../../providers/challenge_provider.dart';
 import '../../providers/settings_provider.dart';
+import '../../services/badge_catalog.dart';
+import '../../theme/app_theme.dart';
 import '../../widgets/circular_progress.dart';
+import 'badge_collection_screen.dart';
 import 'completed_challenge_detail_screen.dart';
 
 class RecordsScreen extends StatelessWidget {
@@ -16,8 +19,8 @@ class RecordsScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(title: Text(context.watch<SettingsProvider>().strings.recordsTitle)),
-      body: Consumer2<ChallengeProvider, SettingsProvider>(
-        builder: (context, challengeProvider, settingsProvider, _) {
+      body: Consumer3<ChallengeProvider, SettingsProvider, BadgeProvider>(
+        builder: (context, challengeProvider, settingsProvider, badgeProvider, _) {
           final s = settingsProvider.strings;
           final userName = settingsProvider.userName;
           final successRate = challengeProvider.overallSuccessRate;
@@ -31,7 +34,9 @@ class RecordsScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _ProfileHeader(userName: userName),
-                const SizedBox(height: 24),
+                const SizedBox(height: 20),
+                _BadgeSummaryCard(badgeProvider: badgeProvider),
+                const SizedBox(height: 20),
                 _SuccessRateChart(successRate: successRate),
                 const SizedBox(height: 16),
                 Row(
@@ -106,6 +111,106 @@ class RecordsScreen extends StatelessWidget {
             ),
           );
         },
+      ),
+    );
+  }
+}
+
+class _BadgeSummaryCard extends StatelessWidget {
+  final BadgeProvider badgeProvider;
+
+  const _BadgeSummaryCard({required this.badgeProvider});
+
+  @override
+  Widget build(BuildContext context) {
+    final earned = badgeProvider.earned;
+    final total = BadgeCatalog.all.length;
+    final recentBadges = earned.toList()
+      ..sort((a, b) => b.earnedAt.compareTo(a.earnedAt));
+    final displayBadges = recentBadges.take(5).toList();
+
+    return GestureDetector(
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const BadgeCollectionScreen()),
+      ),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: AppColors.border, width: 1.5),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  '배지 컬렉션',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+                Row(
+                  children: [
+                    Text(
+                      '${earned.length} / $total',
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    const Icon(
+                      Icons.chevron_right,
+                      color: AppColors.textSecondary,
+                      size: 18,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(4),
+              child: LinearProgressIndicator(
+                value: total > 0 ? earned.length / total : 0,
+                minHeight: 6,
+                backgroundColor: Colors.grey[200],
+                valueColor:
+                    const AlwaysStoppedAnimation<Color>(AppColors.primary),
+              ),
+            ),
+            if (displayBadges.isNotEmpty) ...[
+              const SizedBox(height: 12),
+              Row(
+                children: displayBadges.map((ub) {
+                  final def = BadgeCatalog.findById(ub.badgeId);
+                  if (def == null) return const SizedBox.shrink();
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: Tooltip(
+                      message: def.nameKo,
+                      child: Text(def.icon,
+                          style: const TextStyle(fontSize: 28)),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ] else ...[
+              const SizedBox(height: 12),
+              Text(
+                '아직 획득한 배지가 없습니다. 체크인을 시작해보세요!',
+                style: TextStyle(fontSize: 13, color: Colors.grey[500]),
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }

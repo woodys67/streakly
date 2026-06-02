@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'theme/app_theme.dart';
 import 'providers/auth_provider.dart';
+import 'providers/badge_provider.dart';
 import 'providers/challenge_provider.dart';
 import 'providers/settings_provider.dart';
 import 'screens/auth/landing_screen.dart';
@@ -10,6 +11,7 @@ import 'screens/home/home_screen.dart';
 import 'screens/challenge/challenge_screen.dart';
 import 'screens/records/records_screen.dart';
 import 'screens/settings/settings_screen.dart';
+import 'widgets/badge_unlock_dialog.dart';
 import 'widgets/bottom_nav.dart';
 
 class StreaklyApp extends StatelessWidget {
@@ -20,7 +22,11 @@ class StreaklyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
-        ChangeNotifierProvider(create: (_) => ChallengeProvider()),
+        ChangeNotifierProvider(create: (_) => BadgeProvider()),
+        ChangeNotifierProxyProvider<BadgeProvider, ChallengeProvider>(
+          create: (_) => ChallengeProvider(),
+          update: (_, badge, challenge) => challenge!..setBadgeProvider(badge),
+        ),
         ChangeNotifierProvider(create: (_) => SettingsProvider()),
       ],
       child: Consumer<SettingsProvider>(
@@ -81,6 +87,7 @@ class _AppInitializerState extends State<_AppInitializer> {
     final auth = context.read<AuthProvider>();
     final challenges = context.read<ChallengeProvider>();
     final settings = context.read<SettingsProvider>();
+    final badges = context.read<BadgeProvider>();
 
     final prefs = await SharedPreferences.getInstance();
     _seenOnboarding = prefs.getBool('has_seen_onboarding') ?? false;
@@ -88,6 +95,7 @@ class _AppInitializerState extends State<_AppInitializer> {
     await Future.wait([
       challenges.loadChallenges(),
       settings.loadSettings(),
+      badges.load(),
     ]);
     if (mounted) {
       _authProvider = auth;
@@ -151,6 +159,7 @@ class _MainNavigation extends StatefulWidget {
 
 class _MainNavigationState extends State<_MainNavigation> {
   int _currentIndex = 0;
+  bool _showingBadgeDialog = false;
 
   static const List<Widget> _screens = [
     HomeScreen(),
@@ -158,6 +167,42 @@ class _MainNavigationState extends State<_MainNavigation> {
     RecordsScreen(),
     SettingsScreen(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<BadgeProvider>().addListener(_onBadgeUpdate);
+    });
+  }
+
+  @override
+  void dispose() {
+    context.read<BadgeProvider>().removeListener(_onBadgeUpdate);
+    super.dispose();
+  }
+
+  void _onBadgeUpdate() {
+    if (!mounted) return;
+    final bp = context.read<BadgeProvider>();
+    if (bp.hasPendingUnlock && !_showingBadgeDialog) {
+      setState(() => _showingBadgeDialog = true);
+      showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => BadgeUnlockDialog(
+          badge: bp.nextUnlock!,
+          onDismiss: () {
+            Navigator.of(context).pop();
+            bp.consumeNextUnlock();
+            if (mounted) setState(() => _showingBadgeDialog = false);
+          },
+        ),
+      ).then((_) {
+        if (mounted) setState(() => _showingBadgeDialog = false);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
