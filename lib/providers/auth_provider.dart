@@ -261,13 +261,17 @@ class AuthProvider extends ChangeNotifier {
     _setLoading(true);
     _error = null;
     try {
-      // Supabase client-side 계정 삭제는 Admin API 필요 → Edge Function으로 처리 예정
-      // 현재는 로컬 데이터 초기화 후 로그아웃 처리
+      // delete_user() PostgreSQL 함수로 auth.users에서 본인 계정 삭제
+      // ON DELETE CASCADE → public.users → challenges → sub_routines, daily_logs 자동 삭제
+      await _client.rpc('delete_user');
       await _client.auth.signOut();
       _user = null;
       return true;
     } on AuthException catch (e) {
       _error = e.message;
+      return false;
+    } catch (e) {
+      _error = e.toString();
       return false;
     } finally {
       _setLoading(false);

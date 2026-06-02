@@ -200,9 +200,21 @@ class SettingsScreen extends StatelessWidget {
 
     if (confirmed == true && context.mounted) {
       final challengeProvider = context.read<ChallengeProvider>();
-      await auth.deleteAccount();
-      await settings.resetApp();
-      await challengeProvider.loadChallenges();
+      final badgeProvider = context.read<BadgeProvider>();
+
+      final success = await auth.deleteAccount();
+      if (success) {
+        await settings.resetApp();
+        await challengeProvider.clearLocalCache();
+        await badgeProvider.resetLocal();
+      } else if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(auth.error ?? '계정 삭제에 실패했습니다.'),
+            backgroundColor: AppColors.error,
+          ),
+        );
+      }
     }
   }
 
