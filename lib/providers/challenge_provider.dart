@@ -418,6 +418,21 @@ class ChallengeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// 로그인 유저의 Supabase 데이터 전체 삭제 (앱 초기화용).
+  /// challenges 삭제 시 ON DELETE CASCADE로 sub_routines, daily_logs 등 자동 삭제.
+  Future<void> deleteAllServerData() async {
+    final user = _currentUser;
+    if (user == null) return;
+    try {
+      await _db.from('challenges').delete().eq('user_id', user.id);
+      await _db.from('user_badges').delete().eq('user_id', user.id);
+    } catch (e) {
+      debugPrint('[Streakly] 서버 데이터 삭제 오류: $e');
+    }
+    _challenges = [];
+    notifyListeners();
+  }
+
   // ─────────────────────────────────────────
   // 게스트 → 클라우드 마이그레이션
   // ─────────────────────────────────────────

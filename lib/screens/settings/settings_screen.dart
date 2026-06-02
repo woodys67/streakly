@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../theme/app_theme.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/settings_provider.dart';
+import '../../providers/badge_provider.dart';
 import '../../providers/challenge_provider.dart';
 import '../../services/notification_service.dart';
 import '../auth/sign_in_screen.dart';
@@ -157,8 +158,18 @@ class SettingsScreen extends StatelessWidget {
 
     if (confirmed == true && context.mounted) {
       final challengeProvider = context.read<ChallengeProvider>();
+      final auth = context.read<AuthProvider>();
+
+      // 로그인 유저는 서버 데이터도 삭제
+      if (auth.isAuthenticated) {
+        await challengeProvider.deleteAllServerData();
+      }
+
       await settings.resetApp();
-      await challengeProvider.loadChallenges();
+      await challengeProvider.clearLocalCache();
+      if (context.mounted) {
+        context.read<BadgeProvider>().resetLocal();
+      }
     }
   }
 

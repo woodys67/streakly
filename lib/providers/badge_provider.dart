@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../models/badge_definition.dart';
 import '../models/badge_evaluation_context.dart';
 import '../models/badge_event.dart';
@@ -54,6 +55,15 @@ class BadgeProvider extends ChangeNotifier {
       _pendingUnlocks.removeFirst();
       notifyListeners();
     }
+  }
+
+  /// 앱 초기화 시 로컬 배지 데이터 리셋.
+  Future<void> resetLocal() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('user_badges');
+    _earned = [];
+    _pendingUnlocks.clear();
+    notifyListeners();
   }
 
   bool hasEarned(String badgeId) => _earned.any((b) => b.badgeId == badgeId);
