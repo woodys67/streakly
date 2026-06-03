@@ -10,13 +10,38 @@ class NotificationService {
   static Future<void> init() async {
     const android = AndroidInitializationSettings('@mipmap/ic_launcher');
     const ios = DarwinInitializationSettings(
-      requestAlertPermission: true,
-      requestBadgePermission: true,
-      requestSoundPermission: true,
+      requestAlertPermission: false,
+      requestBadgePermission: false,
+      requestSoundPermission: false,
     );
     await _plugin.initialize(
       const InitializationSettings(android: android, iOS: ios),
     );
+    await requestPermission();
+  }
+
+  /// iOS/Android 알림 권한을 요청하고 허용 여부를 반환한다.
+  /// iOS는 최초 1회만 다이얼로그를 표시하고 이후엔 현재 상태를 반환한다.
+  static Future<bool> requestPermission() async {
+    final ios = _plugin
+        .resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>();
+    if (ios != null) {
+      final granted = await ios.requestPermissions(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+      return granted ?? false;
+    }
+
+    final android = _plugin
+        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+    if (android != null) {
+      final granted = await android.requestNotificationsPermission();
+      return granted ?? false;
+    }
+
+    return true;
   }
 
   static Future<void> scheduleChallenge(Challenge c) async {

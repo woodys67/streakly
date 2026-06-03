@@ -563,11 +563,20 @@ class _SettingsCard extends StatelessWidget {
             title: s.notificationSettings,
             value: settings.notificationsEnabled,
             onChanged: (_) async {
+              final challenges = context.read<ChallengeProvider>().challenges;
               await settings.toggleNotifications();
               if (settings.notificationsEnabled) {
-                await NotificationService.rescheduleAll(
-                  context.read<ChallengeProvider>().challenges,
-                );
+                final granted = await NotificationService.requestPermission();
+                if (!granted) {
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(s.notificationPermissionDenied)),
+                    );
+                  }
+                  await settings.toggleNotifications();
+                  return;
+                }
+                await NotificationService.rescheduleAll(challenges);
               }
             },
           ),

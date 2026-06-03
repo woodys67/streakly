@@ -444,6 +444,7 @@ class AppStrings {
   );
   String get languages => _s(en:'Languages', ko:'언어', ja:'言語', zhCN:'语言', zhTW:'語言', es:'Idiomas', de:'Sprachen', pt:'Idiomas', ru:'Языки');
   String get notificationSettings => _s(en:'Notification Settings', ko:'알림 설정', ja:'通知設定', zhCN:'通知设置', zhTW:'通知設定', es:'Notificaciones', de:'Benachrichtigungen', pt:'Notificações', ru:'Уведомления');
+  String get notificationPermissionDenied => _s(en:'Notification permission denied. Please enable it in Settings.', ko:'알림 권한이 거부되었습니다. 설정에서 허용해주세요.', ja:'通知の権限が拒否されました。設定から許可してください。', zhCN:'通知权限被拒绝，请在设置中开启。', zhTW:'通知權限被拒絕，請在設定中開啟。', es:'Permiso de notificación denegado. Actívalo en Ajustes.', de:'Benachrichtigungsberechtigung verweigert. Bitte in den Einstellungen aktivieren.', pt:'Permissão de notificação negada. Ative nas Configurações.', ru:'Разрешение на уведомления отклонено. Включите в настройках.');
   String get themeSettings => _s(en:'Theme Settings', ko:'테마 설정', ja:'テーマ設定', zhCN:'主题设置', zhTW:'主題設定', es:'Tema', de:'Design', pt:'Tema', ru:'Тема');
   String get darkMode => _s(en:'Dark Mode', ko:'다크 모드', ja:'ダークモード', zhCN:'深色模式', zhTW:'深色模式', es:'Modo oscuro', de:'Dunkelmodus', pt:'Modo escuro', ru:'Тёмная тема');
   String get lightMode => _s(en:'Light Mode', ko:'라이트 모드', ja:'ライトモード', zhCN:'浅色模式', zhTW:'淺色模式', es:'Modo claro', de:'Hellmodus', pt:'Modo claro', ru:'Светлая тема');
