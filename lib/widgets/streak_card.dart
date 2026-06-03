@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../theme/app_theme.dart';
-import '../models/challenge.dart';
+import '../providers/challenge_provider.dart';
 import '../providers/settings_provider.dart';
 
 class StreakCard extends StatelessWidget {
-  final Challenge challenge;
-
-  const StreakCard({super.key, required this.challenge});
+  const StreakCard({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final streak = challenge.streak;
-    final currentDay = challenge.currentDay;
+    final willpower = context.watch<ChallengeProvider>().willpower;
     final s = context.watch<SettingsProvider>().strings;
 
     return Container(
@@ -27,13 +24,13 @@ class StreakCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Image.asset('assets/images/flame.png', width: 32, height: 32),
+              const Text('⚡', style: TextStyle(fontSize: 28)),
               const SizedBox(width: 12),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    s.daysOnFire(streak),
+                    '${s.willpower} $willpower',
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -41,7 +38,7 @@ class StreakCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    s.currentStreak,
+                    s.willpowerSubtitle,
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ],
@@ -49,78 +46,124 @@ class StreakCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          _DayDots(
-            targetDays: challenge.targetDays,
-            completedDays: challenge.completedDays,
-            currentDay: currentDay,
-          ),
+          _LevelGauge(willpower: willpower, s: s),
         ],
       ),
     );
   }
 }
 
-class _DayDots extends StatelessWidget {
-  final int targetDays;
-  final List<int> completedDays;
-  final int currentDay;
+class _LevelGauge extends StatelessWidget {
+  final int willpower;
+  final dynamic s;
 
-  const _DayDots({
-    required this.targetDays,
-    required this.completedDays,
-    required this.currentDay,
-  });
+  const _LevelGauge({required this.willpower, required this.s});
+
+  // 레벨 진입 점수 테이블 (인덱스 0 = Lv.1 진입, 인덱스 25 = 만렙 완성)
+  static const List<int> _thresholds = [
+       0,  10,  22,  37,  54,   // Lv.1–5  🌱 씨앗
+      74,  96, 121, 148, 178,   // Lv.6–10 🌿 새싹
+     210, 245, 282, 322, 365,   // Lv.11–15 🌳 성장
+     410, 458, 508, 561, 616,   // Lv.16–20 🌸 결실
+     674, 734, 797, 862, 930,   // Lv.21–25 ⚡ 전설
+    1000,
+  ];
+
+  int get _level {
+    final capped = willpower.clamp(0, 1000);
+    for (int i = _thresholds.length - 2; i >= 0; i--) {
+      if (capped >= _thresholds[i]) return i + 1;
+    }
+    return 1;
+  }
+
+  double get _progress {
+    if (willpower >= 1000) return 1.0;
+    final lv = _level;
+    final current = _thresholds[lv - 1];
+    final next = _thresholds[lv];
+    return (willpower - current) / (next - current);
+  }
+
+  String get _tierEmoji {
+    final lv = _level;
+    if (lv <= 5) return '🌱';
+    if (lv <= 10) return '🌿';
+    if (lv <= 15) return '🌳';
+    if (lv <= 20) return '🌸';
+    return '⚡';
+  }
+
+  String _tierName() {
+    final lv = _level;
+    if (lv <= 5) return s.tierSeed;
+    if (lv <= 10) return s.tierSprout;
+    if (lv <= 15) return s.tierGrowth;
+    if (lv <= 20) return s.tierFruition;
+    return s.tierLegend;
+  }
 
   @override
   Widget build(BuildContext context) {
-    const dotsToShow = 7;
-    final startDay = (currentDay - dotsToShow + 1).clamp(1, currentDay);
-    final days = List.generate(
-      dotsToShow,
-      (i) => startDay + i,
-    ).where((d) => d <= targetDays).toList();
+    final lv = _level;
+    final isMax = willpower >= 1000;
+    final nextThreshold = isMax ? 1000 : _thresholds[lv];
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: days.map((day) {
-        final isCompleted = completedDays.contains(day);
-        final isToday = day == currentDay;
-        return Column(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Container(
-              width: 28,
-              height: 28,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: isCompleted
-                    ? AppColors.primary
-                    : isToday
-                        ? AppColors.primary.withValues(alpha: 0.2)
-                        : AppColors.border,
-                border: isToday
-                    ? Border.all(color: AppColors.primary, width: 2)
-                    : null,
-              ),
-              child: isCompleted
-                  ? const Icon(
-                      Icons.check,
-                      color: AppColors.white,
-                      size: 16,
-                    )
-                  : null,
+            Row(
+              children: [
+                Text(
+                  '$_tierEmoji ${_tierName()}',
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+                const SizedBox(width: 6),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    'Lv.$lv',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 4),
             Text(
-              'D$day',
+              isMax ? 'MAX ✨' : '$willpower / $nextThreshold',
               style: TextStyle(
-                fontSize: 10,
-                color: isToday ? AppColors.primary : AppColors.textSecondary,
-                fontWeight: isToday ? FontWeight.bold : FontWeight.normal,
+                fontSize: 12,
+                color: isMax ? AppColors.primary : AppColors.textSecondary,
+                fontWeight: isMax ? FontWeight.bold : FontWeight.normal,
               ),
             ),
           ],
-        );
-      }).toList(),
+        ),
+        const SizedBox(height: 8),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(4),
+          child: LinearProgressIndicator(
+            value: _progress,
+            backgroundColor: AppColors.border,
+            valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+            minHeight: 8,
+          ),
+        ),
+      ],
     );
   }
 }

@@ -34,7 +34,11 @@ class _NewChallengeScreenState extends State<NewChallengeScreen> {
     return '$hour:$minute $period';
   }
 
+  bool get _subRoutinesHaveTime =>
+      _subRoutines.any((sr) => sr.time.isNotEmpty && sr.alertEnabled);
+
   Future<void> _pickReminderTime() async {
+    if (_subRoutinesHaveTime) return;
     final picked = await showTimePicker(
       context: context,
       initialTime: _reminderTime ?? const TimeOfDay(hour: 8, minute: 0),
@@ -59,7 +63,12 @@ class _NewChallengeScreenState extends State<NewChallengeScreen> {
       backgroundColor: Colors.transparent,
       builder: (_) => AddSubroutineModal(
         onSave: (subroutine) {
-          setState(() => _subRoutines.add(subroutine));
+          setState(() {
+            _subRoutines.add(subroutine);
+            if (subroutine.time.isNotEmpty && subroutine.alertEnabled) {
+              _reminderTime = null;
+            }
+          });
         },
       ),
     );
@@ -93,16 +102,27 @@ class _NewChallengeScreenState extends State<NewChallengeScreen> {
     }
 
     if (!mounted) return;
-    await context.read<ChallengeProvider>().addChallenge(
-          name: name,
-          targetDays: days,
-          subRoutines: _subRoutines,
-          reminderTime: _formattedReminderTime,
-          repeatDays: repeatDays,
-          notes: _notesController.text.trim(),
-        );
+    final hadSubRoutines = _subRoutines.isNotEmpty;
+    // pop() 전에 provider 참조를 캡처 — pop 이후 context가 해제될 수 있으므로
+    final cp = context.read<ChallengeProvider>();
 
-    if (mounted) Navigator.of(context).pop();
+    await cp.addChallenge(
+      name: name,
+      targetDays: days,
+      subRoutines: _subRoutines,
+      reminderTime: _subRoutinesHaveTime ? '' : _formattedReminderTime,
+      repeatDays: repeatDays,
+      notes: _notesController.text.trim(),
+    );
+
+    if (!mounted) return;
+    Navigator.of(context).pop();
+
+    // Navigator.pop() 이후 배지 체크: addChallenge() 내부에서 실행하면
+    // showDialog()가 스택에 쌓인 뒤 pop()이 다이얼로그를 닫아버리는 문제 방지
+    if (hadSubRoutines) {
+      cp.awardSubRoutineCreatedBadge();
+    }
   }
 
   @override
@@ -172,30 +192,36 @@ class _NewChallengeScreenState extends State<NewChallengeScreen> {
             const SizedBox(height: 24),
             _SectionLabel(label: s.reminderTimeLabel),
             const SizedBox(height: 8),
-            GestureDetector(
-              onTap: _pickReminderTime,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-                decoration: BoxDecoration(
-                  color: AppColors.white,
-                  border: Border.all(color: AppColors.border),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  children: [
-                    const Icon(Icons.access_time,
-                        color: AppColors.textSecondary, size: 20),
-                    const SizedBox(width: 12),
-                    Text(
-                      _reminderTime != null ? _formattedReminderTime : '08:00 AM',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: _reminderTime != null
-                            ? AppColors.textPrimary
-                            : AppColors.textSecondary,
+            Opacity(
+              opacity: _subRoutinesHaveTime ? 0.4 : 1.0,
+              child: GestureDetector(
+                onTap: _subRoutinesHaveTime ? null : _pickReminderTime,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                  decoration: BoxDecoration(
+                    color: _subRoutinesHaveTime ? AppColors.border : AppColors.white,
+                    border: Border.all(color: AppColors.border),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        _subRoutinesHaveTime ? Icons.notifications_off_outlined : Icons.access_time,
+                        color: AppColors.textSecondary,
+                        size: 20,
                       ),
-                    ),
-                  ],
+                      const SizedBox(width: 12),
+                      Text(
+                        _subRoutinesHaveTime
+                            ? s.reminderDisabledHint
+                            : (_reminderTime != null ? _formattedReminderTime : '08:00 AM'),
+                        style: TextStyle(
+                          fontSize: _subRoutinesHaveTime ? 13 : 16,
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -318,9 +344,27 @@ class _SubRoutineTile extends StatelessWidget {
                   ),
                 ),
                 if (subroutine.time.isNotEmpty)
-                  Text(
-                    subroutine.time,
-                    style: Theme.of(context).textTheme.bodySmall,
+                  Row(
+                    children: [
+                      Icon(
+                        subroutine.alertEnabled
+                            ? Icons.notifications_active_outlined
+                            : Icons.notifications_off_outlined,
+                        size: 12,
+                        color: subroutine.alertEnabled
+                            ? AppColors.success
+                            : AppColors.textSecondary,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        subroutine.time,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: subroutine.alertEnabled
+                              ? AppColors.success
+                              : AppColors.textSecondary,
+                        ),
+                      ),
+                    ],
                   ),
               ],
             ),

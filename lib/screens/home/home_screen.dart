@@ -50,7 +50,6 @@ class HomeScreen extends StatelessWidget {
           final allActive = provider.activeChallenges;
           final todaysChallenges = provider.todaysChallenges;
           final weeklyRate = provider.getWeeklyCompletionRate();
-          final badges = provider.getBadgesEarned();
 
           return SingleChildScrollView(
             padding: const EdgeInsets.all(20),
@@ -64,30 +63,14 @@ class HomeScreen extends StatelessWidget {
                 ] else if (todaysChallenges.isEmpty) ...[
                   _RestDayState(s: s),
                   const SizedBox(height: 24),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _StatCard(
-                          title: s.weeklyCompletion,
-                          value: '$weeklyRate%',
-                          icon: Icons.calendar_today_outlined,
-                          color: AppColors.primary,
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: _StatCard(
-                          title: s.badgesEarned,
-                          value: '$badges',
-                          icon: Icons.emoji_events_outlined,
-                          color: AppColors.darkAccent,
-                          onTap: () => _showBadgesSheet(context, provider, s),
-                        ),
-                      ),
-                    ],
+                  _StatCard(
+                    title: s.weeklyCompletion,
+                    value: '$weeklyRate%',
+                    icon: Icons.calendar_today_outlined,
+                    color: AppColors.primary,
                   ),
                 ] else ...[
-                  StreakCard(challenge: todaysChallenges.first),
+                  const StreakCard(),
                   const SizedBox(height: 24),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -122,27 +105,11 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _StatCard(
-                          title: s.weeklyCompletion,
-                          value: '$weeklyRate%',
-                          icon: Icons.calendar_today_outlined,
-                          color: AppColors.primary,
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: _StatCard(
-                          title: s.badgesEarned,
-                          value: '$badges',
-                          icon: Icons.emoji_events_outlined,
-                          color: AppColors.darkAccent,
-                          onTap: () => _showBadgesSheet(context, provider, s),
-                        ),
-                      ),
-                    ],
+                  _StatCard(
+                    title: s.weeklyCompletion,
+                    value: '$weeklyRate%',
+                    icon: Icons.calendar_today_outlined,
+                    color: AppColors.primary,
                   ),
                 ],
               ],
@@ -243,21 +210,18 @@ class _StatCard extends StatelessWidget {
   final String value;
   final IconData icon;
   final Color color;
-  final VoidCallback? onTap;
 
   const _StatCard({
     required this.title,
     required this.value,
     required this.icon,
     required this.color,
-    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
+    return Container(
+        width: double.infinity,
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: color.withValues(alpha: 0.08),
@@ -286,7 +250,6 @@ class _StatCard extends StatelessWidget {
             ),
           ],
         ),
-      ),
     );
   }
 }
@@ -418,149 +381,3 @@ class _ChallengeModeSelector extends StatelessWidget {
   }
 }
 
-void _showBadgesSheet(
-    BuildContext context, ChallengeProvider provider, dynamic s) {
-  showModalBottomSheet(
-    context: context,
-    isScrollControlled: true,
-    backgroundColor: Colors.transparent,
-    builder: (_) => _BadgesSheet(provider: provider, s: s),
-  );
-}
-
-class _BadgeItem {
-  final String title;
-  final String challengeName;
-  final IconData icon;
-  final Color color;
-
-  const _BadgeItem({
-    required this.title,
-    required this.challengeName,
-    required this.icon,
-    required this.color,
-  });
-}
-
-List<_BadgeItem> _computeBadges(ChallengeProvider provider, dynamic s) {
-  final result = <_BadgeItem>[];
-  for (final c in provider.challenges) {
-    if (c.completedDays.length >= 7) {
-      result.add(_BadgeItem(
-        title: s.badge7Days,
-        challengeName: c.name,
-        icon: Icons.local_fire_department,
-        color: AppColors.primary,
-      ));
-    }
-    if (c.completedDays.length >= 14) {
-      result.add(_BadgeItem(
-        title: s.badge14Days,
-        challengeName: c.name,
-        icon: Icons.bolt,
-        color: AppColors.darkAccent,
-      ));
-    }
-    if (c.isCompleted) {
-      result.add(_BadgeItem(
-        title: s.badgeCompleted,
-        challengeName: c.name,
-        icon: Icons.emoji_events,
-        color: AppColors.success,
-      ));
-    }
-  }
-  return result;
-}
-
-class _BadgesSheet extends StatelessWidget {
-  final ChallengeProvider provider;
-  final dynamic s;
-
-  const _BadgesSheet({required this.provider, required this.s});
-
-  @override
-  Widget build(BuildContext context) {
-    final badges = _computeBadges(provider, s);
-
-    return Container(
-      decoration: const BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 40,
-            height: 4,
-            decoration: BoxDecoration(
-              color: AppColors.border,
-              borderRadius: BorderRadius.circular(2),
-            ),
-          ),
-          const SizedBox(height: 16),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              s.badgesTitle,
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-          ),
-          const SizedBox(height: 16),
-          if (badges.isEmpty)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 32),
-              child: Text(
-                s.noBadgesYet,
-                textAlign: TextAlign.center,
-                style: const TextStyle(color: AppColors.textSecondary, height: 1.6),
-              ),
-            )
-          else
-            ...badges.map(
-              (b) => Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 48,
-                      height: 48,
-                      decoration: BoxDecoration(
-                        color: b.color.withValues(alpha: 0.12),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(b.icon, color: b.color, size: 24),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            b.title,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                            ),
-                          ),
-                          Text(
-                            b.challengeName,
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: AppColors.textSecondary,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-}

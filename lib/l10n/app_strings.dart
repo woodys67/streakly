@@ -94,6 +94,14 @@ class AppStrings {
     de:'$days Tage am Stück!', pt:'$days dias em sequência!', ru:'${days} дней подряд!',
   );
   String get currentStreak => _s(en:'Current Streak', ko:'현재 스트릭', ja:'現在のストリーク', zhCN:'当前连续', zhTW:'當前連續', es:'Racha actual', de:'Aktuelle Serie', pt:'Sequência atual', ru:'Текущая серия');
+  String get willpower => _s(en:'Willpower', ko:'의지력', ja:'意志力', zhCN:'意志力', zhTW:'意志力', es:'Fuerza de voluntad', de:'Willenskraft', pt:'Força de vontade', ru:'Сила воли');
+  String get willpowerSubtitle => _s(en:'Cumulative Score', ko:'누적 달성 점수', ja:'累計達成スコア', zhCN:'累计达成分数', zhTW:'累計達成分數', es:'Puntuación acumulada', de:'Gesamtpunktzahl', pt:'Pontuação acumulada', ru:'Накопленные очки');
+  String challengePoints(int n) => _s(en:'+$n pts', ko:'+${n}점', ja:'+${n}点', zhCN:'+${n}点', zhTW:'+${n}點', es:'+$n pts', de:'+$n Pkt', pt:'+$n pts', ru:'+$n оч');
+  String get tierSeed     => _s(en:'Seed',     ko:'씨앗', ja:'種',  zhCN:'种子', zhTW:'種子', es:'Semilla',      de:'Keim',        pt:'Semente',    ru:'Семя');
+  String get tierSprout   => _s(en:'Sprout',   ko:'새싹', ja:'芽',  zhCN:'嫩芽', zhTW:'嫩芽', es:'Brote',        de:'Sprössling',  pt:'Broto',      ru:'Росток');
+  String get tierGrowth   => _s(en:'Growth',   ko:'성장', ja:'成長', zhCN:'成长', zhTW:'成長', es:'Crecimiento',  de:'Wachstum',    pt:'Crescimento',ru:'Рост');
+  String get tierFruition => _s(en:'Fruition', ko:'결실', ja:'結実', zhCN:'结实', zhTW:'結實', es:'Fruto',        de:'Reife',       pt:'Maturidade', ru:'Плод');
+  String get tierLegend   => _s(en:'Legend',   ko:'전설', ja:'伝説', zhCN:'传说', zhTW:'傳說', es:'Leyenda',      de:'Legende',     pt:'Lenda',      ru:'Легенда');
 
   // ── Challenge Screen ─────────────────────────────────────────
   String get challengeTab => _s(en:'Challenge', ko:'챌린지', ja:'チャレンジ', zhCN:'挑战', zhTW:'挑戰', es:'Desafío', de:'Challenge', pt:'Desafio', ru:'Вызов');
@@ -160,6 +168,17 @@ class AppStrings {
   String get custom => _s(en:'Custom', ko:'직접 입력', ja:'カスタム', zhCN:'自定义', zhTW:'自訂', es:'Personalizado', de:'Benutzerdefiniert', pt:'Personalizado', ru:'Пользовательский');
   String get enterDaysHint => _s(en:'Enter number of days', ko:'일수를 입력하세요', ja:'日数を入力してください', zhCN:'请输入天数', zhTW:'請輸入天數', es:'Ingresa el número de días', de:'Anzahl der Tage eingeben', pt:'Digite o número de dias', ru:'Введите количество дней');
   String get reminderTimeLabel => _s(en:'REMINDER TIME', ko:'알림 시간', ja:'リマインダー時刻', zhCN:'提醒时间', zhTW:'提醒時間', es:'HORA DE RECORDATORIO', de:'ERINNERUNGSZEIT', pt:'HORA DO LEMBRETE', ru:'ВРЕМЯ НАПОМИНАНИЯ');
+  String get reminderDisabledHint => _s(
+    en:'Disabled — sub-routine alert times are set',
+    ko:'비활성화 — 서브루틴 알림 시간이 설정되어 있어요',
+    ja:'無効 — サブルーティンの通知時刻が設定されています',
+    zhCN:'已禁用 — 子例行通知时间已设置',
+    zhTW:'已停用 — 子例行通知時間已設定',
+    es:'Desactivado — tiempos de sub-rutinas configurados',
+    de:'Deaktiviert — Sub-Routine-Zeiten gesetzt',
+    pt:'Desativado — horários de sub-rotinas definidos',
+    ru:'Отключено — установлено время подпрограмм',
+  );
   String get repetitionLabel => _s(en:'REPETITION', ko:'반복 요일', ja:'繰り返し', zhCN:'重复', zhTW:'重複', es:'REPETICIÓN', de:'WIEDERHOLUNG', pt:'REPETIÇÃO', ru:'ПОВТОРЕНИЕ');
   String get notesLabel => _s(en:'NOTES & MOTIVATION', ko:'메모 & 동기부여', ja:'メモ＆モチベーション', zhCN:'备注＆动力', zhTW:'備註＆動力', es:'NOTAS Y MOTIVACIÓN', de:'NOTIZEN & MOTIVATION', pt:'NOTAS E MOTIVAÇÃO', ru:'ЗАМЕТКИ И МОТИВАЦИЯ');
   String get notesHint => _s(

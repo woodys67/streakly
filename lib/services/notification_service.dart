@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import '../models/challenge.dart';
+import '../models/routine.dart';
 
 class NotificationService {
   static final _plugin = FlutterLocalNotificationsPlugin();
@@ -64,11 +65,60 @@ class NotificationService {
     await cancelAll();
     for (final c in challenges) {
       await scheduleChallenge(c);
+      for (final sub in c.subRoutines) {
+        await scheduleSubRoutine(sub, c.repeatDays, c.name);
+      }
+    }
+  }
+
+  static Future<void> scheduleSubRoutine(
+    SubRoutine sub,
+    List<int> repeatDays,
+    String challengeName,
+  ) async {
+    if (!sub.alertEnabled || sub.time.isEmpty) return;
+    final tod = _parseTime(sub.time);
+    if (tod == null) return;
+
+    final days = repeatDays.isEmpty
+        ? List.generate(7, (i) => i)
+        : repeatDays;
+
+    for (final day in days) {
+      final weekday = day + 1;
+      await _plugin.zonedSchedule(
+        _subNotifId(sub.id, day),
+        sub.name,
+        challengeName,
+        _nextWeekday(weekday, tod),
+        const NotificationDetails(
+          android: AndroidNotificationDetails(
+            'streakly_subroutines',
+            'Sub-routine Reminders',
+            importance: Importance.high,
+            priority: Priority.high,
+          ),
+          iOS: DarwinNotificationDetails(),
+        ),
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.wallClockTime,
+        matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
+      );
+    }
+  }
+
+  static Future<void> cancelSubRoutine(String subRoutineId) async {
+    for (int day = 0; day < 7; day++) {
+      await _plugin.cancel(_subNotifId(subRoutineId, day));
     }
   }
 
   static int _notifId(String challengeId, int day) =>
       (challengeId.hashCode.abs() % 100000) * 7 + day;
+
+  static int _subNotifId(String subRoutineId, int day) =>
+      (subRoutineId.hashCode.abs() % 100000) * 7 + day + 1000000;
 
   static TimeOfDay? _parseTime(String timeStr) {
     try {

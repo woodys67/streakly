@@ -2,22 +2,26 @@ class SubRoutine {
   final String id;
   final String name;
   final String time;
+  final bool alertEnabled;
 
   SubRoutine({
     required this.id,
     required this.name,
     required this.time,
+    this.alertEnabled = true,
   });
 
   SubRoutine copyWith({
     String? id,
     String? name,
     String? time,
+    bool? alertEnabled,
   }) {
     return SubRoutine(
       id: id ?? this.id,
       name: name ?? this.name,
       time: time ?? this.time,
+      alertEnabled: alertEnabled ?? this.alertEnabled,
     );
   }
 
@@ -26,6 +30,7 @@ class SubRoutine {
       'id': id,
       'name': name,
       'time': time,
+      'alertEnabled': alertEnabled,
     };
   }
 
@@ -34,6 +39,7 @@ class SubRoutine {
       id: json['id'] as String,
       name: json['name'] as String,
       time: json['time'] as String,
+      alertEnabled: json['alertEnabled'] as bool? ?? true,
     );
   }
 
@@ -42,6 +48,7 @@ class SubRoutine {
       id: row['id'] as String,
       name: row['name'] as String,
       time: row['alert_time'] as String? ?? '',
+      alertEnabled: row['alert_enabled'] as bool? ?? true,
     );
   }
 
@@ -51,7 +58,7 @@ class SubRoutine {
       'challenge_id': challengeId,
       'name': name,
       'alert_time': time,
-      'alert_enabled': time.isNotEmpty,
+      'alert_enabled': alertEnabled && time.isNotEmpty,
       'sort_order': sortOrder,
     };
   }

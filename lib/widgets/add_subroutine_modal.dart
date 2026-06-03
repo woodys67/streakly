@@ -50,7 +50,7 @@ class _AddSubroutineModalState extends State<AddSubroutineModal> {
       );
       return;
     }
-    widget.onSave(SubRoutine(id: _uuid.v4(), name: name, time: _formattedTime));
+    widget.onSave(SubRoutine(id: _uuid.v4(), name: name, time: _formattedTime, alertEnabled: _alertOn));
     Navigator.of(context).pop();
   }
 

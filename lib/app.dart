@@ -186,7 +186,7 @@ class _MainNavigationState extends State<_MainNavigation> {
     if (!mounted) return;
     final bp = context.read<BadgeProvider>();
     if (bp.hasPendingUnlock && !_showingBadgeDialog) {
-      setState(() => _showingBadgeDialog = true);
+      _showingBadgeDialog = true;
       showDialog<void>(
         context: context,
         barrierDismissible: false,
@@ -194,13 +194,13 @@ class _MainNavigationState extends State<_MainNavigation> {
           badge: bp.nextUnlock!,
           onDismiss: () {
             Navigator.of(context).pop();
+            _showingBadgeDialog = false;
+            // false 세팅 후 consumeNextUnlock() 호출해야
+            // notifyListeners() → _onBadgeUpdate() 시점에 _showingBadgeDialog = false 보장
             bp.consumeNextUnlock();
-            if (mounted) setState(() => _showingBadgeDialog = false);
           },
         ),
-      ).then((_) {
-        if (mounted) setState(() => _showingBadgeDialog = false);
-      });
+      );
     }
   }
 

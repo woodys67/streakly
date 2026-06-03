@@ -83,14 +83,12 @@ class ChallengeScreen extends StatelessWidget {
                   streak: streak,
                   s: s,
                 ),
-                if (challenge.reminderTime.isNotEmpty || challenge.repeatDays.isNotEmpty) ...[
-                  const SizedBox(height: 16),
-                  _ScheduleInfoSection(
-                    reminderTime: challenge.reminderTime,
-                    repeatDays: challenge.repeatDays,
-                    s: s,
-                  ),
-                ],
+                const SizedBox(height: 16),
+                _ScheduleInfoSection(
+                  reminderTime: challenge.reminderTime,
+                  repeatDays: challenge.repeatDays,
+                  s: s,
+                ),
                 if (challenge.subRoutines.isNotEmpty) ...[
                   const SizedBox(height: 16),
                   _SubRoutinesSection(subRoutines: challenge.subRoutines, s: s),
@@ -326,11 +324,12 @@ class _ProgressSection extends StatelessWidget {
                     style: Theme.of(context).textTheme.bodySmall),
                 const SizedBox(height: 12),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(
-                    color: AppColors.success.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: AppColors.success.withValues(alpha: 0.3)),
+                    color: AppColors.success.withValues(alpha: 0.07),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: AppColors.success.withValues(alpha: 0.4)),
                   ),
                   child: Text(
                     s.dayStreak(streak),
@@ -339,6 +338,7 @@ class _ProgressSection extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                       fontSize: 13,
                     ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
               ],
@@ -515,9 +515,9 @@ class _ScheduleInfoSection extends StatelessWidget {
                   ),
                   const SizedBox(height: 6),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: days.map((d) {
                       return Container(
-                        margin: const EdgeInsets.only(right: 6),
                         width: 28,
                         height: 28,
                         decoration: BoxDecoration(

@@ -59,6 +59,10 @@ class ChallengeProvider extends ChangeNotifier {
     return _challenges.fold<int>(0, (sum, c) => sum + c.streak);
   }
 
+  // 모든 챌린지 completedDays 합산 (패널티 없음, 항상 증가)
+  int get willpower =>
+      _challenges.fold(0, (sum, c) => sum + c.completedDays.length);
+
   double get overallSuccessRate {
     if (_challenges.isEmpty) return 0;
     final total = _challenges.fold<double>(0, (sum, c) => sum + c.successRate);
@@ -166,15 +170,8 @@ class ChallengeProvider extends ChangeNotifier {
     notifyListeners();
 
     await NotificationService.scheduleChallenge(challenge);
-
-    if (subRoutines.isNotEmpty && _badgeProvider != null) {
-      await _badgeProvider!.checkAndAward(
-        BadgeEvent(
-          type: BadgeEventType.subroutineCreated,
-          timestamp: DateTime.now(),
-        ),
-        _challenges,
-      );
+    for (final sub in subRoutines) {
+      await NotificationService.scheduleSubRoutine(sub, repeatDays, name);
     }
 
     if (_isCloud) {
@@ -190,6 +187,18 @@ class ChallengeProvider extends ChangeNotifier {
     } else {
       await _saveLocalChallenges();
     }
+  }
+
+  // 서브루틴 생성 배지 체크 — addChallenge() 호출자가 Navigator.pop() 이후에 실행해야 함
+  Future<void> awardSubRoutineCreatedBadge() async {
+    if (_badgeProvider == null) return;
+    await _badgeProvider!.checkAndAward(
+      BadgeEvent(
+        type: BadgeEventType.subroutineCreated,
+        timestamp: DateTime.now(),
+      ),
+      _challenges,
+    );
   }
 
   Future<void> _insertChallengeToServer(Challenge challenge) async {
@@ -217,6 +226,10 @@ class ChallengeProvider extends ChangeNotifier {
     if (idx == -1) return;
 
     final challenge = _challenges[idx];
+    // 배지 판정을 위해 체크인 전 상태 캡처
+    final prevBestStreak = _challenges.fold<int>(0, (m, c) => c.streak > m ? c.streak : m);
+    final prevStreak = challenge.streak;
+
     final today = challenge.currentDay;
     final updatedSubs = Map<int, List<String>>.from(
       challenge.completedSubRoutines
@@ -233,6 +246,7 @@ class ChallengeProvider extends ChangeNotifier {
 
     final allDone =
         challenge.subRoutines.every((s) => todayList.contains(s.id));
+    final wasAlreadyDoneToday = challenge.completedDays.contains(today);
     final updatedCompleted = List<int>.from(challenge.completedDays);
     if (allDone) {
       if (!updatedCompleted.contains(today)) updatedCompleted.add(today);
@@ -244,6 +258,15 @@ class ChallengeProvider extends ChangeNotifier {
       completedSubRoutines: updatedSubs,
       completedDays: updatedCompleted,
     );
+
+    // 챌린지 완료 여부 판정 (toggleTodayComplete와 동일 로직)
+    bool nowCompleted = false;
+    final updatedChallenge = _challenges[idx];
+    if (!challenge.isCompleted &&
+        updatedChallenge.completedDays.length >= updatedChallenge.targetDays) {
+      _challenges[idx] = updatedChallenge.copyWith(isCompleted: true);
+      nowCompleted = true;
+    }
     notifyListeners();
 
     if (_isCloud) {
@@ -260,12 +283,34 @@ class ChallengeProvider extends ChangeNotifier {
           'day_number': today,
         });
       }
-      await _db
-          .from('challenges')
-          .update({'completed_days': updatedCompleted})
-          .eq('id', challengeId);
+      await _db.from('challenges').update({
+        'completed_days': updatedCompleted,
+        if (nowCompleted) 'is_completed': true,
+      }).eq('id', challengeId);
     } else {
       await _saveLocalChallenges();
+    }
+
+    // 모든 서브루틴이 오늘 처음으로 완료된 시점에만 배지 체크
+    if (_badgeProvider != null && allDone && !wasAlreadyDoneToday) {
+      final payload = await _buildCheckInPayload(challengeId, prevBestStreak, prevStreak);
+      await _badgeProvider!.checkAndAward(
+        BadgeEvent(
+          type: BadgeEventType.checkIn,
+          timestamp: DateTime.now(),
+          payload: payload,
+        ),
+        _challenges,
+      );
+      if (nowCompleted) {
+        await _badgeProvider!.checkAndAward(
+          BadgeEvent(
+            type: BadgeEventType.challengeCompleted,
+            timestamp: DateTime.now(),
+          ),
+          _challenges,
+        );
+      }
     }
   }
 
@@ -393,6 +438,12 @@ class ChallengeProvider extends ChangeNotifier {
   // ─────────────────────────────────────────
 
   Future<void> deleteChallenge(String challengeId) async {
+    final idx = _challenges.indexWhere((c) => c.id == challengeId);
+    if (idx != -1) {
+      for (final sub in _challenges[idx].subRoutines) {
+        await NotificationService.cancelSubRoutine(sub.id);
+      }
+    }
     _challenges.removeWhere((c) => c.id == challengeId);
     notifyListeners();
 
