@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -51,27 +52,29 @@ class SocialLoginButtons extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        // Apple — 검정 원 안에 로고 패딩으로 Google과 시각적 크기 통일
-        GestureDetector(
-          onTap: isLoading ? null : () => _handleApple(context),
-          child: Opacity(
-            opacity: isLoading ? 0.5 : 1.0,
-            child: Container(
-              width: 56,
-              height: 56,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.black,
-              ),
-              padding: const EdgeInsets.all(12),
-              child: Image.asset(
-                'assets/images/logo_apple.png',
-                fit: BoxFit.contain,
+        if (Platform.isIOS) ...[
+          // Apple — iOS 전용
+          GestureDetector(
+            onTap: isLoading ? null : () => _handleApple(context),
+            child: Opacity(
+              opacity: isLoading ? 0.5 : 1.0,
+              child: Container(
+                width: 56,
+                height: 56,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.black,
+                ),
+                padding: const EdgeInsets.all(12),
+                child: Image.asset(
+                  'assets/images/logo_apple.png',
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
           ),
-        ),
-        const SizedBox(width: 20),
+          const SizedBox(width: 20),
+        ],
         // Google — 흰 배경 이미지를 원형으로 clip
         GestureDetector(
           onTap: isLoading ? null : () => _handleGoogle(context),
@@ -91,3 +94,4 @@ class SocialLoginButtons extends StatelessWidget {
     );
   }
 }
+
