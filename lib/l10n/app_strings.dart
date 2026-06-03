@@ -4,6 +4,20 @@ class AppStrings {
 
   static AppStrings of(String language) => AppStrings._(language);
 
+  String get langCode {
+    switch (language) {
+      case 'Korean':            return 'ko';
+      case 'Japanese':          return 'ja';
+      case 'ChineseSimplified': return 'zhCN';
+      case 'ChineseTraditional':return 'zhCN';
+      case 'Spanish':           return 'es';
+      case 'German':            return 'de';
+      case 'Portuguese':        return 'pt';
+      case 'Russian':           return 'ru';
+      default:                  return 'en';
+    }
+  }
+
   String _s({
     required String en,
     required String ko,
@@ -351,6 +365,83 @@ class AppStrings {
   String get editName => _s(en:'Edit Name', ko:'이름 수정', ja:'名前を編集', zhCN:'编辑名称', zhTW:'編輯名稱', es:'Editar nombre', de:'Name bearbeiten', pt:'Editar nome', ru:'Изменить имя');
   String get nameHint => _s(en:'Enter your name', ko:'이름을 입력하세요', ja:'名前を入力', zhCN:'输入名称', zhTW:'輸入名稱', es:'Ingresa tu nombre', de:'Name eingeben', pt:'Digite seu nome', ru:'Введите имя');
   String get appSettings => _s(en:'App Settings', ko:'앱 설정', ja:'アプリ設定', zhCN:'应用设置', zhTW:'應用程式設定', es:'Ajustes de la app', de:'App-Einstellungen', pt:'Configurações do app', ru:'Настройки приложения');
+  String get appGuide => _s(en:'App Guide', ko:'앱 소개', ja:'アプリガイド', zhCN:'应用介绍', zhTW:'應用程式介紹', es:'Guía de la app', de:'App-Anleitung', pt:'Guia do app', ru:'Руководство');
+
+  // 앱 소개 — 항목 타이틀
+  String get guideHowToUse => _s(en:'How to Use', ko:'사용법', ja:'使い方', zhCN:'使用方法', zhTW:'使用方法', es:'Cómo usar', de:'Anleitung', pt:'Como usar', ru:'Как пользоваться');
+  String get guideCreateChallenge => _s(en:'Creating a Challenge', ko:'챌린지 만들기', ja:'チャレンジを作る', zhCN:'创建挑战', zhTW:'建立挑戰', es:'Crear un reto', de:'Challenge erstellen', pt:'Criar um desafio', ru:'Создать задачу');
+  String get guideStreakSystem => _s(en:'Streak System', ko:'스트릭 시스템', ja:'ストリークシステム', zhCN:'连续系统', zhTW:'連續系統', es:'Sistema de racha', de:'Streak-System', pt:'Sistema de sequência', ru:'Система серий');
+  String get guideStreakRecovery => _s(en:'Streak Recovery', ko:'스트릭 복구', ja:'ストリーク回復', zhCN:'连续恢复', zhTW:'連續恢復', es:'Recuperación de racha', de:'Streak-Wiederherstellung', pt:'Recuperação de sequência', ru:'Восстановление серии');
+  String get guideWillpower => _s(en:'Willpower & Level', ko:'의지력 & 레벨', ja:'意志力 & レベル', zhCN:'意志力与等级', zhTW:'意志力與等級', es:'Fuerza de voluntad y nivel', de:'Willenskraft & Level', pt:'Força de vontade e nível', ru:'Сила воли и уровень');
+  String get guideBadge => _s(en:'Badge System', ko:'배지 시스템', ja:'バッジシステム', zhCN:'徽章系统', zhTW:'徽章系統', es:'Sistema de insignias', de:'Abzeichen-System', pt:'Sistema de medalhas', ru:'Система значков');
+
+  // 앱 소개 — 항목 설명
+  String get guideHowToUseBody => _s(
+    en:'Tap + to create a challenge and check off your routine every day. Complete all sub-routines to mark the day done. Check your progress on the Home screen.',
+    ko:'+ 버튼으로 챌린지를 만들고 매일 루틴을 체크하세요. 서브루틴을 모두 완료하면 해당 날짜가 달성됩니다. 홈 화면에서 오늘의 진행 상황을 확인하세요.',
+    ja:'＋ボタンでチャレンジを作り、毎日ルーティンをチェックしましょう。サブルーティンをすべて完了するとその日が達成されます。',
+    zhCN:'点击+创建挑战，每天完成例行任务并打卡。完成所有子任务即可标记当天完成。',
+    zhTW:'點擊+建立挑戰，每天完成例行任務並打卡。完成所有子任務即可標記當天完成。',
+    es:'Toca + para crear un reto y marca tu rutina cada día. Completa todos los sub-retos para marcar el día como logrado.',
+    de:'Tippe auf +, um eine Challenge zu erstellen, und hake deine Routine täglich ab. Schließe alle Sub-Routinen ab, um den Tag als erledigt zu markieren.',
+    pt:'Toque em + para criar um desafio e marque sua rotina todos os dias. Complete todas as sub-rotinas para marcar o dia como concluído.',
+    ru:'Нажмите +, чтобы создать задачу, и отмечайте выполнение каждый день. Завершите все подзадачи, чтобы засчитать день.',
+  );
+  String get guideCreateChallengeBody => _s(
+    en:'Set a target (7 / 14 / 21 days or custom), add sub-routines, choose repeat days, and set a reminder time. The challenge starts the day you create it.',
+    ko:'목표 일수(7·14·21일 또는 직접 입력), 서브루틴, 반복 요일, 알림 시간을 설정할 수 있습니다. 챌린지는 만든 날부터 시작됩니다.',
+    ja:'目標日数（7・14・21日またはカスタム）、サブルーティン、繰り返し曜日、通知時間を設定できます。チャレンジは作成日から始まります。',
+    zhCN:'可设置目标天数（7/14/21天或自定义）、子任务、重复日期和提醒时间。挑战从创建当天开始。',
+    zhTW:'可設定目標天數（7/14/21天或自訂）、子任務、重複日期和提醒時間。挑戰從建立當天開始。',
+    es:'Establece un objetivo (7/14/21 días o personalizado), añade sub-retos, elige días de repetición y configura un recordatorio. El reto empieza el día que lo creas.',
+    de:'Lege ein Ziel (7/14/21 Tage oder benutzerdefiniert) fest, füge Sub-Routinen hinzu, wähle Wiederholungstage und stelle eine Erinnerungszeit ein.',
+    pt:'Defina uma meta (7/14/21 dias ou personalizado), adicione sub-rotinas, escolha dias de repetição e configure um lembrete.',
+    ru:'Установите цель (7/14/21 дней или своё), добавьте подзадачи, выберите дни повторения и время напоминания.',
+  );
+  String get guideStreakSystemBody => _s(
+    en:'Each day you complete your routine, your streak grows. Miss a day and it resets to 0. The Total Streaks on the Records screen shows the combined current streak across all challenges.',
+    ko:'매일 루틴을 완료하면 스트릭이 1씩 쌓입니다. 하루라도 빠지면 0으로 초기화됩니다. 기록 화면의 총 스트릭은 모든 챌린지의 현재 스트릭 합계입니다.',
+    ja:'毎日ルーティンを完了するとストリークが1増えます。1日でも欠かすとリセットされます。記録画面の総ストリークは全チャレンジの現在ストリーク合計です。',
+    zhCN:'每天完成例行任务，连续天数+1。漏掉一天则归零。记录页面的总连续是所有挑战当前连续天数的总和。',
+    zhTW:'每天完成例行任務，連續天數+1。漏掉一天則歸零。記錄頁面的總連續是所有挑戰當前連續天數的總和。',
+    es:'Cada día que completas tu rutina, tu racha crece. Si fallas un día, vuelve a 0. Las Rachas Totales en Registros muestran la suma actual de todas las rachas.',
+    de:'Jeden Tag, an dem du deine Routine abschließt, wächst dein Streak. Verpasst du einen Tag, wird er auf 0 zurückgesetzt.',
+    pt:'A cada dia que você completa sua rotina, sua sequência cresce. Perca um dia e ela volta a 0.',
+    ru:'Каждый день выполнения задачи увеличивает серию на 1. Пропустите день — серия сбрасывается в 0.',
+  );
+  String get guideStreakRecoveryBody => _s(
+    en:'If you miss yesterday\'s routine, a recovery button appears on the card. Spend 3 Willpower to restore the streak. Recovery is available once every 7 days per challenge.',
+    ko:'어제 루틴을 빠뜨린 경우 카드 하단에 복구 버튼이 나타납니다. 의지력 3을 소모해 스트릭을 되살릴 수 있습니다. 챌린지당 7일에 한 번 사용 가능합니다.',
+    ja:'昨日のルーティンを逃した場合、カード下部に回復ボタンが表示されます。意志力3を消費してストリークを復活させることができます。チャレンジごとに7日に1回使用可能です。',
+    zhCN:'如果昨天的任务未完成，卡片底部会出现恢复按钮。消耗3意志力可恢复连续记录。每个挑战每7天可使用一次。',
+    zhTW:'如果昨天的任務未完成，卡片底部會出現恢復按鈕。消耗3意志力可恢復連續記錄。每個挑戰每7天可使用一次。',
+    es:'Si te perdiste la rutina de ayer, aparece un botón de recuperación en la tarjeta. Gasta 3 de fuerza de voluntad para restaurar la racha. Disponible una vez cada 7 días por reto.',
+    de:'Wenn du die gestrige Routine verpasst hast, erscheint ein Wiederherstellungsknopf. Verbrauche 3 Willenskraft, um den Streak wiederherzustellen. Einmal alle 7 Tage pro Challenge verfügbar.',
+    pt:'Se você perdeu a rotina de ontem, um botão de recuperação aparece no cartão. Gaste 3 de força de vontade para restaurar a sequência. Disponível uma vez a cada 7 dias por desafio.',
+    ru:'Если вчера задача не выполнена, на карточке появится кнопка восстановления. Потратьте 3 силы воли, чтобы вернуть серию. Доступно раз в 7 дней на задачу.',
+  );
+  String get guideWillpowerBody => _s(
+    en:'You earn 1 Willpower for every day you complete a routine. Willpower never decreases and powers your level: Seed → Sprout → Growth → Fruition → Legend. Higher levels make streak recovery cheaper.',
+    ko:'루틴을 완료할 때마다 의지력이 1 쌓입니다. 의지력은 절대 줄어들지 않으며 레벨을 높입니다: 씨앗 → 새싹 → 성장 → 결실 → 전설. 레벨이 높을수록 스트릭 복구에 쓸 여유가 생깁니다.',
+    ja:'ルーティンを完了するたびに意志力が1増えます。意志力は絶対に減らず、レベルを上げます：種→芽→成長→実り→伝説。レベルが高いほどストリーク回復に使える余裕が生まれます。',
+    zhCN:'每完成一天的任务获得1意志力。意志力永不减少，并提升等级：种子→嫩芽→成长→结实→传说。等级越高，用于恢复连续的余量越大。',
+    zhTW:'每完成一天的任務獲得1意志力。意志力永不減少，並提升等級：種子→嫩芽→成長→結實→傳說。等級越高，用於恢復連續的餘量越大。',
+    es:'Ganas 1 de fuerza de voluntad por cada día que completas una rutina. Nunca disminuye y sube tu nivel: Semilla→Brote→Crecimiento→Fruto→Leyenda.',
+    de:'Du verdienst 1 Willenskraft für jeden Tag, an dem du eine Routine abschließt. Willenskraft nimmt nie ab und erhöht dein Level: Keim→Sprössling→Wachstum→Frucht→Legende.',
+    pt:'Você ganha 1 de força de vontade por cada dia que completa uma rotina. Nunca diminui e aumenta seu nível: Semente→Broto→Crescimento→Fruto→Lenda.',
+    ru:'За каждый выполненный день вы получаете 1 силу воли. Она никогда не уменьшается и повышает уровень: Семя→Росток→Рост→Плод→Легенда.',
+  );
+  String get guideBadgeBody => _s(
+    en:'Earn badges by reaching milestones: completing streaks, finishing challenges, logging in at certain times, and more. Check your collection on the Records screen.',
+    ko:'스트릭 달성, 챌린지 완료, 특정 시간대 로그인 등 다양한 조건을 달성하면 배지를 획득합니다. 기록 화면에서 획득한 배지와 미획득 배지를 모두 확인할 수 있습니다.',
+    ja:'ストリーク達成、チャレンジ完了、特定時間帯のログインなど様々な条件でバッジを獲得できます。記録画面で確認できます。',
+    zhCN:'达成连续记录、完成挑战、在特定时间登录等各种条件可获得徽章。在记录页面查看已获得和未获得的徽章。',
+    zhTW:'達成連續記錄、完成挑戰、在特定時間登入等各種條件可獲得徽章。在記錄頁面查看已獲得和未獲得的徽章。',
+    es:'Gana insignias al alcanzar hitos: completar rachas, terminar retos, iniciar sesión en ciertos momentos y más. Consulta tu colección en la pantalla de Registros.',
+    de:'Verdiene Abzeichen durch Meilensteine: Streaks abschließen, Challenges beenden, zu bestimmten Zeiten anmelden und mehr. Überprüfe deine Sammlung auf dem Bildschirm Aufzeichnungen.',
+    pt:'Ganhe medalhas ao atingir marcos: completar sequências, terminar desafios, fazer login em horários específicos e mais. Veja sua coleção na tela de Registros.',
+    ru:'Зарабатывайте значки, достигая вех: завершая серии, выполняя задачи, входя в определённое время и многое другое. Проверьте коллекцию на экране Записей.',
+  );
   String get languages => _s(en:'Languages', ko:'언어', ja:'言語', zhCN:'语言', zhTW:'語言', es:'Idiomas', de:'Sprachen', pt:'Idiomas', ru:'Языки');
   String get notificationSettings => _s(en:'Notification Settings', ko:'알림 설정', ja:'通知設定', zhCN:'通知设置', zhTW:'通知設定', es:'Notificaciones', de:'Benachrichtigungen', pt:'Notificações', ru:'Уведомления');
   String get themeSettings => _s(en:'Theme Settings', ko:'테마 설정', ja:'テーマ設定', zhCN:'主题设置', zhTW:'主題設定', es:'Tema', de:'Design', pt:'Tema', ru:'Тема');

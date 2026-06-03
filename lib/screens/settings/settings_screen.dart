@@ -8,6 +8,8 @@ import '../../providers/challenge_provider.dart';
 import '../../services/notification_service.dart';
 import '../auth/sign_in_screen.dart';
 import '../auth/sign_up_screen.dart';
+import 'guide_detail_screen.dart';
+import 'guide_content.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -57,6 +59,8 @@ class SettingsScreen extends StatelessWidget {
                   s: s,
                   onReset: () => _confirmReset(context, settings, s),
                 ),
+                const SizedBox(height: 24),
+                _AppGuideCard(s: s),
                 const SizedBox(height: 24),
                 if (!auth.isGuest) ...[
                   _SignOutButton(
@@ -891,6 +895,71 @@ class _Divider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Divider(height: 1, indent: 56, color: AppColors.border);
+  }
+}
+
+class _AppGuideCard extends StatelessWidget {
+  final dynamic s;
+
+  const _AppGuideCard({required this.s});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.border, width: 1.5),
+      ),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(s.appGuide, style: Theme.of(context).textTheme.titleLarge),
+            ),
+          ),
+          _GuideItem(icon: Icons.lightbulb_outline,             title: s.guideHowToUse,        content: GuideContent.howToUse(s)),
+          const _Divider(),
+          _GuideItem(icon: Icons.add_circle_outline,            title: s.guideCreateChallenge, content: GuideContent.createChallenge(s)),
+          const _Divider(),
+          _GuideItem(icon: Icons.local_fire_department_outlined, title: s.guideStreakSystem,   content: GuideContent.streakSystem(s)),
+          const _Divider(),
+          _GuideItem(icon: Icons.replay_outlined,               title: s.guideStreakRecovery,  content: GuideContent.streakRecovery(s)),
+          const _Divider(),
+          _GuideItem(icon: Icons.bolt_outlined,                 title: s.guideWillpower,       content: GuideContent.willpower(s)),
+          const _Divider(),
+          _GuideItem(icon: Icons.military_tech_outlined,        title: s.guideBadge,           content: GuideContent.badge(s)),
+        ],
+      ),
+    );
+  }
+}
+
+class _GuideItem extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String content;
+
+  const _GuideItem({required this.icon, required this.title, required this.content});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      contentPadding: const EdgeInsets.symmetric(horizontal: 20),
+      leading: Icon(icon, color: AppColors.textSecondary, size: 22),
+      title: Text(
+        title,
+        style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: AppColors.textPrimary),
+      ),
+      trailing: const Icon(Icons.chevron_right, color: AppColors.textSecondary),
+      onTap: () => Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => GuideDetailScreen(icon: icon, title: title, content: content),
+        ),
+      ),
+    );
   }
 }
 

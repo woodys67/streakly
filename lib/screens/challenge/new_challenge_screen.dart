@@ -24,7 +24,9 @@ class _NewChallengeScreenState extends State<NewChallengeScreen> {
   final List<bool> _selectedDays = List.filled(7, false);
   TimeOfDay? _reminderTime;
 
-  static const List<String> _dayLabels = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+  static const List<String> _dayLabels = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+  // display order: Sun=index6, Mon=0, Tue=1, Wed=2, Thu=3, Fri=4, Sat=5
+  static const List<int> _sunFirstOrder = [6, 0, 1, 2, 3, 4, 5];
 
   String get _formattedReminderTime {
     if (_reminderTime == null) return '';
@@ -231,10 +233,11 @@ class _NewChallengeScreenState extends State<NewChallengeScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: List.generate(7, (i) {
-                final selected = _selectedDays[i];
+                final dayIdx = _sunFirstOrder[i];
+                final selected = _selectedDays[dayIdx];
                 return GestureDetector(
                   onTap: () {
-                    setState(() => _selectedDays[i] = !_selectedDays[i]);
+                    setState(() => _selectedDays[dayIdx] = !_selectedDays[dayIdx]);
                   },
                   child: Container(
                     width: 40,

@@ -487,7 +487,9 @@ class _ScheduleInfoSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final language = context.read<SettingsProvider>().language;
-    final days = repeatDays.isEmpty ? List.generate(7, (i) => i) : repeatDays;
+    final rawDays = repeatDays.isEmpty ? List.generate(7, (i) => i) : repeatDays;
+    // sort Sun-first: Sun(6)→0, Mon(0)→1, ..., Sat(5)→6
+    final days = [...rawDays]..sort((a, b) => (a + 1) % 7 - (b + 1) % 7);
     final isEveryDay = repeatDays.isEmpty;
 
     return Container(
