@@ -154,7 +154,28 @@ class SettingsScreen extends StatelessWidget {
       ),
     );
 
-    if (confirmed == true && context.mounted) {
+    if (confirmed != true || !context.mounted) return;
+
+    final doubleConfirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(s.resetApp),
+        content: Text(s.resetAppConfirm2),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: Text(s.cancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            style: TextButton.styleFrom(foregroundColor: AppColors.error),
+            child: Text(s.resetAppFinal),
+          ),
+        ],
+      ),
+    );
+
+    if (doubleConfirmed == true && context.mounted) {
       final challengeProvider = context.read<ChallengeProvider>();
       final auth = context.read<AuthProvider>();
 

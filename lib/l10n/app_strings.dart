@@ -57,6 +57,43 @@ class AppStrings {
   String get ok => _s(en:'OK', ko:'확인', ja:'OK', zhCN:'确定', zhTW:'確定', es:'Aceptar', de:'OK', pt:'OK', ru:'ОК');
   String get createChallenge => _s(en:'Create Challenge', ko:'챌린지 만들기', ja:'チャレンジを作成', zhCN:'创建挑战', zhTW:'建立挑戰', es:'Crear desafío', de:'Challenge erstellen', pt:'Criar desafio', ru:'Создать вызов');
 
+  // ── Badge ────────────────────────────────────────────────────
+  String get badgeUnlockTitle => _s(en:'🎉 Badge Unlocked!', ko:'🎉 배지 획득!', ja:'🎉 バッジ獲得！', zhCN:'🎉 获得徽章！', zhTW:'🎉 獲得徽章！', es:'🎉 ¡Insignia desbloqueada!', de:'🎉 Abzeichen erhalten!', pt:'🎉 Emblema desbloqueado!', ru:'🎉 Значок получен!');
+  String get badgeCollectionTitle => _s(en:'Badge Collection', ko:'배지 컬렉션', ja:'バッジコレクション', zhCN:'徽章收藏', zhTW:'徽章收藏', es:'Colección de insignias', de:'Abzeichen-Sammlung', pt:'Coleção de emblemas', ru:'Коллекция значков');
+  String get badgeEarnedSection => _s(en:'Earned Badges', ko:'획득한 배지', ja:'獲得済みバッジ', zhCN:'已获得徽章', zhTW:'已獲得徽章', es:'Insignias obtenidas', de:'Erhaltene Abzeichen', pt:'Emblemas conquistados', ru:'Полученные значки');
+  String get badgeSecretCondition => _s(en:'Condition is hidden.', ko:'조건이 숨겨져 있습니다.', ja:'条件は非公開です。', zhCN:'条件已隐藏。', zhTW:'條件已隱藏。', es:'La condición está oculta.', de:'Bedingung ist verborgen.', pt:'A condição está oculta.', ru:'Условие скрыто.');
+  String get badgeEarnedEmpty => _s(en:'No badges yet. Start checking in!', ko:'아직 획득한 배지가 없습니다. 체크인을 시작해보세요!', ja:'まだバッジがありません。チェックインしましょう！', zhCN:'还没有徽章。开始打卡吧！', zhTW:'還沒有徽章。開始打卡吧！', es:'Sin insignias aún. ¡Empieza a registrarte!', de:'Noch keine Abzeichen. Fang an einzuchecken!', pt:'Nenhum emblema ainda. Comece o check-in!', ru:'Значков пока нет. Начните отмечаться!');
+  String get badgeCategoryAll => _s(en:'All', ko:'전체', ja:'すべて', zhCN:'全部', zhTW:'全部', es:'Todo', de:'Alle', pt:'Tudo', ru:'Все');
+  String get badgeCategoryStreak => _s(en:'🔥 Streak', ko:'🔥 스트릭', ja:'🔥 ストリーク', zhCN:'🔥 连击', zhTW:'🔥 連擊', es:'🔥 Racha', de:'🔥 Serie', pt:'🔥 Sequência', ru:'🔥 Серия');
+  String get badgeCategoryCompletion => _s(en:'🏆 Completion', ko:'🏆 완주', ja:'🏆 完走', zhCN:'🏆 完成', zhTW:'🏆 完成', es:'🏆 Completado', de:'🏆 Abschluss', pt:'🏆 Conclusão', ru:'🏆 Завершение');
+  String get badgeCategoryLogging => _s(en:'📝 Logging', ko:'📝 기록', ja:'📝 記録', zhCN:'📝 记录', zhTW:'📝 記錄', es:'📝 Registro', de:'📝 Protokoll', pt:'📝 Registro', ru:'📝 Записи');
+  String get badgeCategoryTiming => _s(en:'⏰ Timing', ko:'⏰ 타이밍', ja:'⏰ タイミング', zhCN:'⏰ 时机', zhTW:'⏰ 時機', es:'⏰ Timing', de:'⏰ Timing', pt:'⏰ Timing', ru:'⏰ Тайминг');
+  String get badgeCategorySubroutine => _s(en:'🧩 Subroutine', ko:'🧩 서브루틴', ja:'🧩 サブルーティン', zhCN:'🧩 子程序', zhTW:'🧩 子程序', es:'🧩 Subrutina', de:'🧩 Subroutine', pt:'🧩 Sub-rotina', ru:'🧩 Подпрограмма');
+  String get badgeCategoryTeam => _s(en:'👥 Team', ko:'👥 팀', ja:'👥 チーム', zhCN:'👥 团队', zhTW:'👥 團隊', es:'👥 Equipo', de:'👥 Team', pt:'👥 Equipe', ru:'👥 Команда');
+  String badgeEarnedOn(DateTime date) {
+    final y = date.year, m = date.month, d = date.day;
+    return _s(
+      en: 'Earned ${_monthEn(m)} $d, $y',
+      ko: '${y}년 ${m}월 ${d}일 획득',
+      ja: '${y}年${m}月${d}日 獲得',
+      zhCN: '${y}年${m}月${d}日 获得',
+      zhTW: '${y}年${m}月${d}日 獲得',
+      es: 'Obtenido el $d/${m}/$y',
+      de: 'Erhalten am $d.$m.$y',
+      pt: 'Obtido em $d/$m/$y',
+      ru: 'Получено $d.${m.toString().padLeft(2,'0')}.$y',
+    );
+  }
+  static String _monthEn(int m) => const ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][m-1];
+
+  // ── Guest / Account ──────────────────────────────────────────
+  String get guestDisplayName => _s(en:'Guest', ko:'게스트', ja:'ゲスト', zhCN:'访客', zhTW:'訪客', es:'Invitado', de:'Gast', pt:'Convidado', ru:'Гость');
+  String get deleteAccountFailed => _s(en:'Failed to delete account.', ko:'계정 삭제에 실패했습니다.', ja:'アカウントの削除に失敗しました。', zhCN:'删除账户失败。', zhTW:'刪除帳戶失敗。', es:'Error al eliminar la cuenta.', de:'Konto konnte nicht gelöscht werden.', pt:'Falha ao excluir conta.', ru:'Не удалось удалить аккаунт.');
+  String get emailNotConfirmedError => _s(en:'Email verification required. Please check your inbox.', ko:'이메일 인증이 필요합니다. 받은 편지함을 확인해주세요.', ja:'メール認証が必要です。受信ボックスを確認してください。', zhCN:'需要验证邮箱。请查收收件箱。', zhTW:'需要驗證電子郵件。請查看收件匣。', es:'Se requiere verificación. Revisa tu correo.', de:'E-Mail-Bestätigung erforderlich. Bitte überprüfe deinen Posteingang.', pt:'Verificação de e-mail necessária. Verifique sua caixa de entrada.', ru:'Требуется подтверждение email. Проверьте входящие.');
+  String get appleLoginFailed => _s(en:'Apple login failed.', ko:'Apple 로그인에 실패했습니다.', ja:'Appleログインに失敗しました。', zhCN:'Apple登录失败。', zhTW:'Apple登入失敗。', es:'Error al iniciar sesión con Apple.', de:'Apple-Anmeldung fehlgeschlagen.', pt:'Falha no login com Apple.', ru:'Ошибка входа через Apple.');
+  String get appleLoginError => _s(en:'An error occurred during Apple login.', ko:'Apple 로그인 중 오류가 발생했습니다.', ja:'Appleログイン中にエラーが発生しました。', zhCN:'Apple登录过程中发生错误。', zhTW:'Apple登入過程中發生錯誤。', es:'Error durante el inicio de sesión con Apple.', de:'Fehler beim Apple-Login.', pt:'Erro durante o login com Apple.', ru:'Ошибка при входе через Apple.');
+  String get googleLoginFailed => _s(en:'Google login failed.', ko:'Google 로그인에 실패했습니다.', ja:'Googleログインに失敗しました。', zhCN:'Google登录失败。', zhTW:'Google登入失敗。', es:'Error al iniciar sesión con Google.', de:'Google-Anmeldung fehlgeschlagen.', pt:'Falha no login com Google.', ru:'Ошибка входа через Google.');
+
   // ── Home Screen ──────────────────────────────────────────────
   String get todaysRoutines => _s(en:"Today's Routines", ko:'오늘의 루틴', ja:'今日のルーティン', zhCN:'今日例行', zhTW:'今日例行', es:'Rutinas de hoy', de:'Heutige Routinen', pt:'Rotinas de hoje', ru:'Сегодняшние распорядки');
   String doneCount(int done, int total) => _s(
@@ -162,9 +199,9 @@ class AppStrings {
   String get subRoutineLabel => _s(en:'SUB ROUTINE (OPTIONAL)', ko:'서브 루틴 (선택사항)', ja:'サブルーティン（任意）', zhCN:'子例行（可选）', zhTW:'子例行（可選）', es:'SUB-RUTINA (OPCIONAL)', de:'UNTER-ROUTINE (OPTIONAL)', pt:'SUB-ROTINA (OPCIONAL)', ru:'ПОДПРОГРАММА (НЕОБЯЗАТЕЛЬНО)');
   String get addSubRoutine => _s(en:'Add Sub-routine', ko:'서브 루틴 추가', ja:'サブルーティンを追加', zhCN:'添加子例行', zhTW:'新增子例行', es:'Añadir sub-rutina', de:'Unter-Routine hinzufügen', pt:'Adicionar sub-rotina', ru:'Добавить подпрограмму');
   String get targetDaysLabel => _s(en:'TARGET DAYS', ko:'목표 일수', ja:'目標日数', zhCN:'目标天数', zhTW:'目標天數', es:'DÍAS OBJETIVO', de:'ZIELTAGE', pt:'DIAS ALVO', ru:'ЦЕЛЕВЫЕ ДНИ');
-  String get sevenDays => _s(en:'7 Days', ko:'7일', ja:'7日間', zhCN:'7天', zhTW:'7天', es:'7 días', de:'7 Tage', pt:'7 dias', ru:'7 дней');
-  String get fourteenDays => _s(en:'14 Days', ko:'14일', ja:'14日間', zhCN:'14天', zhTW:'14天', es:'14 días', de:'14 Tage', pt:'14 dias', ru:'14 дней');
-  String get twentyOneDays => _s(en:'21 Days', ko:'21일', ja:'21日間', zhCN:'21天', zhTW:'21天', es:'21 días', de:'21 Tage', pt:'21 dias', ru:'21 день');
+  String get sevenDays => _s(en:'7 Days', ko:'7일', ja:'7日間', zhCN:'7天', zhTW:'7天', es:'7d', de:'7T', pt:'7d', ru:'7');
+  String get fourteenDays => _s(en:'14 Days', ko:'14일', ja:'14日間', zhCN:'14天', zhTW:'14天', es:'14d', de:'14T', pt:'14d', ru:'14');
+  String get twentyOneDays => _s(en:'21 Days', ko:'21일', ja:'21日間', zhCN:'21天', zhTW:'21天', es:'21d', de:'21T', pt:'21d', ru:'21');
   String get custom => _s(en:'Custom', ko:'직접 입력', ja:'カスタム', zhCN:'自定义', zhTW:'自訂', es:'Personalizado', de:'Benutzerdefiniert', pt:'Personalizado', ru:'Пользовательский');
   String get enterDaysHint => _s(en:'Enter number of days', ko:'일수를 입력하세요', ja:'日数を入力してください', zhCN:'请输入天数', zhTW:'請輸入天數', es:'Ingresa el número de días', de:'Anzahl der Tage eingeben', pt:'Digite o número de dias', ru:'Введите количество дней');
   String get reminderTimeLabel => _s(en:'REMINDER TIME', ko:'알림 시간', ja:'リマインダー時刻', zhCN:'提醒时间', zhTW:'提醒時間', es:'HORA DE RECORDATORIO', de:'ERINNERUNGSZEIT', pt:'HORA DO LEMBRETE', ru:'ВРЕМЯ НАПОМИНАНИЯ');
@@ -293,6 +330,18 @@ class AppStrings {
     pt:'Todos os desafios e dados serão excluídos permanentemente. Esta ação não pode ser desfeita.',
     ru:'Все вызовы и данные будут удалены навсегда. Это действие нельзя отменить.',
   );
+  String get resetAppConfirm2 => _s(
+    en:'⚠️ All server data will be permanently deleted and cannot be recovered.\n\nAre you absolutely sure?',
+    ko:'⚠️ 서버에 저장된 모든 데이터가 영구적으로 삭제되며 복구할 수 없습니다.\n\n정말 초기화하시겠습니까?',
+    ja:'⚠️ サーバーに保存されたすべてのデータが完全に削除され、復元できません。\n\n本当にリセットしますか？',
+    zhCN:'⚠️ 服务器上存储的所有数据将被永久删除且无法恢复。\n\n您确定要重置吗？',
+    zhTW:'⚠️ 伺服器上儲存的所有資料將被永久刪除且無法復原。\n\n您確定要重置嗎？',
+    es:'⚠️ Todos los datos almacenados en el servidor se eliminarán permanentemente y no se pueden recuperar.\n\n¿Estás absolutamente seguro?',
+    de:'⚠️ Alle auf dem Server gespeicherten Daten werden dauerhaft gelöscht und können nicht wiederhergestellt werden.\n\nBist du absolut sicher?',
+    pt:'⚠️ Todos os dados armazenados no servidor serão excluídos permanentemente e não poderão ser recuperados.\n\nTem absoluta certeza?',
+    ru:'⚠️ Все данные, хранящиеся на сервере, будут удалены навсегда и не могут быть восстановлены.\n\nВы абсолютно уверены?',
+  );
+  String get resetAppFinal => _s(en:'Yes, Delete Everything', ko:'네, 모두 삭제합니다', ja:'はい、すべて削除します', zhCN:'是的，删除所有', zhTW:'是的，刪除所有', es:'Sí, eliminar todo', de:'Ja, alles löschen', pt:'Sim, excluir tudo', ru:'Да, удалить всё');
   String get editName => _s(en:'Edit Name', ko:'이름 수정', ja:'名前を編集', zhCN:'编辑名称', zhTW:'編輯名稱', es:'Editar nombre', de:'Name bearbeiten', pt:'Editar nome', ru:'Изменить имя');
   String get nameHint => _s(en:'Enter your name', ko:'이름을 입력하세요', ja:'名前を入力', zhCN:'输入名称', zhTW:'輸入名稱', es:'Ingresa tu nombre', de:'Name eingeben', pt:'Digite seu nome', ru:'Введите имя');
   String get appSettings => _s(en:'App Settings', ko:'앱 설정', ja:'アプリ設定', zhCN:'应用设置', zhTW:'應用程式設定', es:'Ajustes de la app', de:'App-Einstellungen', pt:'Configurações do app', ru:'Настройки приложения');
@@ -411,7 +460,22 @@ class AppStrings {
   String get emailRequired => _s(en:'Please enter your email', ko:'이메일을 입력해주세요', ja:'メールアドレスを入力してください', zhCN:'请输入邮箱', zhTW:'請輸入電子郵件', es:'Por favor ingresa tu correo', de:'Bitte E-Mail eingeben', pt:'Por favor insira seu e-mail', ru:'Пожалуйста, введите e-mail');
   String get emailInvalid => _s(en:'Invalid email format', ko:'올바른 이메일 형식이 아닙니다', ja:'正しいメール形式ではありません', zhCN:'邮箱格式不正确', zhTW:'電子郵件格式不正確', es:'Formato de correo no válido', de:'Ungültiges E-Mail-Format', pt:'Formato de e-mail inválido', ru:'Неверный формат e-mail');
   String get passwordRequired => _s(en:'Please enter your password', ko:'비밀번호를 입력해주세요', ja:'パスワードを入力してください', zhCN:'请输入密码', zhTW:'請輸入密碼', es:'Por favor ingresa tu contraseña', de:'Bitte Passwort eingeben', pt:'Por favor insira sua senha', ru:'Пожалуйста, введите пароль');
-  String get migrationError => _s(en:'Error during data migration:', ko:'데이터 이전 중 문제가 발생했습니다:', ja:'データ移行中にエラーが発生しました：', zhCN:'数据迁移时出错：', zhTW:'資料遷移時出錯：', es:'Error durante la migración de datos:', de:'Fehler bei der Datenmigration:', pt:'Erro durante a migração de dados:', ru:'Ошибка при миграции данных:');
+  String get migrationError => _s(en:'Error during data migration:', ko:'데이터 이전 중 문제가 발생했습니다:', ja:'データ移行中にエラーが発생しました：', zhCN:'数据迁移时出错：', zhTW:'資料遷移時出錯：', es:'Error durante la migración de datos:', de:'Fehler bei der Datenmigration:', pt:'Erro durante a migração de dados:', ru:'Ошибка при миграции данных:');
+  String get emailEnglishOnly => _s(en:'Email must be entered in English only.', ko:'이메일은 영문으로만 입력해주세요.', ja:'メールアドレスは英語で入力してください。', zhCN:'请用英文输入邮箱地址。', zhTW:'請用英文輸入電子郵件地址。', es:'El correo debe ingresarse solo en inglés.', de:'E-Mail bitte nur auf Englisch eingeben.', pt:'O e-mail deve ser inserido apenas em inglês.', ru:'Email необходимо вводить только на английском.');
+  String get mergeDialogTitle => _s(en:'Guest Data Found', ko:'게스트 데이터 발견', ja:'ゲストデータが見つかりました', zhCN:'发现访客数据', zhTW:'發現訪客資料', es:'Datos de invitado encontrados', de:'Gastdaten gefunden', pt:'Dados de convidado encontrados', ru:'Найдены данные гостя');
+  String mergeDialogBody(int count) => _s(
+    en: 'You have $count challenge(s) created in guest mode. What would you like to do?',
+    ko: '게스트 모드에서 만든 챌린지 ${count}개가 있습니다. 어떻게 처리하시겠습니까?',
+    ja: 'ゲストモードで作成したチャレンジが${count}件あります。どうしますか？',
+    zhCN: '您在访客模式下创建了${count}个挑战。您想怎么处理？',
+    zhTW: '您在訪客模式下建立了${count}個挑戰。您想怎麼處理？',
+    es: 'Tienes $count desafío(s) creado(s) en modo invitado. ¿Qué deseas hacer?',
+    de: 'Sie haben $count Challenge(s) im Gastmodus erstellt. Was möchten Sie tun?',
+    pt: 'Você tem $count desafio(s) criado(s) no modo convidado. O que deseja fazer?',
+    ru: 'У вас есть $count вызов(а/ов), созданных в гостевом режиме. Что вы хотите сделать?',
+  );
+  String get mergeDialogKeepServer => _s(en:'Keep existing data', ko:'기존 데이터 유지', ja:'既存データを保持', zhCN:'保留现有数据', zhTW:'保留現有資料', es:'Mantener datos existentes', de:'Vorhandene Daten behalten', pt:'Manter dados existentes', ru:'Сохранить текущие данные');
+  String get mergeDialogMerge => _s(en:'Merge guest data', ko:'게스트 데이터 병합', ja:'ゲストデータを統合', zhCN:'合并访客数据', zhTW:'合併訪客資料', es:'Combinar datos de invitado', de:'Gastdaten zusammenführen', pt:'Mesclar dados de convidado', ru:'Объединить данные гостя');
 
   // ── Sign-Up Screen ───────────────────────────────────────────
   String get signUpTitle => _s(en:"Let's get started!", ko:'시작해볼까요?', ja:'さあ、始めましょう！', zhCN:'开始吧！', zhTW:'開始吧！', es:'¡Empecemos!', de:'Legen wir los!', pt:'Vamos começar!', ru:'Начнём!');
