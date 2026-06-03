@@ -1,6 +1,9 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../l10n/app_strings.dart';
 import '../models/badge_definition.dart';
+import '../providers/settings_provider.dart';
 
 class BadgeUnlockDialog extends StatefulWidget {
   final BadgeDefinition badge;
@@ -90,9 +93,9 @@ class _BadgeCard extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text(
-            '🎉 배지 획득!',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          Text(
+            context.read<SettingsProvider>().strings.badgeUnlockTitle,
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 20),
           Container(
@@ -157,9 +160,9 @@ class _BadgeCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: const Text(
-                '확인',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              child: Text(
+                context.read<SettingsProvider>().strings.ok,
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ),
           ),

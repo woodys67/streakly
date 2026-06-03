@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/challenge.dart';
@@ -14,6 +15,9 @@ enum MigrationStatus {
 
   /// 클라우드에 이미 데이터가 있음 — 로컬 데이터 삭제 후 클라우드 유지
   cloudDataExists,
+
+  /// 로컬과 클라우드 모두 데이터 있음 — 유저가 처리 방식을 선택해야 함
+  conflictDetected,
 
   /// 마이그레이션 실패 (롤백 완료)
   failed,
@@ -38,16 +42,27 @@ class MigrationResult {
 class MigrationService {
   static SupabaseClient get _db => Supabase.instance.client;
 
+  /// 로컬 게스트 데이터를 삭제.
+  static Future<void> discardLocalData() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_challengesKey);
+  }
+
   /// 게스트 로컬 데이터를 Supabase 계정으로 마이그레이션.
   ///
-  /// - 클라우드에 이미 데이터가 있으면 로컬만 삭제하고 [MigrationStatus.cloudDataExists] 반환.
+  /// - [forceUpload]가 false일 때 클라우드에 데이터가 있으면 [MigrationStatus.conflictDetected] 반환
+  ///   (로컬 데이터는 삭제하지 않음 — 유저 선택 대기).
+  /// - [forceUpload]가 true이면 클라우드 존재 여부와 무관하게 업로드.
   /// - 삽입 도중 오류 발생 시 삽입한 데이터를 롤백하고 [MigrationStatus.failed] 반환.
   /// - 로컬 데이터 없으면 [MigrationStatus.noLocalData] 반환.
-  static Future<MigrationResult> migrate(String userId) async {
+  static Future<MigrationResult> migrate(String userId, {bool forceUpload = false}) async {
     final prefs = await SharedPreferences.getInstance();
     final jsonString = prefs.getString(_challengesKey);
 
+    debugPrint('[Migration] SharedPreferences challenges: ${jsonString == null ? 'null (없음)' : '${jsonString.length}자'}');
+
     if (jsonString == null) {
+      debugPrint('[Migration] → noLocalData (key 없음)');
       return const MigrationResult(status: MigrationStatus.noLocalData);
     }
 
@@ -57,30 +72,42 @@ class MigrationService {
       localChallenges = jsonList
           .map((j) => Challenge.fromJson(j as Map<String, dynamic>))
           .toList();
-    } catch (_) {
+    } catch (e) {
+      debugPrint('[Migration] → noLocalData (파싱 실패: $e)');
       return const MigrationResult(status: MigrationStatus.noLocalData);
     }
+
+    debugPrint('[Migration] 로컬 챌린지 수: ${localChallenges.length}, forceUpload: $forceUpload');
 
     if (localChallenges.isEmpty) {
+      debugPrint('[Migration] → noLocalData (빈 리스트)');
       return const MigrationResult(status: MigrationStatus.noLocalData);
     }
 
-    // 클라우드에 이미 데이터가 있으면 덮어쓰지 않음
-    try {
-      final existing = await _db
-          .from('challenges')
-          .select('id')
-          .eq('user_id', userId)
-          .limit(1);
-      if ((existing as List).isNotEmpty) {
-        await prefs.remove(_challengesKey);
-        return const MigrationResult(status: MigrationStatus.cloudDataExists);
+    // 클라우드 충돌 확인 (forceUpload이면 건너뜀)
+    if (!forceUpload) {
+      try {
+        final existing = await _db
+            .from('challenges')
+            .select('id')
+            .eq('user_id', userId)
+            .limit(1);
+        debugPrint('[Migration] 서버 기존 데이터: ${(existing as List).length}건');
+        if ((existing as List).isNotEmpty) {
+          // 로컬 데이터를 삭제하지 않고 충돌 상태 반환 — 유저가 처리 방식을 선택
+          debugPrint('[Migration] → conflictDetected (로컬 ${localChallenges.length}개, 서버 있음)');
+          return MigrationResult(
+            status: MigrationStatus.conflictDetected,
+            migratedCount: localChallenges.length,
+          );
+        }
+      } catch (e) {
+        debugPrint('[Migration] → failed (클라우드 확인 오류: $e)');
+        return MigrationResult(
+          status: MigrationStatus.failed,
+          error: '클라우드 중복 확인 실패: $e',
+        );
       }
-    } catch (e) {
-      return MigrationResult(
-        status: MigrationStatus.failed,
-        error: '클라우드 중복 확인 실패: $e',
-      );
     }
 
     // 삽입된 challenge ID 목록 (롤백용)

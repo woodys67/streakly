@@ -488,17 +488,42 @@ class ChallengeProvider extends ChangeNotifier {
   // 게스트 → 클라우드 마이그레이션
   // ─────────────────────────────────────────
 
-  /// MigrationService에 위임한 뒤 인메모리 챌린지를 새로 로드.
-  /// [userId]를 명시하면 Supabase 세션 없이도 동작 (이메일 미인증 직후 등).
-  Future<MigrationResult> syncLocalToCloud({String? userId}) async {
+  /// 게스트 로컬 데이터를 클라우드로 동기화.
+  ///
+  /// [merge]가 null이면 충돌 감지 모드 — 양쪽에 데이터가 있으면
+  /// [MigrationStatus.conflictDetected]를 반환하고 서버 로드를 하지 않음 (UI가 다이얼로그 표시).
+  /// [merge]가 true이면 로컬 데이터를 서버에 병합, false이면 로컬 데이터를 버리고 서버 데이터 유지.
+  Future<MigrationResult> syncLocalToCloud({String? userId, bool? merge}) async {
     final effectiveId = userId?.isNotEmpty == true ? userId! : _currentUser?.id;
     if (effectiveId == null || effectiveId.isEmpty) {
       return const MigrationResult(
           status: MigrationStatus.failed, error: '로그인 상태가 아닙니다');
     }
-    debugPrint('[Streakly] syncLocalToCloud 시작 (userId: $effectiveId)');
-    final result = await MigrationService.migrate(effectiveId);
+
+    // 유저가 "기존 데이터 유지"를 선택한 경우 — 로컬만 삭제 후 서버 로드
+    if (merge == false) {
+      await MigrationService.discardLocalData();
+      _isLoading = true;
+      notifyListeners();
+      try {
+        await _loadFromServerById(effectiveId);
+      } catch (e) {
+        debugPrint('[Streakly] 서버 로드 실패: $e');
+        _challenges = [];
+      }
+      _isLoading = false;
+      notifyListeners();
+      return const MigrationResult(status: MigrationStatus.cloudDataExists);
+    }
+
+    debugPrint('[Streakly] syncLocalToCloud 시작 (userId: $effectiveId, merge: $merge)');
+    final result = await MigrationService.migrate(effectiveId, forceUpload: merge == true);
     debugPrint('[Streakly] 마이그레이션 결과: ${result.status}, 이전 수: ${result.migratedCount}');
+
+    // 충돌 감지 — 서버 로드 없이 반환 (UI가 다이얼로그 표시 후 재호출)
+    if (result.status == MigrationStatus.conflictDetected) {
+      return result;
+    }
 
     // auth 상태 전환 타이밍과 무관하게 effectiveId로 서버에서 직접 로드
     _isLoading = true;

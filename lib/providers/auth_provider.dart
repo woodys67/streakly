@@ -85,7 +85,7 @@ class AuthProvider extends ChangeNotifier {
         } on AuthException catch (signInErr) {
           if (signInErr.message.toLowerCase().contains('email not confirmed')) {
             _isEmailNotConfirmed = true;
-            _error = '이메일 인증이 필요합니다. 받은 편지함을 확인해주세요.';
+            _error = 'email_not_confirmed';
             return false;
           }
         } catch (_) {}
@@ -187,7 +187,7 @@ class AuthProvider extends ChangeNotifier {
 
       final idToken = appleCredential.identityToken;
       if (idToken == null) {
-        _error = 'Apple 로그인에 실패했습니다.';
+        _error = 'apple_login_failed';
         return false;
       }
 
@@ -200,7 +200,7 @@ class AuthProvider extends ChangeNotifier {
       return _user != null;
     } on SignInWithAppleAuthorizationException catch (e) {
       if (e.code != AuthorizationErrorCode.canceled) {
-        _error = 'Apple 로그인 중 오류가 발생했습니다.';
+        _error = 'apple_login_error';
       }
       return false;
     } on AuthException catch (e) {
@@ -226,7 +226,7 @@ class AuthProvider extends ChangeNotifier {
       final googleAuth = await googleUser.authentication;
       final idToken = googleAuth.idToken;
       if (idToken == null) {
-        _error = 'Google 로그인에 실패했습니다.';
+        _error = 'google_login_failed';
         return false;
       }
 

@@ -1,9 +1,10 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import '../../l10n/app_strings.dart';
 import '../../models/badge_definition.dart';
 import '../../providers/badge_provider.dart';
+import '../../providers/settings_provider.dart';
 import '../../services/badge_catalog.dart';
 import '../../theme/app_theme.dart';
 
@@ -17,18 +18,19 @@ class BadgeCollectionScreen extends StatefulWidget {
 class _BadgeCollectionScreenState extends State<BadgeCollectionScreen> {
   BadgeCategory? _selectedCategory;
 
-  static const _categoryLabels = {
-    null: '전체',
-    BadgeCategory.streak: '🔥 스트릭',
-    BadgeCategory.completion: '🏆 완주',
-    BadgeCategory.logging: '📝 기록',
-    BadgeCategory.timing: '⏰ 타이밍',
-    BadgeCategory.subroutine: '🧩 서브루틴',
-    BadgeCategory.team: '👥 팀',
+  Map<BadgeCategory?, String> _categoryLabels(AppStrings s) => {
+    null: s.badgeCategoryAll,
+    BadgeCategory.streak: s.badgeCategoryStreak,
+    BadgeCategory.completion: s.badgeCategoryCompletion,
+    BadgeCategory.logging: s.badgeCategoryLogging,
+    BadgeCategory.timing: s.badgeCategoryTiming,
+    BadgeCategory.subroutine: s.badgeCategorySubroutine,
+    BadgeCategory.team: s.badgeCategoryTeam,
   };
 
   @override
   Widget build(BuildContext context) {
+    final s = context.watch<SettingsProvider>().strings;
     final badgeProvider = context.watch<BadgeProvider>();
     final allBadges = BadgeCatalog.all;
     final filtered = _selectedCategory == null
@@ -39,7 +41,7 @@ class _BadgeCollectionScreenState extends State<BadgeCollectionScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('배지 컬렉션'),
+        title: Text(s.badgeCollectionTitle),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16),
@@ -62,7 +64,7 @@ class _BadgeCollectionScreenState extends State<BadgeCollectionScreen> {
           _CategoryFilter(
             selected: _selectedCategory,
             onChanged: (c) => setState(() => _selectedCategory = c),
-            labels: _categoryLabels,
+            labels: _categoryLabels(s),
           ),
           Expanded(
             child: GridView.builder(
@@ -126,7 +128,7 @@ class _ProgressBar extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '획득한 배지',
+                context.read<SettingsProvider>().strings.badgeEarnedSection,
                 style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
@@ -341,7 +343,7 @@ class _BadgeDetailSheet extends StatelessWidget {
           _RarityRow(rarity: badge.rarity),
           const SizedBox(height: 12),
           Text(
-            isSecret ? '조건이 숨겨져 있습니다.' : badge.descKo,
+            isSecret ? context.read<SettingsProvider>().strings.badgeSecretCondition : badge.descKo,
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 14, color: Colors.grey[700]),
           ),
@@ -361,7 +363,7 @@ class _BadgeDetailSheet extends StatelessWidget {
                       color: AppColors.primary, size: 16),
                   const SizedBox(width: 6),
                   Text(
-                    '${DateFormat('yyyy년 M월 d일').format(earnedAt!)} 획득',
+                    context.read<SettingsProvider>().strings.badgeEarnedOn(earnedAt!),
                     style: const TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,

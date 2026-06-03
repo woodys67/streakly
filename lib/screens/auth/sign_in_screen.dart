@@ -1,12 +1,149 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import '../../utils/ascii_only_formatter.dart';
 import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/challenge_provider.dart';
+import '../../l10n/app_strings.dart';
 import '../../providers/settings_provider.dart';
 import '../../services/migration_service.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/social_login_buttons.dart';
 import 'forgot_password_screen.dart';
+
+/// auth_provider에서 설정되는 에러 키를 현재 언어 문자열로 변환.
+String _localizeAuthError(String? errorKey, AppStrings s) {
+  switch (errorKey) {
+    case 'email_not_confirmed': return s.emailNotConfirmedError;
+    case 'apple_login_failed':  return s.appleLoginFailed;
+    case 'apple_login_error':   return s.appleLoginError;
+    case 'google_login_failed': return s.googleLoginFailed;
+    default: return errorKey ?? '';
+  }
+}
+
+/// 로그인 성공 후 공통 처리 — 마이그레이션 수행 및 충돌 다이얼로그 표시.
+Future<void> _onAuthSuccess(BuildContext context) async {
+  final auth = context.read<AuthProvider>();
+  final challengeProvider = context.read<ChallengeProvider>();
+  final settingsProvider = context.read<SettingsProvider>();
+
+  final userId = auth.userId;
+  final displayName = auth.displayName;
+
+  if (userId.isEmpty) {
+    if (context.mounted) Navigator.of(context).popUntil((route) => route.isFirst);
+    return;
+  }
+
+  await settingsProvider.loadSettings(
+    fallbackDisplayName: displayName,
+    userId: userId,
+  );
+
+  final result = await challengeProvider.syncLocalToCloud(userId: userId);
+
+  if (!context.mounted) return;
+
+  if (result.status == MigrationStatus.conflictDetected) {
+    final mergeResult = await _showMergeDialog(
+      context, challengeProvider, settingsProvider, userId, result.migratedCount,
+    );
+    if (!context.mounted) return;
+    if (mergeResult != null &&
+        mergeResult.status == MigrationStatus.failed &&
+        mergeResult.error != null) {
+      final s = settingsProvider.strings;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('${s.migrationError} ${mergeResult.error}'),
+          backgroundColor: AppColors.error,
+        ),
+      );
+    }
+  } else if (result.status == MigrationStatus.failed &&
+      result.error != null &&
+      result.error != '로그인 상태가 아닙니다') {
+    final s = settingsProvider.strings;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('${s.migrationError} ${result.error}'),
+        backgroundColor: AppColors.error,
+      ),
+    );
+  }
+
+  Navigator.of(context).popUntil((route) => route.isFirst);
+}
+
+/// 로컬·클라우드 데이터 충돌 시 유저에게 처리 방식을 물어보는 다이얼로그.
+/// 반환값: 다이얼로그 이후 실행된 syncLocalToCloud 결과.
+Future<MigrationResult?> _showMergeDialog(
+  BuildContext context,
+  ChallengeProvider challengeProvider,
+  SettingsProvider settingsProvider,
+  String userId,
+  int guestCount,
+) async {
+  final s = settingsProvider.strings;
+  final merge = await showDialog<bool>(
+    context: context,
+    barrierDismissible: false,
+    builder: (ctx) => PopScope(
+      canPop: false,
+      child: AlertDialog(
+        backgroundColor: AppColors.cardBackground,
+        title: Text(
+          s.mergeDialogTitle,
+          style: const TextStyle(
+            color: AppColors.textPrimary,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              s.mergeDialogBody(guestCount),
+              style: const TextStyle(color: AppColors.textSecondary, height: 1.4),
+            ),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Expanded(
+                  child: TextButton(
+                    onPressed: () => Navigator.of(ctx).pop(false),
+                    child: Text(
+                      s.mergeDialogKeepServer,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(color: AppColors.textSecondary),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: TextButton(
+                    onPressed: () => Navigator.of(ctx).pop(true),
+                    child: Text(
+                      s.mergeDialogMerge,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+  if (!context.mounted) return null;
+  // merge == null은 발생하지 않지만(canPop: false로 뒤로가기 차단) 방어적으로 처리
+  return challengeProvider.syncLocalToCloud(userId: userId, merge: merge ?? false);
+}
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -26,46 +163,6 @@ class _SignInScreenState extends State<SignInScreen> {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
-  }
-
-  Future<void> _onAuthSuccess(BuildContext context) async {
-    final auth = context.read<AuthProvider>();
-    final challengeProvider = context.read<ChallengeProvider>();
-    final settingsProvider = context.read<SettingsProvider>();
-
-    // userId와 displayName을 await 이전에 캡처 — 이후 onAuthStateChange 이벤트로
-    // _user가 바뀌어도 올바른 값을 유지.
-    final userId = auth.userId;
-    final displayName = auth.displayName;
-
-    if (userId.isEmpty) {
-      if (context.mounted) Navigator.of(context).popUntil((route) => route.isFirst);
-      return;
-    }
-
-    // public.users 행 확보 (challenges FK 삽입을 위해 먼저 실행)
-    await settingsProvider.loadSettings(
-      fallbackDisplayName: displayName,
-      userId: userId,
-    );
-
-    final result = await challengeProvider.syncLocalToCloud(userId: userId);
-
-    if (!context.mounted) return;
-
-    if (result.status == MigrationStatus.failed &&
-        result.error != null &&
-        result.error != '로그인 상태가 아닙니다') {
-      final s = context.read<SettingsProvider>().strings;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('${s.migrationError} ${result.error}'),
-          backgroundColor: AppColors.error,
-        ),
-      );
-    }
-
-    Navigator.of(context).popUntil((route) => route.isFirst);
   }
 
   Future<void> _signInWithEmail(AuthProvider auth) async {
@@ -143,7 +240,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                   const SizedBox(height: 8),
                   if (auth.error != null) ...[
-                    _ErrorBox(message: auth.error!),
+                    _ErrorBox(message: _localizeAuthError(auth.error, s)),
                     if (auth.isEmailNotConfirmed)
                       Align(
                         alignment: Alignment.centerLeft,
@@ -221,43 +318,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
     _passwordController.dispose();
     _confirmController.dispose();
     super.dispose();
-  }
-
-  Future<void> _onAuthSuccess(BuildContext context) async {
-    final auth = context.read<AuthProvider>();
-    final challengeProvider = context.read<ChallengeProvider>();
-    final settingsProvider = context.read<SettingsProvider>();
-
-    final userId = auth.userId;
-    final displayName = auth.displayName;
-
-    if (userId.isEmpty) {
-      if (context.mounted) Navigator.of(context).popUntil((route) => route.isFirst);
-      return;
-    }
-
-    await settingsProvider.loadSettings(
-      fallbackDisplayName: displayName,
-      userId: userId,
-    );
-
-    final result = await challengeProvider.syncLocalToCloud(userId: userId);
-
-    if (!context.mounted) return;
-
-    if (result.status == MigrationStatus.failed &&
-        result.error != null &&
-        result.error != '로그인 상태가 아닙니다') {
-      final s = context.read<SettingsProvider>().strings;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('${s.migrationError} ${result.error}'),
-          backgroundColor: AppColors.error,
-        ),
-      );
-    }
-
-    Navigator.of(context).popUntil((route) => route.isFirst);
   }
 
   Future<void> _signUp(AuthProvider auth) async {
@@ -341,7 +401,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   const SizedBox(height: 20),
                   if (auth.error != null)
-                    _ErrorBox(message: auth.error!),
+                    _ErrorBox(message: _localizeAuthError(auth.error, s)),
                   const SizedBox(height: 4),
                   _PrimaryButton(
                     label: s.signUp,
@@ -391,6 +451,19 @@ class _EmailField extends StatelessWidget {
       hint: 'example@email.com',
       icon: Icons.email_outlined,
       keyboardType: TextInputType.emailAddress,
+      inputFormatters: [
+        AsciiOnlyFormatter(
+          onBlocked: () {
+            ScaffoldMessenger.of(context)
+              ..clearSnackBars()
+              ..showSnackBar(SnackBar(
+                content: Text(s.emailEnglishOnly),
+                duration: const Duration(seconds: 2),
+                behavior: SnackBarBehavior.floating,
+              ));
+          },
+        ),
+      ],
       validator: (v) {
         if (v == null || v.trim().isEmpty) return s.emailRequired;
         if (!v.contains('@')) return s.emailInvalid;
@@ -407,6 +480,7 @@ class _TextField extends StatelessWidget {
   final IconData icon;
   final TextInputType? keyboardType;
   final String? Function(String?)? validator;
+  final List<TextInputFormatter>? inputFormatters;
 
   const _TextField({
     required this.controller,
@@ -415,6 +489,7 @@ class _TextField extends StatelessWidget {
     required this.icon,
     this.keyboardType,
     this.validator,
+    this.inputFormatters,
   });
 
   @override
@@ -423,6 +498,7 @@ class _TextField extends StatelessWidget {
       controller: controller,
       keyboardType: keyboardType,
       validator: validator,
+      inputFormatters: inputFormatters,
       decoration: InputDecoration(
         labelText: label,
         hintText: hint,
@@ -452,6 +528,9 @@ class _PasswordField extends StatelessWidget {
     return TextFormField(
       controller: controller,
       obscureText: obscure,
+      inputFormatters: [
+        FilteringTextInputFormatter.allow(RegExp(r'[\x20-\x7E]')),
+      ],
       validator: validator ??
           (v) => (v == null || v.isEmpty)
               ? context.read<SettingsProvider>().strings.passwordRequired

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../utils/ascii_only_formatter.dart';
 import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/settings_provider.dart';
@@ -108,6 +109,20 @@ class _FormView extends StatelessWidget {
           TextFormField(
             controller: emailController,
             keyboardType: TextInputType.emailAddress,
+            inputFormatters: [
+              AsciiOnlyFormatter(
+                onBlocked: () {
+                  final s = context.read<SettingsProvider>().strings;
+                  ScaffoldMessenger.of(context)
+                    ..clearSnackBars()
+                    ..showSnackBar(SnackBar(
+                      content: Text(s.emailEnglishOnly),
+                      duration: const Duration(seconds: 2),
+                      behavior: SnackBarBehavior.floating,
+                    ));
+                },
+              ),
+            ],
             validator: (v) {
               if (v == null || v.trim().isEmpty) return s.emailRequired;
               if (!v.contains('@')) return s.emailInvalid;

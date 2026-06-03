@@ -147,9 +147,9 @@ class _BadgeSummaryCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  '배지 컬렉션',
-                  style: TextStyle(
+                Text(
+                  context.read<SettingsProvider>().strings.badgeCollectionTitle,
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: AppColors.textPrimary,
@@ -205,7 +205,7 @@ class _BadgeSummaryCard extends StatelessWidget {
             ] else ...[
               const SizedBox(height: 12),
               Text(
-                '아직 획득한 배지가 없습니다. 체크인을 시작해보세요!',
+                context.read<SettingsProvider>().strings.badgeEarnedEmpty,
                 style: TextStyle(fontSize: 13, color: Colors.grey[500]),
               ),
             ],
