@@ -92,6 +92,8 @@ class HomeScreen extends StatelessWidget {
                             provider.toggleTodayComplete(challenge.id),
                         onSubRoutineToggle: (subId) =>
                             provider.toggleSubRoutineComplete(challenge.id, subId),
+                        canRecover: provider.canRecoverStreak(challenge),
+                        onRecover: () => _showRecoverDialog(context, provider, settings, challenge.id),
                       ),
                     ),
                   ),
@@ -121,6 +123,45 @@ class HomeScreen extends StatelessWidget {
         child: const Icon(Icons.add, color: AppColors.white),
       ),
     );
+  }
+
+  Future<void> _showRecoverDialog(
+    BuildContext context,
+    ChallengeProvider provider,
+    SettingsProvider settings,
+    String challengeId,
+  ) async {
+    final s = settings.strings;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(s.recoverStreakConfirmTitle),
+        content: Text(s.recoverStreakConfirmBody),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: Text(s.cancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            style: TextButton.styleFrom(foregroundColor: AppColors.primary),
+            child: Text(s.recoverStreak),
+          ),
+        ],
+      ),
+    );
+    if (confirmed == true && context.mounted) {
+      await provider.recoverStreak(challengeId);
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(s.streakRecovered),
+            backgroundColor: AppColors.primary,
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
+    }
   }
 }
 

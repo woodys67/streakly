@@ -9,7 +9,7 @@ class StreakCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final willpower = context.watch<ChallengeProvider>().willpower;
+    final willpower = context.watch<ChallengeProvider>().effectiveWillpower;
     final s = context.watch<SettingsProvider>().strings;
 
     return Container(

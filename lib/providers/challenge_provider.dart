@@ -12,12 +12,16 @@ import '../services/notification_service.dart';
 import 'badge_provider.dart';
 
 const String _challengesKey = 'challenges';
+const String _willpowerSpentKey = 'willpower_spent';
+const int _recoveryCost = 3;
+const int _recoveryCooldownDays = 7;
 const _uuid = Uuid();
 
 class ChallengeProvider extends ChangeNotifier {
   List<Challenge> _challenges = [];
   int _selectedChallengeIndex = 0;
   bool _isLoading = false;
+  int _willpowerSpent = 0;
   BadgeProvider? _badgeProvider;
 
   void setBadgeProvider(BadgeProvider bp) => _badgeProvider = bp;
@@ -62,6 +66,51 @@ class ChallengeProvider extends ChangeNotifier {
   // 모든 챌린지 completedDays 합산 (패널티 없음, 항상 증가)
   int get willpower =>
       _challenges.fold(0, (sum, c) => sum + c.completedDays.length);
+
+  // 스트릭 복구에 사용된 의지력을 차감한 실질 의지력
+  int get effectiveWillpower => (willpower - _willpowerSpent).clamp(0, 99999);
+
+  bool canRecoverStreak(Challenge challenge) {
+    if (challenge.isTodayCompleted) return false;
+    if (challenge.currentDay < 2) return false;
+    if (challenge.completedDays.contains(challenge.currentDay - 1)) return false;
+    if (effectiveWillpower < _recoveryCost) return false;
+    if (challenge.lastRecoveryDate != null &&
+        DateTime.now().difference(challenge.lastRecoveryDate!).inDays < _recoveryCooldownDays) return false;
+    return true;
+  }
+
+  Future<void> recoverStreak(String challengeId) async {
+    final idx = _challenges.indexWhere((c) => c.id == challengeId);
+    if (idx == -1) return;
+    final challenge = _challenges[idx];
+    if (!canRecoverStreak(challenge)) return;
+
+    final recoveredDay = challenge.currentDay - 1;
+    final updatedCompleted = List<int>.from(challenge.completedDays)..add(recoveredDay);
+
+    _challenges[idx] = challenge.copyWith(
+      completedDays: updatedCompleted,
+      lastRecoveryDate: DateTime.now(),
+    );
+    _willpowerSpent += _recoveryCost;
+
+    notifyListeners();
+    await _saveLocalChallenges();
+    await _saveWillpowerSpent();
+
+    final user = _currentUser;
+    if (user != null) {
+      await _db.from('challenges').update({
+        'completed_days': updatedCompleted,
+      }).eq('id', challengeId).eq('user_id', user.id);
+    }
+  }
+
+  Future<void> _saveWillpowerSpent() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(_willpowerSpentKey, _willpowerSpent);
+  }
 
   double get overallSuccessRate {
     if (_challenges.isEmpty) return 0;
@@ -115,6 +164,7 @@ class ChallengeProvider extends ChangeNotifier {
     } else {
       _challenges = [];
     }
+    _willpowerSpent = prefs.getInt(_willpowerSpentKey) ?? 0;
   }
 
   Future<void> _loadFromServerById(String userId) async {
@@ -465,7 +515,9 @@ class ChallengeProvider extends ChangeNotifier {
   Future<void> clearLocalCache() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_challengesKey);
+    await prefs.remove(_willpowerSpentKey);
     _challenges = [];
+    _willpowerSpent = 0;
     notifyListeners();
   }
 

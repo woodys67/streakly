@@ -55,6 +55,12 @@ class AppStrings {
   String get save => _s(en:'Save', ko:'저장', ja:'保存', zhCN:'保存', zhTW:'儲存', es:'Guardar', de:'Speichern', pt:'Salvar', ru:'Сохранить');
   String get delete => _s(en:'Delete', ko:'삭제', ja:'削除', zhCN:'删除', zhTW:'刪除', es:'Eliminar', de:'Löschen', pt:'Excluir', ru:'Удалить');
   String get ok => _s(en:'OK', ko:'확인', ja:'OK', zhCN:'确定', zhTW:'確定', es:'Aceptar', de:'OK', pt:'OK', ru:'ОК');
+  String get recoverStreak => _s(en:'Recover Streak', ko:'스트릭 복구', ja:'ストリーク回復', zhCN:'恢复连续', zhTW:'恢復連續', es:'Recuperar racha', de:'Serie wiederherstellen', pt:'Recuperar sequência', ru:'Восстановить серию');
+  String get recoverStreakCost => _s(en:'Costs 3 Willpower', ko:'의지력 3 소모', ja:'意志力3消費', zhCN:'消耗3意志力', zhTW:'消耗3意志力', es:'Cuesta 3 fuerza de voluntad', de:'Kostet 3 Willenskraft', pt:'Custa 3 força de vontade', ru:'Стоит 3 силы воли');
+  String get recoverStreakConfirmTitle => _s(en:'Recover Streak?', ko:'스트릭을 복구할까요?', ja:'ストリークを回復しますか？', zhCN:'恢复连续记录？', zhTW:'恢復連續記錄？', es:'¿Recuperar racha?', de:'Serie wiederherstellen?', pt:'Recuperar sequência?', ru:'Восстановить серию?');
+  String get recoverStreakConfirmBody => _s(en:'Yesterday\'s streak will be restored by spending 3 Willpower.', ko:'의지력 3을 소모하여 어제의 스트릭을 복구합니다.', ja:'意志力3を消費して昨日のストリークを回復します。', zhCN:'消耗3意志力恢复昨天的连续记录。', zhTW:'消耗3意志力恢復昨天的連續記錄。', es:'Se restaurará la racha de ayer gastando 3 de fuerza de voluntad.', de:'Der gestrige Streak wird durch den Verbrauch von 3 Willenskraft wiederhergestellt.', pt:'A sequência de ontem será restaurada gastando 3 de força de vontade.', ru:'Вчерашняя серия будет восстановлена с расходом 3 силы воли.');
+  String get streakRecovered => _s(en:'Streak Recovered!', ko:'스트릭이 복구되었습니다!', ja:'ストリーク回復完了！', zhCN:'连续记录已恢复！', zhTW:'連續記錄已恢復！', es:'¡Racha recuperada!', de:'Serie wiederhergestellt!', pt:'Sequência recuperada!', ru:'Серия восстановлена!');
+  String get notEnoughWillpower => _s(en:'Not enough Willpower', ko:'의지력이 부족합니다', ja:'意志力が不足しています', zhCN:'意志力不足', zhTW:'意志力不足', es:'Fuerza de voluntad insuficiente', de:'Nicht genug Willenskraft', pt:'Força de vontade insuficiente', ru:'Недостаточно силы воли');
   String get createChallenge => _s(en:'Create Challenge', ko:'챌린지 만들기', ja:'チャレンジを作成', zhCN:'创建挑战', zhTW:'建立挑戰', es:'Crear desafío', de:'Challenge erstellen', pt:'Criar desafio', ru:'Создать вызов');
 
   // ── Badge ────────────────────────────────────────────────────

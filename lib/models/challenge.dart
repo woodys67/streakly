@@ -15,6 +15,7 @@ class Challenge {
   final bool isCompleted;
   // day → completed sub-routine IDs
   final Map<int, List<String>> completedSubRoutines;
+  final DateTime? lastRecoveryDate;
 
   Challenge({
     required this.id,
@@ -29,6 +30,7 @@ class Challenge {
     this.notes = '',
     this.isCompleted = false,
     this.completedSubRoutines = const {},
+    this.lastRecoveryDate,
   });
 
   int get currentDay {
@@ -77,6 +79,8 @@ class Challenge {
     String? notes,
     bool? isCompleted,
     Map<int, List<String>>? completedSubRoutines,
+    DateTime? lastRecoveryDate,
+    bool clearLastRecoveryDate = false,
   }) {
     return Challenge(
       id: id ?? this.id,
@@ -91,6 +95,7 @@ class Challenge {
       notes: notes ?? this.notes,
       isCompleted: isCompleted ?? this.isCompleted,
       completedSubRoutines: completedSubRoutines ?? this.completedSubRoutines,
+      lastRecoveryDate: clearLastRecoveryDate ? null : (lastRecoveryDate ?? this.lastRecoveryDate),
     );
   }
 
@@ -110,6 +115,7 @@ class Challenge {
       'completedSubRoutines': completedSubRoutines.map(
         (k, v) => MapEntry(k.toString(), v),
       ),
+      'lastRecoveryDate': lastRecoveryDate?.toIso8601String(),
     };
   }
 
@@ -135,6 +141,9 @@ class Challenge {
       notes: json['notes'] as String? ?? '',
       isCompleted: json['isCompleted'] as bool? ?? false,
       completedSubRoutines: parsedSubs,
+      lastRecoveryDate: json['lastRecoveryDate'] != null
+          ? DateTime.parse(json['lastRecoveryDate'] as String)
+          : null,
     );
   }
 
