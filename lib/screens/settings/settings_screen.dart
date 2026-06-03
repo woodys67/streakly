@@ -585,7 +585,7 @@ class _SettingsCard extends StatelessWidget {
                             onPressed: () {
                               Navigator.of(ctx).pop();
                               AppSettings.openAppSettings(
-                                type: AppSettingsType.notification,
+                                type: AppSettingsType.settings,
                               );
                             },
                             child: Text(s.goToSettings),
