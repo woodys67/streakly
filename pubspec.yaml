@@ -23,6 +23,7 @@ dependencies:
   google_sign_in: ^6.2.2
   crypto: ^3.0.3
   flutter_markdown: ^0.7.7
+  app_settings: ^7.0.0
 
 dev_dependencies:
   flutter_test:

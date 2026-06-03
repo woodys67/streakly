@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:app_settings/app_settings.dart';
 import '../../theme/app_theme.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/settings_provider.dart';
@@ -568,12 +569,31 @@ class _SettingsCard extends StatelessWidget {
               if (settings.notificationsEnabled) {
                 final granted = await NotificationService.requestPermission();
                 if (!granted) {
+                  await settings.toggleNotifications();
                   if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(s.notificationPermissionDenied)),
+                    await showDialog<void>(
+                      context: context,
+                      builder: (ctx) => AlertDialog(
+                        title: Text(s.notificationPermissionDeniedTitle),
+                        content: Text(s.notificationPermissionDeniedBody),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.of(ctx).pop(),
+                            child: Text(s.cancel),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(ctx).pop();
+                              AppSettings.openAppSettings(
+                                type: AppSettingsType.notification,
+                              );
+                            },
+                            child: Text(s.goToSettings),
+                          ),
+                        ],
+                      ),
                     );
                   }
-                  await settings.toggleNotifications();
                   return;
                 }
                 await NotificationService.rescheduleAll(challenges);
