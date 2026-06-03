@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:app_settings/app_settings.dart';
@@ -585,12 +586,18 @@ class _SettingsCard extends StatelessWidget {
                           TextButton(
                             onPressed: () async {
                               Navigator.of(ctx).pop();
-                              final uri = Uri.parse('app-settings:');
-                              if (await canLaunchUrl(uri)) {
-                                await launchUrl(uri);
+                              if (Platform.isIOS) {
+                                final uri = Uri.parse('app-settings:');
+                                if (await canLaunchUrl(uri)) {
+                                  await launchUrl(uri);
+                                } else {
+                                  AppSettings.openAppSettings(
+                                    type: AppSettingsType.settings,
+                                  );
+                                }
                               } else {
                                 AppSettings.openAppSettings(
-                                  type: AppSettingsType.settings,
+                                  type: AppSettingsType.notification,
                                 );
                               }
                             },
