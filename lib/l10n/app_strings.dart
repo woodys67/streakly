@@ -365,7 +365,7 @@ class AppStrings {
   String get editName => _s(en:'Edit Name', ko:'이름 수정', ja:'名前を編集', zhCN:'编辑名称', zhTW:'編輯名稱', es:'Editar nombre', de:'Name bearbeiten', pt:'Editar nome', ru:'Изменить имя');
   String get nameHint => _s(en:'Enter your name', ko:'이름을 입력하세요', ja:'名前を入力', zhCN:'输入名称', zhTW:'輸入名稱', es:'Ingresa tu nombre', de:'Name eingeben', pt:'Digite seu nome', ru:'Введите имя');
   String get appSettings => _s(en:'App Settings', ko:'앱 설정', ja:'アプリ設定', zhCN:'应用设置', zhTW:'應用程式設定', es:'Ajustes de la app', de:'App-Einstellungen', pt:'Configurações do app', ru:'Настройки приложения');
-  String get appGuide => _s(en:'App Guide', ko:'앱 소개', ja:'アプリガイド', zhCN:'应用介绍', zhTW:'應用程式介紹', es:'Guía de la app', de:'App-Anleitung', pt:'Guia do app', ru:'Руководство');
+  String get appGuide => _s(en:'App Guide', ko:'앱 가이드', ja:'アプリガイド', zhCN:'应用介绍', zhTW:'應用程式介紹', es:'Guía de la app', de:'App-Anleitung', pt:'Guia do app', ru:'Руководство');
 
   // 앱 소개 — 항목 타이틀
   String get guideHowToUse => _s(en:'How to Use', ko:'사용법', ja:'使い方', zhCN:'使用方法', zhTW:'使用方法', es:'Cómo usar', de:'Anleitung', pt:'Como usar', ru:'Как пользоваться');
