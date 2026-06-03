@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:app_settings/app_settings.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../theme/app_theme.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/settings_provider.dart';
@@ -582,11 +583,16 @@ class _SettingsCard extends StatelessWidget {
                             child: Text(s.cancel),
                           ),
                           TextButton(
-                            onPressed: () {
+                            onPressed: () async {
                               Navigator.of(ctx).pop();
-                              AppSettings.openAppSettings(
-                                type: AppSettingsType.settings,
-                              );
+                              final uri = Uri.parse('app-settings:');
+                              if (await canLaunchUrl(uri)) {
+                                await launchUrl(uri);
+                              } else {
+                                AppSettings.openAppSettings(
+                                  type: AppSettingsType.settings,
+                                );
+                              }
                             },
                             child: Text(s.goToSettings),
                           ),
