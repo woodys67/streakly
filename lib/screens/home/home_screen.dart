@@ -7,7 +7,6 @@ import '../../widgets/streak_card.dart';
 import '../../widgets/routine_item.dart';
 import '../../widgets/circular_progress.dart';
 import '../challenge/new_challenge_screen.dart';
-import '../settings/settings_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -30,15 +29,7 @@ class HomeScreen extends StatelessWidget {
             ),
           ],
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications_outlined),
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const SettingsScreen()),
-            ),
-          ),
-        ],
+        actions: const [],
       ),
       body: Consumer2<ChallengeProvider, SettingsProvider>(
         builder: (context, provider, settings, _) {

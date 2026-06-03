@@ -30,9 +30,7 @@ class SettingsScreen extends StatelessWidget {
             ),
           ],
         ),
-        actions: [
-          IconButton(icon: const Icon(Icons.notifications_outlined), onPressed: () {}),
-        ],
+        actions: const [],
       ),
       body: Consumer2<SettingsProvider, AuthProvider>(
         builder: (context, settings, auth, _) {
@@ -210,7 +208,7 @@ class SettingsScreen extends StatelessWidget {
       } else if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(auth.error ?? '계정 삭제에 실패했습니다.'),
+            content: Text(auth.error ?? context.read<SettingsProvider>().strings.deleteAccountFailed),
             backgroundColor: AppColors.error,
           ),
         );
@@ -281,7 +279,8 @@ class _ProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final displayName = isGuest && userName == 'Streakly User' ? '게스트' : userName;
+    final s = context.read<SettingsProvider>().strings;
+    final displayName = isGuest && userName == 'Streakly User' ? s.guestDisplayName : userName;
 
     return Container(
       padding: const EdgeInsets.all(20),
