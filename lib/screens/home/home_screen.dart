@@ -6,6 +6,7 @@ import '../../providers/settings_provider.dart';
 import '../../widgets/streak_card.dart';
 import '../../widgets/routine_item.dart';
 import '../../widgets/circular_progress.dart';
+import '../../services/ad_service.dart';
 import '../challenge/new_challenge_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -130,6 +131,7 @@ class HomeScreen extends StatelessWidget {
     String challengeId,
   ) async {
     final s = settings.strings;
+
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
@@ -143,12 +145,26 @@ class HomeScreen extends StatelessWidget {
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(true),
             style: TextButton.styleFrom(foregroundColor: AppColors.primary),
-            child: Text(s.recoverStreak),
+            child: const Text('📺  광고 시청'),
           ),
         ],
       ),
     );
-    if (confirmed == true && context.mounted) {
+
+    if (confirmed != true || !context.mounted) return;
+
+    if (!AdService().isRewardedAdReady) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(s.adNotReady),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
+    final rewarded = await AdService().showRewardedAd();
+    if (rewarded && context.mounted) {
       await provider.recoverStreak(challengeId);
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

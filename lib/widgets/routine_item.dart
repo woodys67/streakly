@@ -189,7 +189,7 @@ class _RecoveryButton extends StatelessWidget {
             const Icon(Icons.local_fire_department, color: AppColors.primary, size: 13),
             const SizedBox(width: 4),
             Text(
-              '${s.recoverStreak}  -3⚡',
+              '📺  ${s.recoverStreak}',
               style: const TextStyle(
                 fontSize: 12,
                 color: AppColors.primary,

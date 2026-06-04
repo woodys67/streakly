@@ -81,5 +81,15 @@
 			</array>
 		</dict>
 	</array>
+	<!-- TODO: 출시 전 실제 AdMob App ID로 교체 -->
+	<key>GADApplicationIdentifier</key>
+	<string>ca-app-pub-3940256099942544~1458002511</string>
+	<key>SKAdNetworkItems</key>
+	<array>
+		<dict>
+			<key>SKAdNetworkIdentifier</key>
+			<string>cstr6suwn9.skadnetwork</string>
+		</dict>
+	</array>
 </dict>
 </plist>
