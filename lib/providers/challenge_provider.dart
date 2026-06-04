@@ -70,6 +70,10 @@ class ChallengeProvider extends ChangeNotifier {
   // 스트릭 복구에 사용된 의지력을 차감한 실질 의지력
   int get effectiveWillpower => (willpower - _willpowerSpent).clamp(0, 99999);
 
+  // 오늘 완료한 챌린지 수 (오늘 획득한 의지력)
+  int get todayWillpower =>
+      _challenges.where((c) => c.isTodayCompleted).length;
+
   bool canRecoverStreak(Challenge challenge) {
     if (challenge.isTodayCompleted) return false;
     if (challenge.currentDay < 2) return false;
@@ -110,6 +114,18 @@ class ChallengeProvider extends ChangeNotifier {
   Future<void> _saveWillpowerSpent() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt(_willpowerSpentKey, _willpowerSpent);
+
+    final user = _currentUser;
+    if (user != null) {
+      try {
+        await _db
+            .from('users')
+            .update({'willpower_spent': _willpowerSpent})
+            .eq('id', user.id);
+      } catch (e) {
+        debugPrint('[Streakly] willpower_spent 서버 저장 오류: $e');
+      }
+    }
   }
 
   double get overallSuccessRate {
@@ -179,6 +195,18 @@ class ChallengeProvider extends ChangeNotifier {
         .map((r) => Challenge.fromSupabase(r as Map<String, dynamic>))
         .toList();
     debugPrint('[Streakly] 서버에서 ${_challenges.length}개 챌린지 로드 완료');
+
+    try {
+      final userRow = await _db
+          .from('users')
+          .select('willpower_spent')
+          .eq('id', userId)
+          .maybeSingle();
+      _willpowerSpent = (userRow?['willpower_spent'] as int?) ?? 0;
+    } catch (e) {
+      debugPrint('[Streakly] willpower_spent 서버 로드 오류: $e');
+      _willpowerSpent = 0;
+    }
   }
 
   // ─────────────────────────────────────────
@@ -575,6 +603,18 @@ class ChallengeProvider extends ChangeNotifier {
     // 충돌 감지 — 서버 로드 없이 반환 (UI가 다이얼로그 표시 후 재호출)
     if (result.status == MigrationStatus.conflictDetected) {
       return result;
+    }
+
+    // 로컬 데이터가 서버로 업로드된 경우 willpower_spent도 함께 마이그레이션
+    if (result.status == MigrationStatus.success) {
+      try {
+        await _db
+            .from('users')
+            .update({'willpower_spent': _willpowerSpent})
+            .eq('id', effectiveId);
+      } catch (e) {
+        debugPrint('[Streakly] willpower_spent 마이그레이션 오류: $e');
+      }
     }
 
     // auth 상태 전환 타이밍과 무관하게 effectiveId로 서버에서 직접 로드

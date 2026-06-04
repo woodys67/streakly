@@ -17,8 +17,13 @@ create table if not exists public.users (
   notifications_enabled boolean     not null default true,
   dark_mode             boolean     not null default false,
   is_pro                boolean     not null default false,
+  willpower_spent       integer     not null default 0,
   created_at            timestamptz not null default now()
 );
+
+-- 기존 DB에 컬럼이 없는 경우 추가 (재실행 안전)
+alter table public.users
+  add column if not exists willpower_spent integer not null default 0;
 
 create table if not exists public.challenges (
   id             uuid        primary key default gen_random_uuid(),
