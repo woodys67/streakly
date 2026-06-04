@@ -153,6 +153,7 @@ class AppStrings {
   String get currentStreak => _s(en:'Current Streak', ko:'현재 스트릭', ja:'現在のストリーク', zhCN:'当前连续', zhTW:'當前連續', es:'Racha actual', de:'Aktuelle Serie', pt:'Sequência atual', ru:'Текущая серия');
   String get willpower => _s(en:'Willpower', ko:'의지력', ja:'意志力', zhCN:'意志力', zhTW:'意志力', es:'Fuerza de voluntad', de:'Willenskraft', pt:'Força de vontade', ru:'Сила воли');
   String get myWillpower => _s(en:'My Willpower', ko:'나의 의지력', ja:'私の意志力', zhCN:'我的意志力', zhTW:'我的意志力', es:'Mi fuerza de voluntad', de:'Meine Willenskraft', pt:'Minha força de vontade', ru:'Моя сила воли');
+  String get todayWillpowerLabel => _s(en:"Today's Gain", ko:'오늘의 의지력', ja:'今日の意志力', zhCN:'今日获得', zhTW:'今日獲得', es:'Ganancia hoy', de:'Heute gewonnen', pt:'Ganho hoje', ru:'Сегодня');
   String get willpowerSubtitle => _s(en:'Cumulative Score', ko:'누적 달성 점수', ja:'累計達成スコア', zhCN:'累计达成分数', zhTW:'累計達成分數', es:'Puntuación acumulada', de:'Gesamtpunktzahl', pt:'Pontuação acumulada', ru:'Накопленные очки');
   String challengePoints(int n) => _s(en:'+$n pts', ko:'+${n}점', ja:'+${n}点', zhCN:'+${n}点', zhTW:'+${n}點', es:'+$n pts', de:'+$n Pkt', pt:'+$n pts', ru:'+$n оч');
   String get tierSeed     => _s(en:'Seed',     ko:'씨앗', ja:'種',  zhCN:'种子', zhTW:'種子', es:'Semilla',      de:'Keim',        pt:'Semente',    ru:'Семя');
