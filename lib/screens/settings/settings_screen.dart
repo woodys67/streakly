@@ -613,12 +613,13 @@ class _SettingsCard extends StatelessWidget {
               }
             },
           ),
-          const _Divider(),
-          _NavigationSetting(
-            icon: Icons.workspace_premium_outlined,
-            title: s.teamChallengeSubscribe,
-            onTap: () => _onSubscribeTap(context),
-          ),
+          // TODO: 팀 챌린지 오픈 시 아래 주석 해제
+          // const _Divider(),
+          // _NavigationSetting(
+          //   icon: Icons.workspace_premium_outlined,
+          //   title: s.teamChallengeSubscribe,
+          //   onTap: () => _onSubscribeTap(context),
+          // ),
           const _Divider(),
           ListTile(
             contentPadding: const EdgeInsets.symmetric(horizontal: 20),
