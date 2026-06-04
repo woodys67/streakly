@@ -38,35 +38,18 @@ class SettingsProvider extends ChangeNotifier {
 
 
   static const List<Map<String, String>> availableLanguages = [
-    {'code': 'English',            'label': 'English'},
-    {'code': 'Korean',             'label': '한국어 - Korean'},
-    {'code': 'Japanese',           'label': '日本語 - Japanese'},
-    {'code': 'ChineseSimplified',  'label': '中文简体 - Simplified'},
-    {'code': 'ChineseTraditional', 'label': '中文繁體 - Traditional'},
-    {'code': 'Spanish',            'label': 'Español - Spanish'},
-    {'code': 'German',             'label': 'Deutsch - German'},
-    {'code': 'Portuguese',         'label': 'Português - Portuguese'},
-    {'code': 'Russian',            'label': 'Русский - Russian'},
+    {'code': 'English',  'label': 'English'},
+    {'code': 'Korean',   'label': '한국어 - Korean'},
+    {'code': 'Japanese', 'label': '日本語 - Japanese'},
+    {'code': 'Spanish',  'label': 'Español - Spanish'},
   ];
 
   static String _detectDeviceLanguage() {
-    final locale = PlatformDispatcher.instance.locale;
-    final lang = locale.languageCode;
-    final script = locale.scriptCode ?? '';
-    final region = locale.countryCode ?? '';
+    final lang = PlatformDispatcher.instance.locale.languageCode;
 
     if (lang == 'ko') return 'Korean';
     if (lang == 'ja') return 'Japanese';
-    if (lang == 'de') return 'German';
     if (lang == 'es') return 'Spanish';
-    if (lang == 'pt') return 'Portuguese';
-    if (lang == 'ru') return 'Russian';
-    if (lang == 'zh') {
-      if (script == 'Hant' || region == 'TW' || region == 'HK' || region == 'MO') {
-        return 'ChineseTraditional';
-      }
-      return 'ChineseSimplified';
-    }
     return 'English';
   }
 

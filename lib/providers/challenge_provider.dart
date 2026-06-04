@@ -75,7 +75,6 @@ class ChallengeProvider extends ChangeNotifier {
       _challenges.where((c) => c.isTodayCompleted).length;
 
   bool canRecoverStreak(Challenge challenge) {
-    if (kDebugMode) return true; // 디버그 빌드에서 테스트 편의상 항상 허용
     if (challenge.isTodayCompleted) return false;
     if (challenge.currentDay < 2) return false;
     if (challenge.completedDays.contains(challenge.currentDay - 1)) return false;

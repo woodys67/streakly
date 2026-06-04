@@ -183,20 +183,13 @@ class _RecoveryButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: AppColors.primary.withAlpha(80), width: 1),
         ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(Icons.local_fire_department, color: AppColors.primary, size: 13),
-            const SizedBox(width: 4),
-            Text(
-              '📺  ${s.recoverStreak}',
-              style: const TextStyle(
-                fontSize: 12,
-                color: AppColors.primary,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ],
+        child: Text(
+          s.recoverStreak,
+          style: const TextStyle(
+            fontSize: 12,
+            color: AppColors.primary,
+            fontWeight: FontWeight.w700,
+          ),
         ),
       ),
     );
