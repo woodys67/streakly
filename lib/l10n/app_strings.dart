@@ -287,6 +287,10 @@ class AppStrings {
   String get nameHint => _s(en:'Enter your name', ko:'이름을 입력하세요', ja:'名前を入力', es:'Ingresa tu nombre');
   String get appSettings => _s(en:'App Settings', ko:'앱 설정', ja:'アプリ設定', es:'Ajustes de la app');
   String get appGuide => _s(en:'App Guide', ko:'앱 가이드', ja:'アプリガイド', es:'Guía de la app');
+  String get legalInfo => _s(en:'Legal', ko:'법적 정보', ja:'法的情報', es:'Legal');
+  String get privacyPolicy => _s(en:'Privacy Policy', ko:'개인정보처리방침', ja:'プライバシーポリシー', es:'Política de privacidad');
+  String get termsOfService => _s(en:'Terms of Service', ko:'이용약관', ja:'利用規約', es:'Términos de servicio');
+  String get appVersion => _s(en:'Version', ko:'버전', ja:'バージョン', es:'Versión');
   // 앱 소개 — 항목 타이틀
   String get guideHowToUse => _s(en:'How to Use', ko:'사용법', ja:'使い方', es:'Cómo usar');
   String get guideCreateChallenge => _s(en:'Creating a Challenge', ko:'챌린지 만들기', ja:'チャレンジを作る', es:'Crear un reto');

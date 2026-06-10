@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:app_settings/app_settings.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -65,6 +66,8 @@ class SettingsScreen extends StatelessWidget {
                 const SizedBox(height: 24),
                 _AppGuideCard(s: s),
                 const SizedBox(height: 24),
+                _LegalCard(s: s),
+                const SizedBox(height: 24),
                 if (!auth.isGuest) ...[
                   _SignOutButton(
                     label: s.signOut,
@@ -76,6 +79,8 @@ class SettingsScreen extends StatelessWidget {
                     onDelete: () => _confirmDeleteAccount(context, auth, settings, s),
                   ),
                 ],
+                const SizedBox(height: 16),
+                _AppVersionText(versionLabel: s.appVersion),
               ],
             ),
           );
@@ -1010,6 +1015,45 @@ class _GuideItem extends StatelessWidget {
   }
 }
 
+class _LegalCard extends StatelessWidget {
+  final dynamic s;
+
+  const _LegalCard({required this.s});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.border, width: 1.5),
+      ),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(s.legalInfo, style: Theme.of(context).textTheme.titleLarge),
+            ),
+          ),
+          _NavigationSetting(
+            icon: Icons.privacy_tip_outlined,
+            title: s.privacyPolicy,
+            onTap: null, // TODO: 링크 연결 예정
+          ),
+          const _Divider(),
+          _NavigationSetting(
+            icon: Icons.description_outlined,
+            title: s.termsOfService,
+            onTap: null, // TODO: 링크 연결 예정
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _SignOutButton extends StatelessWidget {
   final String label;
   final VoidCallback onSignOut;
@@ -1056,6 +1100,39 @@ class _DeleteAccountButton extends StatelessWidget {
             decorationColor: AppColors.error.withValues(alpha: 0.6),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _AppVersionText extends StatefulWidget {
+  final String versionLabel;
+
+  const _AppVersionText({required this.versionLabel});
+
+  @override
+  State<_AppVersionText> createState() => _AppVersionTextState();
+}
+
+class _AppVersionTextState extends State<_AppVersionText> {
+  String _version = '';
+
+  @override
+  void initState() {
+    super.initState();
+    PackageInfo.fromPlatform().then((info) {
+      if (mounted) setState(() => _version = info.version);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_version.isEmpty) return const SizedBox.shrink();
+    return Text(
+      '${widget.versionLabel} $_version',
+      style: const TextStyle(
+        fontSize: 12,
+        color: AppColors.textSecondary,
       ),
     );
   }
