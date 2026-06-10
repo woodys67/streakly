@@ -17,10 +17,10 @@ class StreaklyBottomNav extends StatelessWidget {
   Widget build(BuildContext context) {
     final s = context.watch<SettingsProvider>().strings;
     return Container(
-      decoration: const BoxDecoration(
-        color: AppColors.white,
+      decoration: BoxDecoration(
+        color: context.colorSurface,
         border: Border(
-          top: BorderSide(color: AppColors.border, width: 1.5),
+          top: BorderSide(color: context.colorOutline, width: 1.5),
         ),
       ),
       child: BottomNavigationBar(
@@ -29,7 +29,7 @@ class StreaklyBottomNav extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         selectedItemColor: AppColors.primary,
-        unselectedItemColor: AppColors.textSecondary,
+        unselectedItemColor: context.colorTextSecondary,
         type: BottomNavigationBarType.fixed,
         selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
         unselectedLabelStyle: const TextStyle(fontSize: 12),

@@ -38,10 +38,10 @@ class RoutineItem extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: context.colorSurface,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: isCompleted ? AppColors.success : AppColors.border,
+          color: isCompleted ? AppColors.success : context.colorOutline,
           width: 1.5,
         ),
       ),
@@ -59,9 +59,9 @@ class RoutineItem extends StatelessWidget {
                   margin: const EdgeInsets.only(top: 1),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: isCompleted ? AppColors.success : AppColors.white,
+                    color: isCompleted ? AppColors.success : context.colorSurface,
                     border: Border.all(
-                      color: isCompleted ? AppColors.success : AppColors.border,
+                      color: isCompleted ? AppColors.success : context.colorOutline,
                       width: 2,
                     ),
                   ),
@@ -80,11 +80,11 @@ class RoutineItem extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w600,
-                        color: AppColors.textPrimary,
+                        color: context.colorTextPrimary,
                         decoration: isCompleted
                             ? TextDecoration.lineThrough
                             : TextDecoration.none,
-                        decorationColor: AppColors.textSecondary,
+                        decorationColor: context.colorTextSecondary,
                       ),
                     ),
                     if (challenge.reminderTime.isNotEmpty) ...[
@@ -109,9 +109,9 @@ class RoutineItem extends StatelessWidget {
                                   height: 22,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(6),
-                                    color: subDone ? AppColors.success : AppColors.white,
+                                    color: subDone ? AppColors.success : context.colorSurface,
                                     border: Border.all(
-                                      color: subDone ? AppColors.success : AppColors.border,
+                                      color: subDone ? AppColors.success : context.colorOutline,
                                       width: 1.5,
                                     ),
                                   ),
@@ -125,19 +125,19 @@ class RoutineItem extends StatelessWidget {
                                     sub.name,
                                     style: TextStyle(
                                       fontSize: 13,
-                                      color: subDone ? AppColors.textSecondary : AppColors.textPrimary,
+                                      color: subDone ? context.colorTextSecondary : context.colorTextPrimary,
                                       fontWeight: FontWeight.w500,
                                       decoration: subDone ? TextDecoration.lineThrough : TextDecoration.none,
-                                      decorationColor: AppColors.textSecondary,
+                                      decorationColor: context.colorTextSecondary,
                                     ),
                                   ),
                                 ),
                                 if (sub.time.isNotEmpty)
                                   Text(
                                     sub.time,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 11,
-                                      color: AppColors.textSecondary,
+                                      color: context.colorTextSecondary,
                                     ),
                                   ),
                               ],
@@ -249,7 +249,7 @@ class _ProgressBar extends StatelessWidget {
       borderRadius: BorderRadius.circular(4),
       child: LinearProgressIndicator(
         value: progress,
-        backgroundColor: AppColors.border,
+        backgroundColor: context.colorOutline,
         valueColor: const AlwaysStoppedAnimation<Color>(AppColors.success),
         minHeight: 6,
       ),

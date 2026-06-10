@@ -22,13 +22,12 @@ class ChallengeScreen extends StatelessWidget {
 
         if (challenge == null) {
           return Scaffold(
-            backgroundColor: AppColors.background,
             appBar: AppBar(title: Text(s.challengeTab)),
             body: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.flag_outlined, size: 64, color: AppColors.textSecondary),
+                  Icon(Icons.flag_outlined, size: 64, color: context.colorTextSecondary),
                   const SizedBox(height: 16),
                   Text(
                     s.noActiveChallenge,
@@ -37,7 +36,7 @@ class ChallengeScreen extends StatelessWidget {
                   const SizedBox(height: 8),
                   Text(
                     s.noActiveChallengeDesc,
-                    style: const TextStyle(color: AppColors.textSecondary),
+                    style: TextStyle(color: context.colorTextSecondary),
                   ),
                   const SizedBox(height: 24),
                   ElevatedButton(
@@ -56,7 +55,6 @@ class ChallengeScreen extends StatelessWidget {
         final streak = challenge.streak;
 
         return Scaffold(
-          backgroundColor: AppColors.background,
           appBar: AppBar(
             title: Text(challenge.name),
             centerTitle: true,
@@ -122,7 +120,7 @@ class ChallengeScreen extends StatelessWidget {
                     Text(s.dailyLogs, style: Theme.of(context).textTheme.headlineSmall),
                     Text(
                       s.entriesCount(challenge.logs.length),
-                      style: const TextStyle(color: AppColors.textSecondary),
+                      style: TextStyle(color: context.colorTextSecondary),
                     ),
                   ],
                 ),
@@ -398,9 +396,9 @@ class _ProgressSection extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: context.colorSurface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border, width: 1.5),
+        border: Border.all(color: context.colorOutline, width: 1.5),
       ),
       child: Row(
         children: [
@@ -421,7 +419,7 @@ class _ProgressSection extends StatelessWidget {
                 ),
                 Text(
                   '$completedDays/$targetDays',
-                  style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+                  style: TextStyle(fontSize: 12, color: context.colorTextSecondary),
                 ),
               ],
             ),
@@ -484,9 +482,9 @@ class _EmptyLogsPlaceholder extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 24),
-        const Icon(Icons.book_outlined, size: 48, color: AppColors.textSecondary),
+        Icon(Icons.book_outlined, size: 48, color: context.colorTextSecondary),
         const SizedBox(height: 8),
-        Text(s.noLogsYet, style: const TextStyle(color: AppColors.textSecondary)),
+        Text(s.noLogsYet, style: TextStyle(color: context.colorTextSecondary)),
         const SizedBox(height: 16),
       ],
     );
@@ -504,19 +502,19 @@ class _SubRoutinesSection extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: context.colorSurface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border, width: 1.5),
+        border: Border.all(color: context.colorOutline, width: 1.5),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             s.subRoutines,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
+              color: context.colorTextPrimary,
             ),
           ),
           const SizedBox(height: 12),
@@ -537,9 +535,9 @@ class _SubRoutinesSection extends StatelessWidget {
                   Expanded(
                     child: Text(
                       sub.name,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 14,
-                        color: AppColors.textPrimary,
+                        color: context.colorTextPrimary,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -547,11 +545,11 @@ class _SubRoutinesSection extends StatelessWidget {
                   if (sub.time.isNotEmpty)
                     Row(
                       children: [
-                        const Icon(Icons.access_time, size: 13, color: AppColors.textSecondary),
+                        Icon(Icons.access_time, size: 13, color: context.colorTextSecondary),
                         const SizedBox(width: 4),
                         Text(
                           sub.time,
-                          style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+                          style: TextStyle(fontSize: 12, color: context.colorTextSecondary),
                         ),
                       ],
                     ),
@@ -608,9 +606,9 @@ class _ScheduleInfoSection extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: context.colorSurface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border, width: 1.5),
+        border: Border.all(color: context.colorOutline, width: 1.5),
       ),
       child: Row(
         children: [
@@ -621,10 +619,10 @@ class _ScheduleInfoSection extends StatelessWidget {
                 children: [
                   Text(
                     s.repetitionLabel,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w600,
-                      color: AppColors.textSecondary,
+                      color: context.colorTextSecondary,
                       letterSpacing: 0.5,
                     ),
                   ),
@@ -662,10 +660,10 @@ class _ScheduleInfoSection extends StatelessWidget {
               children: [
                 Text(
                   s.reminderTimeLabel,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w600,
-                    color: AppColors.textSecondary,
+                    color: context.colorTextSecondary,
                     letterSpacing: 0.5,
                   ),
                 ),
@@ -738,7 +736,7 @@ class _PauseSection extends StatelessWidget {
                   ),
                   Text(
                     s.pauseActiveUntil(_formatDate(pause.end)),
-                    style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+                    style: TextStyle(fontSize: 12, color: context.colorTextSecondary),
                   ),
                 ],
               ),
@@ -803,7 +801,7 @@ class _NotesSection extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 8),
-          Text(notes, style: const TextStyle(fontSize: 14, color: AppColors.textPrimary, height: 1.5)),
+          Text(notes, style: TextStyle(fontSize: 14, color: context.colorTextPrimary, height: 1.5)),
         ],
       ),
     );

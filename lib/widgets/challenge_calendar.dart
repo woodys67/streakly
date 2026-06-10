@@ -70,12 +70,12 @@ class _DayCell extends StatelessWidget {
         style: BorderStyle.solid,
       );
     } else if (isFuture) {
-      bgColor = AppColors.background;
-      textColor = AppColors.textSecondary;
-      border = Border.all(color: AppColors.border, width: 1);
+      bgColor = context.colorSurface;
+      textColor = context.colorTextSecondary;
+      border = Border.all(color: context.colorOutline, width: 1);
     } else {
-      bgColor = AppColors.border;
-      textColor = AppColors.textSecondary;
+      bgColor = context.colorOutline;
+      textColor = context.colorTextSecondary;
       border = null;
     }
 

@@ -35,6 +35,8 @@ class StreaklyApp extends StatelessWidget {
             title: 'Streakly',
             debugShowCheckedModeBanner: false,
             theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
+            themeMode: settings.darkMode ? ThemeMode.dark : ThemeMode.light,
             home: const _AppInitializer(),
           );
         },

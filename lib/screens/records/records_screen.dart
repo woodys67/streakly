@@ -18,7 +18,6 @@ class RecordsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: AppBar(title: Text(context.watch<SettingsProvider>().strings.recordsTitle)),
       body: Consumer3<ChallengeProvider, SettingsProvider, BadgeProvider>(
         builder: (context, challengeProvider, settingsProvider, badgeProvider, _) {
@@ -78,7 +77,7 @@ class RecordsScreen extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 40),
                       child: Text(
                         s.noRecordsYet,
-                        style: const TextStyle(color: AppColors.textSecondary),
+                        style: TextStyle(color: context.colorTextSecondary),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -89,7 +88,7 @@ class RecordsScreen extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 40),
                       child: Text(
                         s.keepGoingRecords,
-                        style: const TextStyle(color: AppColors.textSecondary),
+                        style: TextStyle(color: context.colorTextSecondary),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -140,9 +139,9 @@ class _BadgeSummaryCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppColors.white,
+          color: context.colorSurface,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.border, width: 1.5),
+          border: Border.all(color: context.colorOutline, width: 1.5),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -152,10 +151,10 @@ class _BadgeSummaryCard extends StatelessWidget {
               children: [
                 Text(
                   context.read<SettingsProvider>().strings.badgeCollectionTitle,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
+                    color: context.colorTextPrimary,
                   ),
                 ),
                 Row(
@@ -169,9 +168,9 @@ class _BadgeSummaryCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 4),
-                    const Icon(
+                    Icon(
                       Icons.chevron_right,
-                      color: AppColors.textSecondary,
+                      color: context.colorTextSecondary,
                       size: 18,
                     ),
                   ],
@@ -280,9 +279,9 @@ class _SuccessRateChart extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: context.colorSurface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border, width: 1.5),
+        border: Border.all(color: context.colorOutline, width: 1.5),
       ),
       child: Row(
         children: [
@@ -315,26 +314,26 @@ class _SuccessRateChart extends StatelessWidget {
                   children: [
                     Text(
                       s.successLabel,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
-                        color: AppColors.textSecondary,
+                        color: context.colorTextSecondary,
                         letterSpacing: 1,
                       ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       s.overallRate,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.textPrimary,
+                        color: context.colorTextPrimary,
                       ),
                     ),
                     const SizedBox(height: 8),
                     Text(
                       s.keepItUp,
-                      style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+                      style: TextStyle(fontSize: 12, color: context.colorTextSecondary),
                     ),
                   ],
                 );
@@ -443,9 +442,9 @@ class _CompletedChallengeCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: context.colorSurface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.border, width: 1.5),
+        border: Border.all(color: context.colorOutline, width: 1.5),
       ),
       child: Row(
         children: [
@@ -484,9 +483,9 @@ class _CompletedChallengeCard extends StatelessWidget {
               ],
             ),
           ),
-          const Icon(
+          Icon(
             Icons.chevron_right,
-            color: AppColors.textSecondary,
+            color: context.colorTextSecondary,
           ),
         ],
       ),

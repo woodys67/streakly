@@ -1,5 +1,13 @@
 import 'package:flutter/material.dart';
 
+extension AppThemeContext on BuildContext {
+  bool get isDark => Theme.of(this).brightness == Brightness.dark;
+  Color get colorSurface => isDark ? const Color(0xFF2C2C2C) : AppColors.white;
+  Color get colorTextPrimary => isDark ? Colors.white : AppColors.textPrimary;
+  Color get colorTextSecondary => isDark ? const Color(0xFF9E9E9E) : AppColors.textSecondary;
+  Color get colorOutline => isDark ? const Color(0xFF3A3A3A) : AppColors.border;
+}
+
 class AppColors {
   static const Color primary = Color(0xFFFF8C00);
   static const Color darkAccent = Color(0xFF8B4513);

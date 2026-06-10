@@ -53,9 +53,9 @@ class _NativeAdCardState extends State<NativeAdCard> {
     return Container(
       height: 90,
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: context.colorSurface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.border, width: 1.5),
+        border: Border.all(color: context.colorOutline, width: 1.5),
       ),
       clipBehavior: Clip.hardEdge,
       child: AdWidget(ad: _ad!),

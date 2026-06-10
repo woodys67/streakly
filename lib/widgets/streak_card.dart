@@ -17,9 +17,9 @@ class StreakCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: context.colorSurface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border, width: 1.5),
+        border: Border.all(color: context.colorOutline, width: 1.5),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -152,10 +152,10 @@ class _LevelGauge extends StatelessWidget {
               children: [
                 Text(
                   '$_tierEmoji ${_tierName()}',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
-                    color: AppColors.textPrimary,
+                    color: context.colorTextPrimary,
                   ),
                 ),
                 const SizedBox(width: 6),
@@ -180,7 +180,7 @@ class _LevelGauge extends StatelessWidget {
               isMax ? 'MAX ✨' : '$willpower / $nextThreshold',
               style: TextStyle(
                 fontSize: 12,
-                color: isMax ? AppColors.primary : AppColors.textSecondary,
+                color: isMax ? AppColors.primary : context.colorTextSecondary,
                 fontWeight: isMax ? FontWeight.bold : FontWeight.normal,
               ),
             ),
@@ -191,7 +191,7 @@ class _LevelGauge extends StatelessWidget {
           borderRadius: BorderRadius.circular(4),
           child: LinearProgressIndicator(
             value: _progress,
-            backgroundColor: AppColors.border,
+            backgroundColor: context.colorOutline,
             valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
             minHeight: 8,
           ),

@@ -320,9 +320,9 @@ class _ProfileCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: context.colorSurface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border, width: 1.5),
+        border: Border.all(color: context.colorOutline, width: 1.5),
       ),
       child: Row(
         children: [
@@ -396,8 +396,8 @@ class _ProfileCard extends StatelessWidget {
                   if (email.isNotEmpty)
                     Text(
                       email,
-                      style: const TextStyle(
-                        color: AppColors.textSecondary,
+                      style: TextStyle(
+                        color: context.colorTextSecondary,
                         fontSize: 12,
                       ),
                       overflow: TextOverflow.ellipsis,
@@ -405,8 +405,8 @@ class _ProfileCard extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(
                     memberLabel,
-                    style: const TextStyle(
-                        color: AppColors.textSecondary, fontSize: 12),
+                    style: TextStyle(
+                        color: context.colorTextSecondary, fontSize: 12),
                   ),
                 ],
               ],
@@ -414,8 +414,8 @@ class _ProfileCard extends StatelessWidget {
           ),
           GestureDetector(
             onTap: onNameTap,
-            child: const Icon(Icons.edit_outlined,
-                color: AppColors.textSecondary, size: 20),
+            child: Icon(Icons.edit_outlined,
+                color: context.colorTextSecondary, size: 20),
           ),
         ],
       ),
@@ -438,9 +438,9 @@ class _ProfileImagePicker extends StatelessWidget {
     final labels = context.watch<SettingsProvider>().strings.profileImageLabels;
 
     return Container(
-      decoration: const BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      decoration: BoxDecoration(
+        color: context.colorSurface,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
       ),
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
       child: Column(
@@ -450,7 +450,7 @@ class _ProfileImagePicker extends StatelessWidget {
           Container(
             width: 40, height: 4,
             decoration: BoxDecoration(
-              color: AppColors.border,
+              color: context.colorOutline,
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -459,10 +459,10 @@ class _ProfileImagePicker extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: Text(
               settings.strings.selectProfileImage,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: AppColors.textPrimary,
+                color: context.colorTextPrimary,
               ),
             ),
           ),
@@ -517,7 +517,7 @@ class _ProfileImagePicker extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 9,
                         fontWeight: isSelected ? FontWeight.w700 : FontWeight.w400,
-                        color: isSelected ? AppColors.primary : AppColors.textSecondary,
+                        color: isSelected ? AppColors.primary : context.colorTextSecondary,
                         height: 1.3,
                       ),
                       textAlign: TextAlign.center,
@@ -552,9 +552,9 @@ class _SettingsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: context.colorSurface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border, width: 1.5),
+        border: Border.all(color: context.colorOutline, width: 1.5),
       ),
       child: Column(
         children: [
@@ -628,16 +628,23 @@ class _SettingsCard extends StatelessWidget {
           //   onTap: () => _onSubscribeTap(context),
           // ),
           const _Divider(),
+          _ToggleSetting(
+            icon: Icons.dark_mode_outlined,
+            title: s.darkMode,
+            value: settings.darkMode,
+            onChanged: (_) => settings.toggleDarkMode(),
+          ),
+          const _Divider(),
           ListTile(
             contentPadding: const EdgeInsets.symmetric(horizontal: 20),
-            leading: const Icon(Icons.restart_alt,
-                color: AppColors.textSecondary, size: 22),
+            leading: Icon(Icons.restart_alt,
+                color: context.colorTextSecondary, size: 22),
             title: Text(
               s.resetApp,
-              style: const TextStyle(
+              style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w500,
-                  color: AppColors.textSecondary),
+                  color: context.colorTextSecondary),
             ),
             onTap: onReset,
           ),
@@ -829,22 +836,22 @@ class _LanguageSetting extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       child: Row(
         children: [
-          const Icon(Icons.language, color: AppColors.textSecondary, size: 22),
+          Icon(Icons.language, color: context.colorTextSecondary, size: 22),
           const SizedBox(width: 16),
           Expanded(
             child: Text(
               label,
-              style: const TextStyle(
+              style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w500,
-                  color: AppColors.textPrimary),
+                  color: context.colorTextPrimary),
             ),
           ),
           DropdownButton<String>(
             value: settings.language,
             underline: const SizedBox(),
-            style: const TextStyle(
-                color: AppColors.textSecondary, fontSize: 13),
+            style: TextStyle(
+                color: context.colorTextSecondary, fontSize: 13),
             items: SettingsProvider.availableLanguages
                 .map((lang) => DropdownMenuItem<String>(
                       value: lang['code'],
@@ -880,15 +887,15 @@ class _ToggleSetting extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
       child: Row(
         children: [
-          Icon(icon, color: AppColors.textSecondary, size: 22),
+          Icon(icon, color: context.colorTextSecondary, size: 22),
           const SizedBox(width: 16),
           Expanded(
             child: Text(
               title,
-              style: const TextStyle(
+              style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w500,
-                  color: AppColors.textPrimary),
+                  color: context.colorTextPrimary),
             ),
           ),
           Switch(
@@ -919,21 +926,21 @@ class _NavigationSetting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(icon, color: AppColors.textSecondary, size: 22),
+      leading: Icon(icon, color: context.colorTextSecondary, size: 22),
       title: Text(
         title,
-        style: const TextStyle(
+        style: TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.w500,
-            color: AppColors.textPrimary),
+            color: context.colorTextPrimary),
       ),
       subtitle: subtitle != null
           ? Text(subtitle!,
-              style: const TextStyle(
-                  fontSize: 12, color: AppColors.textSecondary))
+              style: TextStyle(
+                  fontSize: 12, color: context.colorTextSecondary))
           : null,
       trailing:
-          const Icon(Icons.chevron_right, color: AppColors.textSecondary),
+          Icon(Icons.chevron_right, color: context.colorTextSecondary),
       onTap: onTap,
     );
   }
@@ -944,7 +951,7 @@ class _Divider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Divider(height: 1, indent: 56, color: AppColors.border);
+    return Divider(height: 1, indent: 56, color: context.colorOutline);
   }
 }
 
@@ -957,9 +964,9 @@ class _AppGuideCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: context.colorSurface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border, width: 1.5),
+        border: Border.all(color: context.colorOutline, width: 1.5),
       ),
       child: Column(
         children: [
@@ -1000,12 +1007,12 @@ class _GuideItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 20),
-      leading: Icon(icon, color: AppColors.textSecondary, size: 22),
+      leading: Icon(icon, color: context.colorTextSecondary, size: 22),
       title: Text(
         title,
-        style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: AppColors.textPrimary),
+        style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: context.colorTextPrimary),
       ),
-      trailing: const Icon(Icons.chevron_right, color: AppColors.textSecondary),
+      trailing: Icon(Icons.chevron_right, color: context.colorTextSecondary),
       onTap: () => Navigator.of(context).push(
         MaterialPageRoute(
           builder: (_) => GuideDetailScreen(icon: icon, title: title, content: content),
@@ -1024,9 +1031,9 @@ class _LegalCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: context.colorSurface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border, width: 1.5),
+        border: Border.all(color: context.colorOutline, width: 1.5),
       ),
       child: Column(
         children: [
