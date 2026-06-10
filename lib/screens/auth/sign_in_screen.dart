@@ -112,7 +112,12 @@ Future<MigrationResult?> _showMergeDialog(
               children: [
                 Expanded(
                   child: TextButton(
-                    onPressed: () => Navigator.of(ctx).pop(false),
+                    onPressed: () async {
+                      final confirmed = await _showKeepServerConfirmDialog(ctx, s);
+                      if (confirmed == true && ctx.mounted) {
+                        Navigator.of(ctx).pop(false);
+                      }
+                    },
                     child: Text(
                       s.mergeDialogKeepServer,
                       textAlign: TextAlign.center,
@@ -122,7 +127,12 @@ Future<MigrationResult?> _showMergeDialog(
                 ),
                 Expanded(
                   child: TextButton(
-                    onPressed: () => Navigator.of(ctx).pop(true),
+                    onPressed: () async {
+                      final confirmed = await _showMergeConfirmDialog(ctx, s);
+                      if (confirmed == true && ctx.mounted) {
+                        Navigator.of(ctx).pop(true);
+                      }
+                    },
                     child: Text(
                       s.mergeDialogMerge,
                       textAlign: TextAlign.center,
@@ -143,6 +153,74 @@ Future<MigrationResult?> _showMergeDialog(
   if (!context.mounted) return null;
   // merge == null은 발생하지 않지만(canPop: false로 뒤로가기 차단) 방어적으로 처리
   return challengeProvider.syncLocalToCloud(userId: userId, merge: merge ?? false);
+}
+
+/// "게스트 데이터 병합" 선택 시 병합 내용을 안내하고 최종 확인하는 다이얼로그.
+Future<bool?> _showMergeConfirmDialog(BuildContext context, dynamic s) {
+  return showDialog<bool>(
+    context: context,
+    builder: (ctx) => AlertDialog(
+      backgroundColor: AppColors.cardBackground,
+      title: Text(
+        s.mergeConfirmTitle,
+        style: const TextStyle(
+          color: AppColors.textPrimary,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      content: Text(
+        s.mergeConfirmBody,
+        style: const TextStyle(color: AppColors.textSecondary, height: 1.5),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(ctx).pop(false),
+          child: Text(s.cancel, style: const TextStyle(color: AppColors.textSecondary)),
+        ),
+        TextButton(
+          onPressed: () => Navigator.of(ctx).pop(true),
+          child: Text(
+            s.mergeConfirmAction,
+            style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+/// "기존 데이터 유지" 선택 시 게스트 데이터 삭제를 최종 확인하는 다이얼로그.
+Future<bool?> _showKeepServerConfirmDialog(BuildContext context, dynamic s) {
+  return showDialog<bool>(
+    context: context,
+    builder: (ctx) => AlertDialog(
+      backgroundColor: AppColors.cardBackground,
+      title: Text(
+        s.keepServerConfirmTitle,
+        style: const TextStyle(
+          color: AppColors.textPrimary,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      content: Text(
+        s.keepServerConfirmBody,
+        style: const TextStyle(color: AppColors.textSecondary, height: 1.5),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(ctx).pop(false),
+          child: Text(s.cancel, style: const TextStyle(color: AppColors.textSecondary)),
+        ),
+        TextButton(
+          onPressed: () => Navigator.of(ctx).pop(true),
+          child: Text(
+            s.keepServerConfirmAction,
+            style: const TextStyle(color: AppColors.error, fontWeight: FontWeight.bold),
+          ),
+        ),
+      ],
+    ),
+  );
 }
 
 class SignInScreen extends StatefulWidget {

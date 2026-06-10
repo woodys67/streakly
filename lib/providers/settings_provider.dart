@@ -125,8 +125,9 @@ class SettingsProvider extends ChangeNotifier {
       _notificationsEnabled = row['notifications_enabled'] as bool? ?? true;
       _darkMode = row['dark_mode'] as bool? ?? false;
       _userName = row['display_name'] as String? ?? 'Streakly User';
+      _profileImage = row['profile_image'] as String? ?? '';
       final prefs = await SharedPreferences.getInstance();
-      _profileImage = prefs.getString(_profileImageKey) ?? '';
+      await prefs.setString(_profileImageKey, _profileImage);
       notifyListeners();
       return true;
     }
@@ -155,8 +156,9 @@ class SettingsProvider extends ChangeNotifier {
           _notificationsEnabled = retryRow['notifications_enabled'] as bool? ?? true;
           _darkMode = retryRow['dark_mode'] as bool? ?? false;
           _userName = retryRow['display_name'] as String? ?? 'Streakly User';
+          _profileImage = retryRow['profile_image'] as String? ?? '';
           final prefs = await SharedPreferences.getInstance();
-          _profileImage = prefs.getString(_profileImageKey) ?? '';
+          await prefs.setString(_profileImageKey, _profileImage);
           notifyListeners();
           return true;
         }
@@ -184,6 +186,7 @@ class SettingsProvider extends ChangeNotifier {
         'language': _language,
         'notifications_enabled': _notificationsEnabled,
         'dark_mode': _darkMode,
+        'profile_image': _profileImage,
       });
     } catch (_) {}
   }
@@ -224,12 +227,14 @@ class SettingsProvider extends ChangeNotifier {
   Future<void> setProfileImage(String assetPath) async {
     _profileImage = assetPath;
     notifyListeners();
-    await _saveToLocal();
+    await _persist();
   }
 
   /// Supabase 세션 종료는 AuthProvider.signOut()이 담당.
-  /// 로컬 데이터는 보존하고 로컬 설정을 그대로 유지.
+  /// 프로필 이미지는 계정 연결 데이터이므로 로그아웃 시 초기화.
   Future<void> signOut() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_profileImageKey);
     await _loadFromLocal();
   }
 
@@ -240,6 +245,7 @@ class SettingsProvider extends ChangeNotifier {
     _notificationsEnabled = true;
     _darkMode = false;
     _userName = 'Streakly User';
+    _profileImage = '';
     notifyListeners();
   }
 }

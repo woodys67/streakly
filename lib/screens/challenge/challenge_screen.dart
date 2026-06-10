@@ -63,7 +63,7 @@ class ChallengeScreen extends StatelessWidget {
             actions: [
               if (provider.activeChallenges.length > 1)
                 PopupMenuButton<int>(
-                  icon: const Icon(Icons.swap_horiz),
+                  icon: const Icon(Icons.list),
                   onSelected: provider.selectChallenge,
                   itemBuilder: (_) => provider.activeChallenges
                       .asMap()

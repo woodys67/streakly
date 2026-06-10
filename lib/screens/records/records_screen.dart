@@ -8,6 +8,7 @@ import '../../providers/settings_provider.dart';
 import '../../services/badge_catalog.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/circular_progress.dart';
+import '../../widgets/native_ad_card.dart';
 import 'badge_collection_screen.dart';
 import 'completed_challenge_detail_screen.dart';
 
@@ -63,6 +64,8 @@ class RecordsScreen extends StatelessWidget {
                     ),
                   ],
                 ),
+                const SizedBox(height: 16),
+                const NativeAdCard(),
                 const SizedBox(height: 24),
                 Text(
                   s.completedChallenges,

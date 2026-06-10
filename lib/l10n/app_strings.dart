@@ -431,6 +431,22 @@ class AppStrings {
   );
   String get mergeDialogKeepServer => _s(en:'Keep existing data', ko:'기존 데이터 유지', ja:'既存データを保持', es:'Mantener datos existentes');
   String get mergeDialogMerge => _s(en:'Merge guest data', ko:'게스트 데이터 병합', ja:'ゲストデータを統合', es:'Combinar datos de invitado');
+  String get keepServerConfirmTitle => _s(en:'Delete guest data?', ko:'게스트 데이터를 삭제할까요?', ja:'ゲストデータを削除しますか？', es:'¿Eliminar datos de invitado?');
+  String get keepServerConfirmBody => _s(
+    en: 'Guest mode data will be permanently deleted and only your existing account data will be loaded.',
+    ko: '게스트 모드에서 기록된 데이터가 영구적으로 삭제되고, 기존 계정의 데이터만 불러옵니다.',
+    ja: 'ゲストモードで記録したデータは完全に削除され、既存のアカウントデータのみが読み込まれます。',
+    es: 'Los datos del modo invitado se eliminarán permanentemente y solo se cargarán los datos de tu cuenta existente.',
+  );
+  String get keepServerConfirmAction => _s(en:'Delete & keep account data', ko:'삭제하고 기존 데이터 유지', ja:'削除して既存データを保持', es:'Eliminar y mantener datos de cuenta');
+  String get mergeConfirmTitle => _s(en:'Merge guest data?', ko:'게스트 데이터를 병합할까요?', ja:'ゲストデータを統合しますか？', es:'¿Combinar datos de invitado?');
+  String get mergeConfirmBody => _s(
+    en: 'Guest mode challenges will be added to your existing account data. Both datasets will coexist.',
+    ko: '게스트 모드에서 만든 챌린지가 기존 계정 데이터에 추가됩니다. 두 데이터가 함께 유지됩니다.',
+    ja: 'ゲストモードで作成したチャレンジが既存のアカウントデータに追加されます。両方のデータが保持されます。',
+    es: 'Los desafíos del modo invitado se añadirán a los datos de tu cuenta existente. Ambos conjuntos de datos coexistirán.',
+  );
+  String get mergeConfirmAction => _s(en:'Merge', ko:'병합하기', ja:'統合する', es:'Combinar');
   // ── Sign-Up Screen ───────────────────────────────────────────
   String get signUpTitle => _s(en:"Let's get started!", ko:'시작해볼까요?', ja:'さあ、始めましょう！', es:'¡Empecemos!');
   String get signUpSubtitle => _s(en:'Create an account and start your challenges', ko:'계정을 만들고 챌린지를 시작하세요', ja:'アカウントを作成してチャレンジを始めよう', es:'Crea una cuenta y comienza tus desafíos');

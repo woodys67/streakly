@@ -271,7 +271,9 @@ class SettingsScreen extends StatelessWidget {
 
     if (confirmed == true && context.mounted) {
       final challengeProvider = context.read<ChallengeProvider>();
+      final badgeProvider = context.read<BadgeProvider>();
       await challengeProvider.clearLocalCache();
+      await badgeProvider.resetLocal();
       await auth.signOut();
       await settings.signOut();
     }
