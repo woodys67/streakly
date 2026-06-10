@@ -39,7 +39,6 @@ class _BadgeCollectionScreenState extends State<BadgeCollectionScreen> {
     final earnedCount = badgeProvider.earned.length;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: Text(s.badgeCollectionTitle),
         actions: [

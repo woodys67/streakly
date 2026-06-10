@@ -131,7 +131,6 @@ class _NewChallengeScreenState extends State<NewChallengeScreen> {
   Widget build(BuildContext context) {
     final s = context.watch<SettingsProvider>().strings;
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: Text(s.newChallenge),
         leading: IconButton(

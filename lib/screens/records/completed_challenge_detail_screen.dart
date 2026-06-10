@@ -23,7 +23,6 @@ class CompletedChallengeDetailScreen extends StatelessWidget {
     final successPercent = (successRate * 100).round();
 
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: AppBar(title: Text(challenge.name)),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
@@ -34,9 +33,9 @@ class CompletedChallengeDetailScreen extends StatelessWidget {
               width: double.infinity,
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: AppColors.white,
+                color: context.colorSurface,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppColors.border, width: 1.5),
+                border: Border.all(color: context.colorOutline, width: 1.5),
               ),
               child: Row(
                 children: [
@@ -86,9 +85,9 @@ class CompletedChallengeDetailScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: AppColors.white,
+                color: context.colorSurface,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppColors.border, width: 1.5),
+                border: Border.all(color: context.colorOutline, width: 1.5),
               ),
               child: ChallengeCalendar(challenge: challenge),
             ),
@@ -124,9 +123,9 @@ class _ReadOnlyLogCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: context.colorSurface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.border, width: 1.5),
+        border: Border.all(color: context.colorOutline, width: 1.5),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

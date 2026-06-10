@@ -117,7 +117,6 @@ class _AppInitializerState extends State<_AppInitializer> {
   Widget build(BuildContext context) {
     if (!_initialized) {
       return Scaffold(
-        backgroundColor: AppColors.background,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

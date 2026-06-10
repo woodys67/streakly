@@ -17,7 +17,6 @@ class GuideDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: Row(
           children: [
@@ -40,23 +39,23 @@ class GuideDetailScreen extends StatelessWidget {
     final theme = Theme.of(context);
     return MarkdownStyleSheet(
       h2: theme.textTheme.titleLarge?.copyWith(
-        color: AppColors.textPrimary,
+        color: context.colorTextPrimary,
         fontWeight: FontWeight.bold,
       ),
       h3: theme.textTheme.titleMedium?.copyWith(
-        color: AppColors.textPrimary,
+        color: context.colorTextPrimary,
         fontWeight: FontWeight.w600,
       ),
       p: theme.textTheme.bodyMedium?.copyWith(
-        color: AppColors.textPrimary,
+        color: context.colorTextPrimary,
         height: 1.65,
       ),
       strong: theme.textTheme.bodyMedium?.copyWith(
-        color: AppColors.textPrimary,
+        color: context.colorTextPrimary,
         fontWeight: FontWeight.bold,
       ),
       blockquote: theme.textTheme.bodyMedium?.copyWith(
-        color: AppColors.textSecondary,
+        color: context.colorTextSecondary,
         height: 1.5,
       ),
       blockquoteDecoration: BoxDecoration(
@@ -70,18 +69,18 @@ class GuideDetailScreen extends StatelessWidget {
       listBullet: theme.textTheme.bodyMedium?.copyWith(color: AppColors.primary),
       tableHead: theme.textTheme.bodySmall?.copyWith(
         fontWeight: FontWeight.bold,
-        color: AppColors.textPrimary,
+        color: context.colorTextPrimary,
       ),
       tableBody: theme.textTheme.bodySmall?.copyWith(
-        color: AppColors.textPrimary,
+        color: context.colorTextPrimary,
         height: 1.5,
       ),
       tableHeadAlign: TextAlign.left,
-      tableBorder: TableBorder.all(color: AppColors.border, width: 1),
+      tableBorder: TableBorder.all(color: context.colorOutline, width: 1),
       tableColumnWidth: const FlexColumnWidth(),
       tableCellsPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       horizontalRuleDecoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: AppColors.border, width: 1)),
+        border: Border(bottom: BorderSide(color: context.colorOutline, width: 1)),
       ),
       h2Padding: const EdgeInsets.only(top: 24, bottom: 8),
       h3Padding: const EdgeInsets.only(top: 16, bottom: 4),
