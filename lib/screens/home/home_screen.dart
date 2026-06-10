@@ -145,7 +145,7 @@ class HomeScreen extends StatelessWidget {
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(true),
             style: TextButton.styleFrom(foregroundColor: AppColors.primary),
-            child: const Text('📺  광고 시청'),
+            child: const Text('광고 시청'),
           ),
         ],
       ),

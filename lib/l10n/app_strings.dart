@@ -44,6 +44,26 @@ class AppStrings {
   String get delete => _s(en:'Delete', ko:'삭제', ja:'削除', es:'Eliminar');
   String get ok => _s(en:'OK', ko:'확인', ja:'OK', es:'Aceptar');
   String get recoverStreak => _s(en:'Recover Streak', ko:'스트릭 복구', ja:'ストリーク回復', es:'Recuperar racha');
+  // ── Pause Ticket ─────────────────────────────────────────────
+  String get pauseTicketButton => _s(en:'Use Pause Ticket', ko:'정지권 사용', ja:'一時停止チケット使用', es:'Usar ticket de pausa');
+  String get pauseTicketTitle => _s(en:'Challenge Pause Ticket', ko:'챌린지 정지권', ja:'チャレンジ一時停止チケット', es:'Ticket de pausa');
+  String get pauseTicketDesc => _s(
+    en:'During the selected period, your streak will not break even if you miss a day.\n\nIdeal for vacations or special occasions.\n\n₩1,900',
+    ko:'선택한 기간 동안 루틴을 수행하지 않아도 스트릭이 끊기지 않습니다.\n\n휴가나 경조사 등 부득이한 상황에 사용하세요.\n\n₩1,900',
+    ja:'選択した期間中はルーティンをこなさなくてもストリークが途切れません。\n\n休暇や特別な行事の際にご利用ください。\n\n₩1,900',
+    es:'Durante el período seleccionado, tu racha no se romperá aunque faltes un día.\n\nIdeal para vacaciones u ocasiones especiales.\n\n₩1,900',
+  );
+  String get pauseTicketBuy => _s(en:'Buy (₩1,900)', ko:'구매하기 (₩1,900)', ja:'購入する (₩1,900)', es:'Comprar (₩1,900)');
+  String get pauseActivated => _s(en:'Pause ticket applied!', ko:'정지권이 적용되었습니다!', ja:'一時停止チケットが適用されました！', es:'¡Ticket de pausa aplicado!');
+  String get pauseActive => _s(en:'Paused', ko:'일시정지 중', ja:'一時停止中', es:'En pausa');
+  String pauseActiveUntil(String date) => _s(en:'Until $date', ko:'$date 까지', ja:'$date まで', es:'Hasta $date');
+  String get pauseAlreadyActive => _s(en:'A pause is already active for this challenge.', ko:'이미 정지권이 적용 중입니다.', ja:'すでに一時停止が適用されています。', es:'Ya hay una pausa activa para este reto.');
+  String get pauseSelectPeriod => _s(en:'Select Pause Period', ko:'정지 기간 선택', ja:'一時停止期間を選択', es:'Seleccionar período de pausa');
+  String get pauseCancel => _s(en:'End Pause', ko:'정지 해제', ja:'一時停止を解除', es:'Cancelar pausa');
+  String get pauseCancelConfirmTitle => _s(en:'End Pause?', ko:'정지를 해제할까요?', ja:'一時停止を解除しますか？', es:'¿Cancelar pausa?');
+  String get pauseCancelConfirmBody => _s(en:'The pause will end immediately. No refund will be issued.', ko:'정지권이 즉시 해제됩니다. 환불은 제공되지 않습니다.', ja:'一時停止をすぐに解除します。返金はされません。', es:'La pausa finalizará de inmediato. No se realizará ningún reembolso.');
+  String get pauseCancelled => _s(en:'Pause ended.', ko:'정지가 해제되었습니다.', ja:'一時停止が解除されました。', es:'Pausa cancelada.');
+  String get recoverStreakHint => _s(en:'You can recover a streak!', ko:'복구할 수 있는 스트릭이 있어요!', ja:'回復できるストリークがあります！', es:'¡Puedes recuperar una racha!');
   String get recoverStreakCost => _s(en:'Costs 3 Willpower', ko:'의지력 3 소모', ja:'意志力3消費', es:'Cuesta 3 fuerza de voluntad');
   String get recoverStreakConfirmTitle => _s(en:'Recover Streak?', ko:'스트릭을 복구할까요?', ja:'ストリークを回復しますか？', es:'¿Recuperar racha?');
   String get recoverStreakConfirmBody => _s(en:'Watch a short ad to recover yesterday\'s streak.', ko:'짧은 광고를 시청하면 어제의 스트릭을 복구할 수 있습니다.', ja:'短い広告を見ると昨日のストリークを回復できます。', es:'Mira un anuncio corto para recuperar la racha de ayer.');
@@ -274,6 +294,7 @@ class AppStrings {
   String get guideStreakRecovery => _s(en:'Streak Recovery', ko:'스트릭 복구', ja:'ストリーク回復', es:'Recuperación de racha');
   String get guideWillpower => _s(en:'Willpower & Level', ko:'의지력 & 레벨', ja:'意志力 & レベル', es:'Fuerza de voluntad y nivel');
   String get guideBadge => _s(en:'Badge System', ko:'배지 시스템', ja:'バッジシステム', es:'Sistema de insignias');
+  String get guidePauseTicket => _s(en:'Pause Ticket', ko:'정지권', ja:'一時停止チケット', es:'Ticket de pausa');
   // 앱 소개 — 항목 설명
   String get guideHowToUseBody => _s(
     en:'Tap + to create a challenge and check off your routine every day. Complete all sub-routines to mark the day done. Check your progress on the Home screen.',

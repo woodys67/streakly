@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../theme/app_theme.dart';
+import '../../models/challenge.dart';
 import '../../models/routine.dart';
 import '../../providers/challenge_provider.dart';
 import '../../providers/settings_provider.dart';
@@ -89,6 +90,13 @@ class ChallengeScreen extends StatelessWidget {
                   repeatDays: challenge.repeatDays,
                   s: s,
                 ),
+                const SizedBox(height: 16),
+                _PauseSection(
+                  challenge: challenge,
+                  s: s,
+                  onUsePause: () => _showPauseFlow(context, provider, challenge, s),
+                  onCancelPause: () => _showPauseCancelDialog(context, provider, challenge, s),
+                ),
                 if (challenge.subRoutines.isNotEmpty) ...[
                   const SizedBox(height: 16),
                   _SubRoutinesSection(subRoutines: challenge.subRoutines, s: s),
@@ -168,6 +176,111 @@ class ChallengeScreen extends StatelessWidget {
         );
       },
     );
+  }
+
+  Future<void> _showPauseFlow(
+    BuildContext context,
+    ChallengeProvider provider,
+    Challenge challenge,
+    dynamic s,
+  ) async {
+    if (provider.challenges.firstWhere((c) => c.id == challenge.id).isCurrentlyPaused) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(s.pauseAlreadyActive), duration: const Duration(seconds: 2)),
+      );
+      return;
+    }
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(s.pauseTicketTitle),
+        content: Text(s.pauseTicketDesc),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text(s.cancel),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary),
+            child: Text(s.pauseTicketBuy, style: const TextStyle(color: AppColors.white)),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true || !context.mounted) return;
+
+    final now = DateTime.now();
+    final range = await showDateRangePicker(
+      context: context,
+      firstDate: now,
+      lastDate: now.add(const Duration(days: 365)),
+      initialDateRange: DateTimeRange(
+        start: now,
+        end: now.add(const Duration(days: 2)),
+      ),
+      helpText: s.pauseSelectPeriod,
+      builder: (context, child) => Theme(
+        data: Theme.of(context).copyWith(
+          colorScheme: Theme.of(context).colorScheme.copyWith(
+            primary: AppColors.primary,
+          ),
+        ),
+        child: child!,
+      ),
+    );
+
+    if (range == null || !context.mounted) return;
+
+    await provider.addPause(challenge.id, range.start, range.end);
+
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(s.pauseActivated),
+          backgroundColor: AppColors.primary,
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    }
+  }
+
+  Future<void> _showPauseCancelDialog(
+    BuildContext context,
+    ChallengeProvider provider,
+    Challenge challenge,
+    dynamic s,
+  ) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(s.pauseCancelConfirmTitle),
+        content: Text(s.pauseCancelConfirmBody),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text(s.cancel),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            style: ElevatedButton.styleFrom(backgroundColor: AppColors.error),
+            child: Text(s.pauseCancel, style: const TextStyle(color: AppColors.white)),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true || !context.mounted) return;
+
+    await provider.removePause(challenge.id);
+
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(s.pauseCancelled), duration: const Duration(seconds: 2)),
+      );
+    }
   }
 
   Future<void> _showAddLogDialog(
@@ -575,6 +688,82 @@ class _ScheduleInfoSection extends StatelessWidget {
             ),
           ],
         ],
+      ),
+    );
+  }
+}
+
+class _PauseSection extends StatelessWidget {
+  final Challenge challenge;
+  final dynamic s;
+  final VoidCallback onUsePause;
+  final VoidCallback onCancelPause;
+
+  const _PauseSection({
+    required this.challenge,
+    required this.s,
+    required this.onUsePause,
+    required this.onCancelPause,
+  });
+
+  String _formatDate(DateTime d) => '${d.year}.${d.month.toString().padLeft(2, '0')}.${d.day.toString().padLeft(2, '0')}';
+
+  @override
+  Widget build(BuildContext context) {
+    final pause = challenge.activePause;
+
+    if (pause != null) {
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          color: AppColors.primary.withValues(alpha: 0.08),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: AppColors.primary.withValues(alpha: 0.3), width: 1.5),
+        ),
+        child: Row(
+          children: [
+            const Icon(Icons.pause_circle_outline, color: AppColors.primary, size: 20),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    s.pauseActive,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                  Text(
+                    s.pauseActiveUntil(_formatDate(pause.end)),
+                    style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+                  ),
+                ],
+              ),
+            ),
+            TextButton(
+              onPressed: onCancelPause,
+              style: TextButton.styleFrom(foregroundColor: AppColors.error),
+              child: Text(s.pauseCancel, style: const TextStyle(fontSize: 12)),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return SizedBox(
+      width: double.infinity,
+      child: OutlinedButton.icon(
+        onPressed: onUsePause,
+        icon: const Icon(Icons.pause_circle_outline, size: 18),
+        label: Text(s.pauseTicketButton),
+        style: OutlinedButton.styleFrom(
+          foregroundColor: AppColors.primary,
+          side: const BorderSide(color: AppColors.primary, width: 1.5),
+          padding: const EdgeInsets.symmetric(vertical: 12),
+        ),
       ),
     );
   }

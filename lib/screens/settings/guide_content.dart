@@ -7,6 +7,7 @@ class GuideContent {
   static String streakRecovery(AppStrings s) => _pick(s, _streakRecovery);
   static String willpower(AppStrings s) => _pick(s, _willpower);
   static String badge(AppStrings s) => _pick(s, _badge);
+  static String pauseTicket(AppStrings s) => _pick(s, _pauseTicket);
 
   static String _pick(AppStrings s, Map<String, String> map) {
     final lang = s.langCode;
@@ -927,19 +928,17 @@ O cartão **Sequências Totais** mostra a soma das sequências atuais de todos o
     'ko': '''
 ## 스트릭 복구란?
 
-어제 루틴을 빠뜨렸을 때, **의지력 3을 소모해 스트릭을 되살리는** 기능입니다.
-"어차피 끊겼으니 포기"라는 심리를 방지하고 지속성을 유지하는 데 도움을 줍니다.
+어제 루틴을 빠뜨렸을 때, **짧은 광고를 시청해 스트릭을 되살리는** 기능입니다.
+"어차피 끊겼으니 포기"라고 생각하지 말고 지속성을 유지하세요.
 
 ---
 
 ## 복구 조건
 
-| 조건 | 내용 |
-|---|---|
-| 복구 가능 시점 | 오늘 루틴을 아직 완료하지 않은 상태 |
-| 복구 대상 | 어제 날짜 (Day N-1) |
-| 필요 의지력 | **3** |
-| 쿨다운 | 챌린지당 **7일에 1회** |
+1. 오늘 루틴을 아직 완료하지 않은 상태여야 합니다. (오늘 완료 시 복구 불가)
+2. 복구 대상은 **직전 예정일** (반복 요일 기준)의 기록입니다. (예: 월,수,금 루틴의 경우 월요일을 놓쳤다면 수요일의 '오늘의 루틴'에서 월요일 기록을 복구할 수 있습니다.)
+3. 복구 기한(다음 루틴 수행일)을 넘긴 스트릭은 복구할 수 없습니다. (예: 월,수,금 루틴의 경우 월요일을 놓쳤다면 금요일의 '오늘의 루틴'에서 월요일 기록을 복구할 수 없습니다.)
+4. 챌린지당 **7일에 1회**로 사용 제한이 있습니다.
 
 ---
 
@@ -947,8 +946,8 @@ O cartão **Sequências Totais** mostra a soma das sequências atuais de todos o
 
 1. 홈 화면에서 오늘 **미완료** 상태인 루틴 카드를 확인합니다.
 2. 카드 우측 하단의 **스트릭 복구** 버튼을 탭합니다.
-3. 확인 다이얼로그에서 **복구 버튼**을 누릅니다.
-4. 어제 날짜가 완료 처리되고 의지력 3이 차감됩니다.
+3. 확인 다이얼로그에서 **광고 시청** 버튼을 누릅니다.
+4. 광고가 끝나면 어제 날짜가 완료 처리됩니다.
 
 ---
 
@@ -957,32 +956,25 @@ O cartão **Sequências Totais** mostra a soma das sequências atuais de todos o
 - 오늘 루틴을 이미 완료한 경우
 - 챌린지 Day 1인 경우 (어제가 없음)
 - 어제가 이미 완료된 경우
-- 의지력이 **3 미만**인 경우
 - 해당 챌린지에서 **7일 이내** 이미 복구를 사용한 경우
 
 ---
 
-## 설계 의도
-
-레벨이 높을수록 의지력이 풍부해 복구 여유가 생깁니다.
-오래 쌓아온 사용자일수록 **"내가 쌓아온 의지력이 나를 지켜준다"** 는 경험을 할 수 있습니다.
 ''',
     'en': '''
 ## What is Streak Recovery?
 
-When you miss yesterday's routine, you can **spend 3 Willpower to restore your streak**.
-It prevents the "I already broke it, why bother" mindset.
+When you miss yesterday's routine, you can **watch a short ad to restore your streak**.
+Don't give up — keep your habit going.
 
 ---
 
 ## Recovery Conditions
 
-| Condition | Detail |
-|---|---|
-| When available | Today's routine not yet completed |
-| Recovers | Yesterday (Day N-1) |
-| Willpower cost | **3** |
-| Cooldown | **Once every 7 days** per challenge |
+1. Today's routine must not yet be completed. (Recovery is unavailable once today is done)
+2. The target of recovery is the **most recent scheduled day** (based on repeat days). (e.g., For a Mon/Wed/Fri routine, if Monday was missed, Monday's record can be recovered from Wednesday's 'Today's Routine'.)
+3. Streaks past the deadline (the next scheduled day) cannot be recovered. (e.g., For a Mon/Wed/Fri routine, if Monday was missed, Monday's record cannot be recovered from Friday's 'Today's Routine'.)
+4. Usage is limited to **once every 7 days** per challenge.
 
 ---
 
@@ -990,8 +982,8 @@ It prevents the "I already broke it, why bother" mindset.
 
 1. Find the **incomplete** routine card on the Home screen.
 2. Tap the **Recover Streak** button at the bottom-right of the card.
-3. Confirm in the dialog.
-4. Yesterday is marked complete and 3 Willpower is deducted.
+3. Tap **Watch Ad** in the confirmation dialog.
+4. Once the ad ends, yesterday is marked as complete.
 
 ---
 
@@ -1000,30 +992,25 @@ It prevents the "I already broke it, why bother" mindset.
 - Today's routine is already complete
 - It's Day 1 (no yesterday)
 - Yesterday was already completed
-- Willpower is **below 3**
 - Recovery was used within the **last 7 days** for this challenge
 
 ---
 
-## Design Intent
-
-Higher-level users have more Willpower, making recovery easier — a reward for dedication.
 ''',
     'ja': '''
 ## ストリーク回復とは？
 
-昨日のルーティンを逃したとき、**意志力3を消費してストリークを復活させる**機能です。
+昨日のルーティンを逃したとき、**短い広告を見てストリークを復活させる**機能です。
+「どうせ途切れたから諦める」と思わず、継続を続けましょう。
 
 ---
 
 ## 回復条件
 
-| 条件 | 内容 |
-|---|---|
-| 利用可能時 | 今日のルーティンがまだ未完了 |
-| 回復対象 | 昨日（Day N-1）|
-| 必要意志力 | **3** |
-| クールダウン | チャレンジごとに**7日に1回** |
+1. 今日のルーティンがまだ未完了の状態である必要があります。（今日完了すると回復不可）
+2. 回復対象は**直近の予定日**（繰り返し曜日基準）の記録です。（例：月・水・金ルーティンで月曜を逃した場合、水曜の「今日のルーティン」から月曜の記録を回復できます。）
+3. 期限（次のルーティン実施日）を過ぎたストリークは回復できません。（例：月・水・金ルーティンで月曜を逃した場合、金曜の「今日のルーティン」から月曜の記録は回復できません。）
+4. チャレンジごとに**7日に1回**の使用制限があります。
 
 ---
 
@@ -1031,8 +1018,8 @@ Higher-level users have more Willpower, making recovery easier — a reward for 
 
 1. ホーム画面で今日**未完了**のルーティンカードを確認します。
 2. カード右下の **ストリーク回復** ボタンをタップします。
-3. 確認ダイアログで**回復ボタン**を押します。
-4. 昨日が完了処理され、意志力が3減ります。
+3. 確認ダイアログで**広告を見る**ボタンを押します。
+4. 広告終了後、昨日が完了処理されます。
 
 ---
 
@@ -1041,25 +1028,25 @@ Higher-level users have more Willpower, making recovery easier — a reward for 
 - 今日のルーティンが完了済みの場合
 - Day 1の場合（昨日がない）
 - 昨日がすでに完了済みの場合
-- 意志力が**3未満**の場合
 - 同チャレンジで**7日以内**に回復を使用した場合
+
+---
+
 ''',
     'zhCN': '''
 ## 什么是连续恢复？
 
-当您漏掉昨天的任务时，可以**消耗3意志力恢复连续记录**。
-防止"反正断了就放弃"的心理，帮助持续坚持。
+当您漏掉昨天的任务时，可以**观看短广告恢复连续记录**。
+不要"反正断了就放弃"，继续坚持吧。
 
 ---
 
 ## 恢复条件
 
-| 条件 | 内容 |
-|---|---|
-| 可用时机 | 今天任务尚未完成 |
-| 恢复对象 | 昨天（第N-1天）|
-| 需要意志力 | **3** |
-| 冷却时间 | 每个挑战**7天1次** |
+1. 今天任务尚未完成才可使用。（今天完成后无法恢复）
+2. 恢复对象为**最近一次预定日**（按重复日期计算）的记录。（例：周一、三、五任务，若周一未完成，可在周三的"今日任务"中恢复周一的记录。）
+3. 超过恢复期限（下一次任务执行日）的连续记录无法恢复。（例：周一、三、五任务，若周一未完成，则无法在周五的"今日任务"中恢复周一的记录。）
+4. 每个挑战限制**7天1次**使用。
 
 ---
 
@@ -1067,8 +1054,8 @@ Higher-level users have more Willpower, making recovery easier — a reward for 
 
 1. 在主页找到今天**未完成**的任务卡片。
 2. 点击卡片右下角的 **恢复连续** 按钮。
-3. 在确认对话框中点击**恢复**。
-4. 昨天标记为完成，扣除3意志力。
+3. 在确认对话框中点击**观看广告**。
+4. 广告结束后，昨天标记为完成。
 
 ---
 
@@ -1077,25 +1064,25 @@ Higher-level users have more Willpower, making recovery easier — a reward for 
 - 今天任务已完成
 - 挑战第1天（没有昨天）
 - 昨天已完成
-- 意志力**不足3**
 - 该挑战**7天内**已使用过恢复
+
+---
+
 ''',
     'es': '''
 ## ¿Qué es la recuperación de racha?
 
-Cuando pierdes la rutina de ayer, puedes **gastar 3 de fuerza de voluntad para restaurar tu racha**.
-Evita la mentalidad de "ya la rompí, para qué seguir".
+Cuando pierdes la rutina de ayer, puedes **ver un anuncio corto para restaurar tu racha**.
+No pienses "ya la rompí, para qué seguir" — ¡sigue adelante!
 
 ---
 
 ## Condiciones de recuperación
 
-| Condición | Detalle |
-|---|---|
-| Cuándo está disponible | La rutina de hoy aún no está completada |
-| Recupera | Ayer (Día N-1) |
-| Costo en fuerza de voluntad | **3** |
-| Tiempo de espera | **Una vez cada 7 días** por reto |
+1. La rutina de hoy aún no debe estar completada. (La recuperación no está disponible si ya completaste hoy)
+2. El objetivo de recuperación es el registro del **día programado más reciente** (según días de repetición). (ej.: Para una rutina de Lun/Mié/Vie, si se perdió el lunes, el registro del lunes se puede recuperar desde la 'Rutina de hoy' del miércoles.)
+3. Las rachas que superen el plazo (el siguiente día programado) no pueden recuperarse. (ej.: Para una rutina de Lun/Mié/Vie, si se perdió el lunes, el registro del lunes no puede recuperarse desde la 'Rutina de hoy' del viernes.)
+4. El uso está limitado a **una vez cada 7 días** por reto.
 
 ---
 
@@ -1103,8 +1090,8 @@ Evita la mentalidad de "ya la rompí, para qué seguir".
 
 1. Encuentra la tarjeta de rutina **incompleta** en la pantalla de Inicio.
 2. Toca el botón **Recuperar racha** en la parte inferior derecha de la tarjeta.
-3. Confirma en el diálogo.
-4. Ayer se marca como completado y se descuentan 3 de fuerza de voluntad.
+3. Toca **Ver anuncio** en el diálogo de confirmación.
+4. Al terminar el anuncio, ayer se marca como completado.
 
 ---
 
@@ -1113,25 +1100,25 @@ Evita la mentalidad de "ya la rompí, para qué seguir".
 - La rutina de hoy ya está completada
 - Es el Día 1 (no hay ayer)
 - Ayer ya estaba completado
-- La fuerza de voluntad es **inferior a 3**
 - La recuperación se usó en los **últimos 7 días** para este reto
+
+---
+
 ''',
     'de': '''
 ## Was ist die Streak-Wiederherstellung?
 
-Wenn du die gestrige Routine verpasst hast, kannst du **3 Willenskraft ausgeben, um deinen Streak wiederherzustellen**.
-Verhindert die "Ich hab's eh schon verpasst"-Mentalität.
+Wenn du die gestrige Routine verpasst hast, kannst du **eine kurze Werbung ansehen, um deinen Streak wiederherzustellen**.
+Denk nicht "Ich hab's eh schon verpasst" — mach einfach weiter!
 
 ---
 
 ## Wiederherstellungsbedingungen
 
-| Bedingung | Detail |
-|---|---|
-| Wann verfügbar | Die heutige Routine ist noch nicht abgeschlossen |
-| Stellt wieder her | Gestern (Tag N-1) |
-| Willenskraft-Kosten | **3** |
-| Abklingzeit | **Einmal alle 7 Tage** pro Challenge |
+1. Die heutige Routine darf noch nicht abgeschlossen sein. (Wiederherstellung nicht möglich, wenn heute bereits erledigt)
+2. Ziel der Wiederherstellung ist der Eintrag des **zuletzt geplanten Tages** (basierend auf Wiederholungstagen). (Bsp.: Bei einer Mo/Mi/Fr-Routine gilt: Wurde Montag verpasst, kann der Montag-Eintrag aus der 'Heutige Routine' am Mittwoch wiederhergestellt werden.)
+3. Streaks, die die Frist (den nächsten geplanten Tag) überschritten haben, können nicht wiederhergestellt werden. (Bsp.: Bei einer Mo/Mi/Fr-Routine gilt: Wurde Montag verpasst, kann der Montag-Eintrag aus der 'Heutige Routine' am Freitag nicht wiederhergestellt werden.)
+4. Die Nutzung ist auf **einmal alle 7 Tage** pro Challenge begrenzt.
 
 ---
 
@@ -1139,8 +1126,8 @@ Verhindert die "Ich hab's eh schon verpasst"-Mentalität.
 
 1. Finde die **unvollständige** Routine-Karte auf der Startseite.
 2. Tippe auf den **Serie wiederherstellen**-Button unten rechts auf der Karte.
-3. Bestätige im Dialog.
-4. Gestern wird als erledigt markiert und 3 Willenskraft wird abgezogen.
+3. Tippe auf **Werbung ansehen** im Bestätigungsdialog.
+4. Nach dem Werbeende wird Gestern als erledigt markiert.
 
 ---
 
@@ -1149,25 +1136,25 @@ Verhindert die "Ich hab's eh schon verpasst"-Mentalität.
 - Die heutige Routine ist bereits abgeschlossen
 - Es ist Tag 1 (kein Gestern)
 - Gestern war bereits abgeschlossen
-- Willenskraft ist **unter 3**
 - Die Wiederherstellung wurde in den **letzten 7 Tagen** für diese Challenge verwendet
+
+---
+
 ''',
     'pt': '''
 ## O que é a recuperação de sequência?
 
-Quando você perde a rotina de ontem, pode **gastar 3 de força de vontade para restaurar sua sequência**.
-Evita a mentalidade de "já quebrei, para que continuar".
+Quando você perde a rotina de ontem, pode **assistir a um anúncio curto para restaurar sua sequência**.
+Não desista pensando "já quebrei" — continue em frente!
 
 ---
 
 ## Condições de recuperação
 
-| Condição | Detalhe |
-|---|---|
-| Quando disponível | A rotina de hoje ainda não foi concluída |
-| Recupera | Ontem (Dia N-1) |
-| Custo em força de vontade | **3** |
-| Tempo de recarga | **Uma vez a cada 7 dias** por desafio |
+1. A rotina de hoje ainda não deve estar concluída. (A recuperação não está disponível se hoje já foi concluído)
+2. O alvo da recuperação é o registro do **dia programado mais recente** (com base nos dias de repetição). (ex.: Para uma rotina de Seg/Qua/Sex, se segunda foi perdida, o registro de segunda pode ser recuperado na 'Rotina de hoje' de quarta.)
+3. Sequências que ultrapassaram o prazo (o próximo dia programado) não podem ser recuperadas. (ex.: Para uma rotina de Seg/Qua/Sex, se segunda foi perdida, o registro de segunda não pode ser recuperado na 'Rotina de hoje' de sexta.)
+4. O uso é limitado a **uma vez a cada 7 dias** por desafio.
 
 ---
 
@@ -1175,8 +1162,8 @@ Evita a mentalidade de "já quebrei, para que continuar".
 
 1. Encontre o cartão de rotina **incompleto** na tela Início.
 2. Toque no botão **Recuperar sequência** no canto inferior direito do cartão.
-3. Confirme no diálogo.
-4. Ontem é marcado como concluído e 3 de força de vontade são deduzidos.
+3. Toque em **Assistir anúncio** no diálogo de confirmação.
+4. Após o anúncio, ontem é marcado como concluído.
 
 ---
 
@@ -1185,25 +1172,25 @@ Evita a mentalidade de "já quebrei, para que continuar".
 - A rotina de hoje já está concluída
 - É o Dia 1 (não há ontem)
 - Ontem já estava concluído
-- A força de vontade é **menor que 3**
 - A recuperação foi usada nos **últimos 7 dias** para este desafio
+
+---
+
 ''',
     'ru': '''
 ## Что такое восстановление серии?
 
-Если вы пропустили вчерашнюю рутину, можно **потратить 3 силы воли, чтобы восстановить серию**.
-Предотвращает мышление "всё равно уже прервал, зачем продолжать".
+Если вы пропустили вчерашнюю рутину, можно **посмотреть короткую рекламу, чтобы восстановить серию**.
+Не думайте "всё равно уже прервал" — продолжайте!
 
 ---
 
 ## Условия восстановления
 
-| Условие | Подробности |
-|---|---|
-| Когда доступно | Сегодняшняя рутина ещё не выполнена |
-| Восстанавливает | Вчера (День N-1) |
-| Стоимость | **3 силы воли** |
-| Перезарядка | **Раз в 7 дней** на задачу |
+1. Сегодняшняя рутина ещё не должна быть выполнена. (Восстановление недоступно, если сегодня уже выполнено)
+2. Объектом восстановления является запись **последнего запланированного дня** (по дням повторения). (Пример: для рутины Пн/Ср/Пт — если пропущен понедельник, запись понедельника можно восстановить из «Сегодняшней рутины» в среду.)
+3. Серии, превысившие срок (следующий запланированный день), восстановить нельзя. (Пример: для рутины Пн/Ср/Пт — если пропущен понедельник, запись понедельника нельзя восстановить из «Сегодняшней рутины» в пятницу.)
+4. Использование ограничено **раз в 7 дней** на задачу.
 
 ---
 
@@ -1211,8 +1198,8 @@ Evita a mentalidade de "já quebrei, para que continuar".
 
 1. Найдите **невыполненную** карточку задачи на главном экране.
 2. Нажмите кнопку **Восстановить серию** в правом нижнем углу карточки.
-3. Подтвердите в диалоге.
-4. Вчера засчитывается как выполненное, и 3 силы воли списываются.
+3. В диалоге нажмите **Смотреть рекламу**.
+4. После просмотра рекламы вчера засчитывается как выполненное.
 
 ---
 
@@ -1221,8 +1208,10 @@ Evita a mentalidade de "já quebrei, para que continuar".
 - Сегодняшняя рутина уже выполнена
 - Это День 1 (нет вчера)
 - Вчера уже было выполнено
-- Сила воли **меньше 3**
 - Восстановление использовалось в **последние 7 дней** для этой задачи
+
+---
+
 ''',
   };
 
@@ -1900,6 +1889,208 @@ Vá para a aba **📊 Registros** → toque no cartão Coleção de medalhas.
 Перейдите на вкладку **📊 Записи** → нажмите карточку Коллекция значков.
 
 > 🔒 Условия секретных значков скрыты до их получения.
+''',
+  };
+
+  // ─────────────────────────────────────────────────────────────
+  // 정지권
+  // ─────────────────────────────────────────────────────────────
+  static const Map<String, String> _pauseTicket = {
+    'ko': '''
+## 정지권이란?
+
+휴가, 경조사 등 부득이한 사정으로 챌린지를 수행하기 어려운 기간을 **미리 지정**해두면, 해당 기간 동안 루틴을 하지 않아도 **스트릭이 끊기지 않는** 기능입니다.
+
+> 정지권은 유료 단건 구매 상품입니다.
+
+---
+
+## 동작 방식
+
+- 정지 기간 중 루틴을 **수행하지 않아도** 스트릭이 유지됩니다.
+- 정지 기간 중에도 루틴을 **수행할 수 있습니다** — 체크인 시 진행도가 올라갑니다.
+- 스트릭 복구와 달리 **사전에** 기간을 설정하는 방식입니다.
+- 정지 기간이 끝나면 다음 날부터 정상적으로 스트릭이 다시 계산됩니다.
+
+---
+
+## 사용 방법
+
+1. 하단 탭 **🚩 챌린지** 화면으로 이동합니다.
+2. **정지권 사용** 버튼을 탭합니다.
+3. 안내 및 가격을 확인하고 **구매하기** 버튼을 탭합니다.
+4. 정지할 기간(시작일 ~ 종료일)을 선택합니다.
+5. 선택 완료 후 해당 기간에 정지권이 적용됩니다.
+
+---
+
+## 정지 해제
+
+정지 기간이 끝나기 전에 조기 해제할 수 있습니다.
+
+1. 챌린지 화면에서 **"일시정지 중"** 배너를 확인합니다.
+2. 배너 오른쪽의 **정지 해제** 버튼을 탭합니다.
+3. 확인 다이얼로그에서 동의하면 즉시 해제됩니다.
+
+> ⚠️ 정지를 해제해도 환불은 제공되지 않습니다.
+
+---
+
+## 스트릭 복구와의 차이
+
+| 구분 | 정지권 | 스트릭 복구 |
+|---|---|---|
+| 시점 | **사전** 설정 | **사후** 복구 |
+| 방법 | 유료 구매 | 광고 시청 |
+| 기간 | 여러 날 지정 가능 | 직전 하루만 |
+| 제한 | 없음 | 챌린지당 7일 1회 |
+''',
+    'en': '''
+## What is a Pause Ticket?
+
+A Pause Ticket lets you **designate a period in advance** — such as a vacation or special occasion — during which your streak will **not break** even if you skip your routine.
+
+> Pause Tickets are available as a one-time paid purchase.
+
+---
+
+## How It Works
+
+- Missing your routine during a pause **will not break your streak**.
+- You **can still check in** during a pause — it counts toward your progress.
+- Unlike streak recovery, this is set **in advance**.
+- After the pause ends, the streak resumes normally from the next day.
+
+---
+
+## How to Use
+
+1. Go to the **🚩 Challenge** tab.
+2. Tap the **Use Pause Ticket** button.
+3. Review the description and price, then tap **Buy**.
+4. Select your pause period (start date ~ end date).
+5. The pause is applied immediately after selection.
+
+---
+
+## Ending a Pause Early
+
+You can cancel a pause before it ends.
+
+1. Find the **"Paused"** banner on the Challenge screen.
+2. Tap the **End Pause** button on the right.
+3. Confirm in the dialog — the pause ends immediately.
+
+> ⚠️ No refund is issued when ending a pause early.
+
+---
+
+## Pause Ticket vs. Streak Recovery
+
+| | Pause Ticket | Streak Recovery |
+|---|---|---|
+| Timing | **Before** (set in advance) | **After** (retroactive) |
+| Method | Paid purchase | Watch an ad |
+| Duration | Multiple days | Previous day only |
+| Limit | None | Once per 7 days per challenge |
+''',
+    'ja': '''
+## 一時停止チケットとは？
+
+休暇や冠婚葬祭など、やむを得ない事情でチャレンジが難しい期間を**事前に指定**することで、その期間中ルーティンをこなさなくても**ストリークが途切れない**機能です。
+
+> 一時停止チケットは有料の単品購入商品です。
+
+---
+
+## 動作方式
+
+- 一時停止期間中にルーティンを**しなくても**ストリークが維持されます。
+- 一時停止期間中でもルーティンを**実行できます** — チェックインすると進捗が上がります。
+- ストリーク回復と異なり、**事前に**期間を設定する方式です。
+- 期間終了後は翌日から通常どおりストリークが再計算されます。
+
+---
+
+## 使い方
+
+1. **🚩 チャレンジ**タブへ移動します。
+2. **一時停止チケット使用**ボタンをタップします。
+3. 説明と価格を確認し、**購入する**をタップします。
+4. 一時停止する期間（開始日〜終了日）を選択します。
+5. 選択完了後、その期間に一時停止が適用されます。
+
+---
+
+## 一時停止の解除
+
+終了日前に早期解除できます。
+
+1. チャレンジ画面の**「一時停止中」**バナーを確認します。
+2. バナー右側の**一時停止を解除**ボタンをタップします。
+3. 確認ダイアログで同意すると即座に解除されます。
+
+> ⚠️ 早期解除しても返金はされません。
+
+---
+
+## ストリーク回復との違い
+
+| 項目 | 一時停止チケット | ストリーク回復 |
+|---|---|---|
+| タイミング | **事前**設定 | **事後**回復 |
+| 方法 | 有料購入 | 広告視聴 |
+| 期間 | 複数日指定可能 | 直前の1日のみ |
+| 制限 | なし | チャレンジごと7日1回 |
+''',
+    'es': '''
+## ¿Qué es un Ticket de pausa?
+
+Un Ticket de pausa te permite **designar un período con antelación** — como vacaciones o una ocasión especial — durante el cual tu racha **no se romperá** aunque te saltes la rutina.
+
+> Los Tickets de pausa son una compra de pago única.
+
+---
+
+## Cómo funciona
+
+- Saltarte la rutina durante una pausa **no romperá tu racha**.
+- **Puedes hacer check-in** durante la pausa — cuenta para tu progreso.
+- A diferencia de la recuperación de racha, se configura **de antemano**.
+- Al terminar la pausa, la racha se reanuda normalmente al día siguiente.
+
+---
+
+## Cómo usarlo
+
+1. Ve a la pestaña **🚩 Retos**.
+2. Toca el botón **Usar Ticket de pausa**.
+3. Revisa la descripción y el precio, luego toca **Comprar**.
+4. Selecciona el período de pausa (fecha inicio ~ fecha fin).
+5. La pausa se aplica de inmediato tras la selección.
+
+---
+
+## Cancelar una pausa antes de tiempo
+
+Puedes cancelar la pausa antes de que termine.
+
+1. Encuentra el banner **"En pausa"** en la pantalla de Retos.
+2. Toca el botón **Cancelar pausa** a la derecha.
+3. Confirma en el diálogo — la pausa finaliza de inmediato.
+
+> ⚠️ No se realizará ningún reembolso al cancelar la pausa.
+
+---
+
+## Ticket de pausa vs. Recuperación de racha
+
+| | Ticket de pausa | Recuperación de racha |
+|---|---|---|
+| Momento | **Antes** (configuración previa) | **Después** (retroactivo) |
+| Método | Compra de pago | Ver un anuncio |
+| Duración | Varios días | Solo el día anterior |
+| Límite | Ninguno | Una vez cada 7 días por reto |
 ''',
   };
 }

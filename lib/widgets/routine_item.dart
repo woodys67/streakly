@@ -153,11 +153,27 @@ class RoutineItem extends StatelessWidget {
               ),
             ],
           ),
-          if (canRecover) ...[
+          if (challenge.isCurrentlyPaused) ...[
             const SizedBox(height: 8),
-            Align(
-              alignment: Alignment.centerRight,
-              child: _RecoveryButton(onRecover: onRecover),
+            _PauseBadge(pauseEnd: challenge.activePause!.end),
+          ] else if (canRecover) ...[
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                  child: Text(
+                    context.watch<SettingsProvider>().strings.recoverStreakHint,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                _RecoveryButton(onRecover: onRecover),
+              ],
             ),
           ],
         ],
@@ -192,6 +208,32 @@ class _RecoveryButton extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _PauseBadge extends StatelessWidget {
+  final DateTime pauseEnd;
+
+  const _PauseBadge({required this.pauseEnd});
+
+  @override
+  Widget build(BuildContext context) {
+    final s = context.watch<SettingsProvider>().strings;
+    final dateStr = '${pauseEnd.year}.${pauseEnd.month.toString().padLeft(2, '0')}.${pauseEnd.day.toString().padLeft(2, '0')}';
+    return Row(
+      children: [
+        const Icon(Icons.pause_circle_outline, size: 14, color: AppColors.primary),
+        const SizedBox(width: 4),
+        Text(
+          '${s.pauseActive} · ${s.pauseActiveUntil(dateStr)}',
+          style: const TextStyle(
+            fontSize: 12,
+            color: AppColors.primary,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
     );
   }
 }

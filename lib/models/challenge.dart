@@ -1,6 +1,30 @@
 import 'routine.dart';
 import 'daily_log.dart';
 
+class PausePeriod {
+  final DateTime start;
+  final DateTime end;
+
+  const PausePeriod({required this.start, required this.end});
+
+  bool includes(DateTime date) {
+    final d = DateTime(date.year, date.month, date.day);
+    final s = DateTime(start.year, start.month, start.day);
+    final e = DateTime(end.year, end.month, end.day);
+    return !d.isBefore(s) && !d.isAfter(e);
+  }
+
+  Map<String, dynamic> toJson() => {
+    'start': start.toIso8601String().split('T').first,
+    'end': end.toIso8601String().split('T').first,
+  };
+
+  factory PausePeriod.fromJson(Map<String, dynamic> json) => PausePeriod(
+    start: DateTime.parse(json['start'] as String),
+    end: DateTime.parse(json['end'] as String),
+  );
+}
+
 class Challenge {
   final String id;
   final String name;
@@ -16,6 +40,7 @@ class Challenge {
   // day → completed sub-routine IDs
   final Map<int, List<String>> completedSubRoutines;
   final DateTime? lastRecoveryDate;
+  final List<PausePeriod> pausePeriods;
 
   Challenge({
     required this.id,
@@ -31,6 +56,7 @@ class Challenge {
     this.isCompleted = false,
     this.completedSubRoutines = const {},
     this.lastRecoveryDate,
+    this.pausePeriods = const [],
   });
 
   int get currentDay {
@@ -39,11 +65,45 @@ class Challenge {
     return diff.clamp(1, targetDays);
   }
 
+  bool _isScheduledDay(int day) {
+    if (repeatDays.isEmpty) return true;
+    final date = startDate.add(Duration(days: day - 1));
+    return repeatDays.contains(date.weekday);
+  }
+
+  bool _isPausedDay(int day) {
+    final date = startDate.add(Duration(days: day - 1));
+    return pausePeriods.any((p) => p.includes(date));
+  }
+
+  bool get isCurrentlyPaused {
+    final today = DateTime.now();
+    return pausePeriods.any((p) => p.includes(today));
+  }
+
+  PausePeriod? get activePause {
+    final today = DateTime.now();
+    for (final p in pausePeriods) {
+      if (p.includes(today)) return p;
+    }
+    return null;
+  }
+
+  // repeatDays를 고려한 직전 예정일 반환. 없으면 null.
+  int? get previousScheduledDay {
+    for (int d = currentDay - 1; d >= 1; d--) {
+      if (_isScheduledDay(d)) return d;
+    }
+    return null;
+  }
+
   int get streak {
     if (completedDays.isEmpty) return 0;
     final today = currentDay;
     int count = 0;
     for (int d = today; d >= 1; d--) {
+      if (!_isScheduledDay(d)) continue;
+      if (_isPausedDay(d)) continue;
       if (completedDays.contains(d)) {
         count++;
       } else {
@@ -81,6 +141,7 @@ class Challenge {
     Map<int, List<String>>? completedSubRoutines,
     DateTime? lastRecoveryDate,
     bool clearLastRecoveryDate = false,
+    List<PausePeriod>? pausePeriods,
   }) {
     return Challenge(
       id: id ?? this.id,
@@ -96,6 +157,7 @@ class Challenge {
       isCompleted: isCompleted ?? this.isCompleted,
       completedSubRoutines: completedSubRoutines ?? this.completedSubRoutines,
       lastRecoveryDate: clearLastRecoveryDate ? null : (lastRecoveryDate ?? this.lastRecoveryDate),
+      pausePeriods: pausePeriods ?? this.pausePeriods,
     );
   }
 
@@ -116,6 +178,7 @@ class Challenge {
         (k, v) => MapEntry(k.toString(), v),
       ),
       'lastRecoveryDate': lastRecoveryDate?.toIso8601String(),
+      'pausePeriods': pausePeriods.map((p) => p.toJson()).toList(),
     };
   }
 
@@ -144,6 +207,9 @@ class Challenge {
       lastRecoveryDate: json['lastRecoveryDate'] != null
           ? DateTime.parse(json['lastRecoveryDate'] as String)
           : null,
+      pausePeriods: (json['pausePeriods'] as List? ?? [])
+          .map((p) => PausePeriod.fromJson(p as Map<String, dynamic>))
+          .toList(),
     );
   }
 
@@ -186,6 +252,9 @@ class Challenge {
       notes: row['notes'] as String? ?? '',
       isCompleted: row['is_completed'] as bool? ?? false,
       completedSubRoutines: completedSubRoutines,
+      pausePeriods: (row['pause_periods'] as List? ?? [])
+          .map((p) => PausePeriod.fromJson(p as Map<String, dynamic>))
+          .toList(),
     );
   }
 

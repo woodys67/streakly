@@ -971,6 +971,8 @@ class _AppGuideCard extends StatelessWidget {
           const _Divider(),
           _GuideItem(icon: Icons.replay_outlined,               title: s.guideStreakRecovery,  content: GuideContent.streakRecovery(s)),
           const _Divider(),
+          _GuideItem(icon: Icons.pause_circle_outline,          title: s.guidePauseTicket,     content: GuideContent.pauseTicket(s)),
+          const _Divider(),
           _GuideItem(icon: Icons.bolt_outlined,                 title: s.guideWillpower,       content: GuideContent.willpower(s)),
           const _Divider(),
           _GuideItem(icon: Icons.military_tech_outlined,        title: s.guideBadge,           content: GuideContent.badge(s)),

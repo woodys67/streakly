@@ -76,11 +76,69 @@ class ChallengeProvider extends ChangeNotifier {
 
   bool canRecoverStreak(Challenge challenge) {
     if (challenge.isTodayCompleted) return false;
-    if (challenge.currentDay < 2) return false;
-    if (challenge.completedDays.contains(challenge.currentDay - 1)) return false;
+    if (challenge.isCurrentlyPaused) return false;
+    final prev = challenge.previousScheduledDay;
+    if (prev == null) return false;
+    if (challenge.completedDays.contains(prev)) return false;
     if (challenge.lastRecoveryDate != null &&
         DateTime.now().difference(challenge.lastRecoveryDate!).inDays < _recoveryCooldownDays) return false;
     return true;
+  }
+
+  bool canPause(Challenge challenge) {
+    return !challenge.isCurrentlyPaused;
+  }
+
+  Future<void> removePause(String challengeId) async {
+    final idx = _challenges.indexWhere((c) => c.id == challengeId);
+    if (idx == -1) return;
+
+    final challenge = _challenges[idx];
+    final today = DateTime.now();
+    final updatedPauses = challenge.pausePeriods
+        .where((p) => !p.includes(today))
+        .toList();
+
+    _challenges[idx] = challenge.copyWith(pausePeriods: updatedPauses);
+    notifyListeners();
+
+    await _saveLocalChallenges();
+
+    final user = _currentUser;
+    if (user != null) {
+      try {
+        await _db.from('challenges').update({
+          'pause_periods': updatedPauses.map((p) => p.toJson()).toList(),
+        }).eq('id', challengeId).eq('user_id', user.id);
+      } catch (e) {
+        debugPrint('[Streakly] pause_periods 서버 저장 오류: $e');
+      }
+    }
+  }
+
+  Future<void> addPause(String challengeId, DateTime startDate, DateTime endDate) async {
+    final idx = _challenges.indexWhere((c) => c.id == challengeId);
+    if (idx == -1) return;
+
+    final challenge = _challenges[idx];
+    final newPause = PausePeriod(start: startDate, end: endDate);
+    final updatedPauses = List<PausePeriod>.from(challenge.pausePeriods)..add(newPause);
+
+    _challenges[idx] = challenge.copyWith(pausePeriods: updatedPauses);
+    notifyListeners();
+
+    await _saveLocalChallenges();
+
+    final user = _currentUser;
+    if (user != null) {
+      try {
+        await _db.from('challenges').update({
+          'pause_periods': updatedPauses.map((p) => p.toJson()).toList(),
+        }).eq('id', challengeId).eq('user_id', user.id);
+      } catch (e) {
+        debugPrint('[Streakly] pause_periods 서버 저장 오류: $e');
+      }
+    }
   }
 
   Future<void> recoverStreak(String challengeId) async {
@@ -89,7 +147,7 @@ class ChallengeProvider extends ChangeNotifier {
     final challenge = _challenges[idx];
     if (!canRecoverStreak(challenge)) return;
 
-    final recoveredDay = challenge.currentDay - 1;
+    final recoveredDay = challenge.previousScheduledDay!;
     final updatedCompleted = List<int>.from(challenge.completedDays)..add(recoveredDay);
 
     _challenges[idx] = challenge.copyWith(

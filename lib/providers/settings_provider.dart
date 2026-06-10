@@ -125,6 +125,8 @@ class SettingsProvider extends ChangeNotifier {
       _notificationsEnabled = row['notifications_enabled'] as bool? ?? true;
       _darkMode = row['dark_mode'] as bool? ?? false;
       _userName = row['display_name'] as String? ?? 'Streakly User';
+      final prefs = await SharedPreferences.getInstance();
+      _profileImage = prefs.getString(_profileImageKey) ?? '';
       notifyListeners();
       return true;
     }
@@ -153,6 +155,8 @@ class SettingsProvider extends ChangeNotifier {
           _notificationsEnabled = retryRow['notifications_enabled'] as bool? ?? true;
           _darkMode = retryRow['dark_mode'] as bool? ?? false;
           _userName = retryRow['display_name'] as String? ?? 'Streakly User';
+          final prefs = await SharedPreferences.getInstance();
+          _profileImage = prefs.getString(_profileImageKey) ?? '';
           notifyListeners();
           return true;
         }
