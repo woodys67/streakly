@@ -247,8 +247,7 @@ class _BadgeCell extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                   child: ImageFiltered(
                     imageFilter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
-                    child: Text(badge.icon,
-                        style: const TextStyle(fontSize: 28)),
+                    child: Image.asset(badge.imagePath, width: 36, height: 36),
                   ),
                 )
               : ColorFiltered(
@@ -261,8 +260,7 @@ class _BadgeCell extends StatelessWidget {
                           0.2126, 0.7152, 0.0722, 0, 0,
                           0,      0,      0,      1, 0,
                         ]),
-                  child: Text(badge.icon,
-                      style: const TextStyle(fontSize: 28)),
+                  child: Image.asset(badge.imagePath, width: 36, height: 36),
                 ),
           const SizedBox(height: 4),
           Text(
@@ -316,12 +314,16 @@ class _BadgeDetailSheet extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 20),
-          Text(
-            badge.icon,
-            style: TextStyle(
-              fontSize: 56,
-              color: earned ? null : Colors.grey,
-            ),
+          ColorFiltered(
+            colorFilter: earned
+                ? const ColorFilter.mode(Colors.transparent, BlendMode.saturation)
+                : const ColorFilter.matrix([
+                    0.2126, 0.7152, 0.0722, 0, 0,
+                    0.2126, 0.7152, 0.0722, 0, 0,
+                    0.2126, 0.7152, 0.0722, 0, 0,
+                    0,      0,      0,      1, 0,
+                  ]),
+            child: Image.asset(badge.imagePath, width: 72, height: 72),
           ),
           const SizedBox(height: 12),
           Text(

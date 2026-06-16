@@ -116,10 +116,7 @@ class _BadgeCard extends StatelessWidget {
               ],
             ),
             child: Center(
-              child: Text(
-                badge.icon,
-                style: const TextStyle(fontSize: 44),
-              ),
+              child: Image.asset(badge.imagePath, width: 64, height: 64),
             ),
           ),
           const SizedBox(height: 16),

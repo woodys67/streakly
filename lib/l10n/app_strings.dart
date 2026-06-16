@@ -288,6 +288,7 @@ class AppStrings {
   String get appSettings => _s(en:'App Settings', ko:'앱 설정', ja:'アプリ設定', es:'Ajustes de la app');
   String get appGuide => _s(en:'App Guide', ko:'앱 가이드', ja:'アプリガイド', es:'Guía de la app');
   String get legalInfo => _s(en:'Legal', ko:'법적 정보', ja:'法的情報', es:'Legal');
+  String get accountSection => _s(en:'Account', ko:'계정', ja:'アカウント', es:'Cuenta');
   String get privacyPolicy => _s(en:'Privacy Policy', ko:'개인정보처리방침', ja:'プライバシーポリシー', es:'Política de privacidad');
   String get termsOfService => _s(en:'Terms of Service', ko:'이용약관', ja:'利用規約', es:'Términos de servicio');
   String get appVersion => _s(en:'Version', ko:'버전', ja:'バージョン', es:'Versión');

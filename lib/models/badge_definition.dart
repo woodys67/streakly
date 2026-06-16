@@ -23,4 +23,6 @@ class BadgeDefinition {
     required this.rarity,
     this.isSecret = false,
   });
+
+  String get imagePath => 'assets/images/badges/$id.png';
 }

@@ -198,8 +198,7 @@ class _BadgeSummaryCard extends StatelessWidget {
                     padding: const EdgeInsets.only(right: 8),
                     child: Tooltip(
                       message: def.nameKo,
-                      child: Text(def.icon,
-                          style: const TextStyle(fontSize: 28)),
+                      child: Image.asset(def.imagePath, width: 36, height: 36),
                     ),
                   );
                 }).toList(),

@@ -40,7 +40,6 @@ class HomeScreen extends StatelessWidget {
 
           final allActive = provider.activeChallenges;
           final todaysChallenges = provider.todaysChallenges;
-          final weeklyRate = provider.getWeeklyCompletionRate();
 
           return SingleChildScrollView(
             padding: const EdgeInsets.all(20),
@@ -51,13 +50,6 @@ class HomeScreen extends StatelessWidget {
                   _EmptyState(s: s),
                 ] else if (todaysChallenges.isEmpty) ...[
                   _RestDayState(s: s),
-                  const SizedBox(height: 24),
-                  _StatCard(
-                    title: s.weeklyCompletion,
-                    value: '$weeklyRate%',
-                    icon: Icons.calendar_today_outlined,
-                    color: AppColors.primary,
-                  ),
                 ] else ...[
                   const StreakCard(),
                   const SizedBox(height: 24),
@@ -94,13 +86,6 @@ class HomeScreen extends StatelessWidget {
                         onRecover: () => _showRecoverDialog(context, provider, settings, challenge.id),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 24),
-                  _StatCard(
-                    title: s.weeklyCompletion,
-                    value: '$weeklyRate%',
-                    icon: Icons.calendar_today_outlined,
-                    color: AppColors.primary,
                   ),
                 ],
               ],

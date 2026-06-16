@@ -68,13 +68,10 @@ class SettingsScreen extends StatelessWidget {
                 _LegalCard(s: s),
                 const SizedBox(height: 24),
                 if (!auth.isGuest) ...[
-                  _SignOutButton(
-                    label: s.signOut,
+                  _AccountCard(
+                    signOutLabel: s.signOut,
+                    deleteAccountLabel: s.deleteAccount,
                     onSignOut: () => _confirmSignOut(context, settings, auth, s),
-                  ),
-                  const SizedBox(height: 8),
-                  _DeleteAccountButton(
-                    label: s.deleteAccount,
                     onDelete: () => _confirmDeleteAccount(context, auth, settings, s),
                   ),
                 ],
@@ -1060,51 +1057,110 @@ class _LegalCard extends StatelessWidget {
   }
 }
 
-class _SignOutButton extends StatelessWidget {
-  final String label;
+class _AccountCard extends StatelessWidget {
+  final String signOutLabel;
+  final String deleteAccountLabel;
   final VoidCallback onSignOut;
+  final VoidCallback onDelete;
 
-  const _SignOutButton({required this.label, required this.onSignOut});
+  const _AccountCard({
+    required this.signOutLabel,
+    required this.deleteAccountLabel,
+    required this.onSignOut,
+    required this.onDelete,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: OutlinedButton(
-        onPressed: onSignOut,
-        style: OutlinedButton.styleFrom(
-          foregroundColor: AppColors.error,
-          side: const BorderSide(color: AppColors.error, width: 1.5),
-          padding: const EdgeInsets.symmetric(vertical: 14),
-        ),
-        child: Text(label,
-            style: const TextStyle(
-                fontSize: 16, fontWeight: FontWeight.bold)),
+    final s = context.read<SettingsProvider>().strings;
+    return Container(
+      decoration: BoxDecoration(
+        color: context.colorSurface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: context.colorOutline, width: 1.5),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+            child: Text(s.accountSection, style: Theme.of(context).textTheme.titleLarge),
+          ),
+          _AccountRow(
+            icon: Icons.logout,
+            iconBgColor: AppColors.primary.withValues(alpha: 0.12),
+            iconColor: AppColors.primary,
+            label: signOutLabel,
+            labelColor: context.colorTextPrimary,
+            chevronColor: context.colorTextSecondary,
+            onTap: onSignOut,
+          ),
+          Divider(height: 1, indent: 72, color: context.colorOutline),
+          _AccountRow(
+            icon: Icons.person_remove_outlined,
+            iconBgColor: AppColors.error.withValues(alpha: 0.10),
+            iconColor: AppColors.error,
+            label: deleteAccountLabel,
+            labelColor: AppColors.error,
+            chevronColor: AppColors.error,
+            onTap: onDelete,
+          ),
+        ],
       ),
     );
   }
 }
 
-class _DeleteAccountButton extends StatelessWidget {
+class _AccountRow extends StatelessWidget {
+  final IconData icon;
+  final Color iconBgColor;
+  final Color iconColor;
   final String label;
-  final VoidCallback onDelete;
+  final Color labelColor;
+  final Color chevronColor;
+  final VoidCallback onTap;
 
-  const _DeleteAccountButton({required this.label, required this.onDelete});
+  const _AccountRow({
+    required this.icon,
+    required this.iconBgColor,
+    required this.iconColor,
+    required this.label,
+    required this.labelColor,
+    required this.chevronColor,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: TextButton(
-        onPressed: onDelete,
-        style: TextButton.styleFrom(foregroundColor: AppColors.error),
-        child: Text(
-          label,
-          style: TextStyle(
-            fontSize: 13,
-            color: AppColors.error.withValues(alpha: 0.6),
-            decoration: TextDecoration.underline,
-            decorationColor: AppColors.error.withValues(alpha: 0.6),
-          ),
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: iconBgColor,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(icon, color: iconColor, size: 22),
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Text(
+                label,
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                  color: labelColor,
+                ),
+              ),
+            ),
+            Icon(Icons.chevron_right, color: chevronColor, size: 20),
+          ],
         ),
       ),
     );
