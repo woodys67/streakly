@@ -23,8 +23,9 @@ class RecordsScreen extends StatelessWidget {
         builder: (context, challengeProvider, settingsProvider, badgeProvider, _) {
           final s = settingsProvider.strings;
           final userName = settingsProvider.userName;
-          final successRate = challengeProvider.overallSuccessRate;
           final totalStreak = challengeProvider.totalStreak;
+          final longestStreak = challengeProvider.longestStreak;
+          final totalRecoveries = challengeProvider.totalRecoveries;
           final completed = challengeProvider.completedChallenges;
           final allChallenges = challengeProvider.challenges;
 
@@ -36,8 +37,6 @@ class RecordsScreen extends StatelessWidget {
                 _ProfileHeader(userName: userName),
                 const SizedBox(height: 20),
                 _BadgeSummaryCard(badgeProvider: badgeProvider),
-                const SizedBox(height: 20),
-                _SuccessRateChart(successRate: successRate),
                 const SizedBox(height: 16),
                 Row(
                   children: [
@@ -47,6 +46,7 @@ class RecordsScreen extends StatelessWidget {
                         value: '$totalStreak',
                         bgColor: AppColors.darkAccent,
                         icon: Icons.local_fire_department,
+                        tooltip: s.totalStreaksInfo,
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -56,9 +56,31 @@ class RecordsScreen extends StatelessWidget {
                         value: '${completed.length}',
                         bgColor: AppColors.success,
                         icon: Icons.emoji_events,
-                        showInfo: true,
-                        infoMessage: s.completedInfo,
-                        okLabel: s.ok,
+                        tooltip: s.completedInfo,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    Expanded(
+                      child: _MetricCard(
+                        title: s.longestStreakLabel,
+                        value: '$longestStreak',
+                        bgColor: const Color(0xFF9C27B0),
+                        icon: Icons.military_tech,
+                        tooltip: s.longestStreakInfo,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: _MetricCard(
+                        title: s.streakRecoveryLabel,
+                        value: '$totalRecoveries',
+                        bgColor: const Color(0xFF0288D1),
+                        icon: Icons.refresh,
+                        tooltip: s.streakRecoveryInfo,
                       ),
                     ),
                   ],
@@ -147,7 +169,6 @@ class _BadgeSummaryCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   context.read<SettingsProvider>().strings.badgeCollectionTitle,
@@ -157,23 +178,34 @@ class _BadgeSummaryCard extends StatelessWidget {
                     color: context.colorTextPrimary,
                   ),
                 ),
-                Row(
-                  children: [
-                    Text(
-                      '${earned.length} / $total',
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-                    Icon(
-                      Icons.chevron_right,
-                      color: context.colorTextSecondary,
-                      size: 18,
-                    ),
-                  ],
+                const SizedBox(width: 4),
+                Tooltip(
+                  message: context.read<SettingsProvider>().strings.badgeCollectionInfo,
+                  triggerMode: TooltipTriggerMode.tap,
+                  showDuration: const Duration(seconds: 4),
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: Colors.black87,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  textStyle: const TextStyle(color: Colors.white, fontSize: 13),
+                  preferBelow: false,
+                  child: Icon(Icons.info_outline, size: 16, color: context.colorTextSecondary),
+                ),
+                const Spacer(),
+                Text(
+                  '${earned.length} / $total',
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.primary,
+                  ),
+                ),
+                const SizedBox(width: 4),
+                Icon(
+                  Icons.chevron_right,
+                  color: context.colorTextSecondary,
+                  size: 18,
                 ),
               ],
             ),
@@ -266,102 +298,20 @@ class _ProfileHeader extends StatelessWidget {
   }
 }
 
-class _SuccessRateChart extends StatelessWidget {
-  final double successRate;
-
-  const _SuccessRateChart({required this.successRate});
-
-  @override
-  Widget build(BuildContext context) {
-    final percent = (successRate * 100).round();
-
-    return Container(
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: context.colorSurface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: context.colorOutline, width: 1.5),
-      ),
-      child: Row(
-        children: [
-          CircularProgressWidget(
-            progress: successRate,
-            size: 100,
-            strokeWidth: 10,
-            progressColor: AppColors.primary,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  '$percent%',
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.primary,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 24),
-          Expanded(
-            child: Builder(
-              builder: (context) {
-                final s = context.watch<SettingsProvider>().strings;
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      s.successLabel,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
-                        color: context.colorTextSecondary,
-                        letterSpacing: 1,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      s.overallRate,
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: context.colorTextPrimary,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      s.keepItUp,
-                      style: TextStyle(fontSize: 12, color: context.colorTextSecondary),
-                    ),
-                  ],
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 class _MetricCard extends StatelessWidget {
   final String title;
   final String value;
   final Color bgColor;
   final IconData icon;
-  final bool showInfo;
-  final String? infoMessage;
-  final String okLabel;
+  final String tooltip;
 
   const _MetricCard({
     required this.title,
     required this.value,
     required this.bgColor,
     required this.icon,
-    this.showInfo = false,
-    this.infoMessage,
-    this.okLabel = 'OK',
+    required this.tooltip,
   });
 
   @override
@@ -379,25 +329,19 @@ class _MetricCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Icon(icon, color: AppColors.white, size: 24),
-              if (showInfo && infoMessage != null)
-                GestureDetector(
-                  onTap: () {
-                    showDialog<void>(
-                      context: context,
-                      builder: (_) => AlertDialog(
-                        title: Text(title),
-                        content: Text(infoMessage!),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.of(context).pop(),
-                            child: Text(okLabel),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                  child: const Icon(Icons.info_outline, color: AppColors.white, size: 18),
+              Tooltip(
+                message: tooltip,
+                triggerMode: TooltipTriggerMode.tap,
+                showDuration: const Duration(seconds: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.black87,
+                  borderRadius: BorderRadius.circular(8),
                 ),
+                textStyle: const TextStyle(color: Colors.white, fontSize: 13),
+                preferBelow: false,
+                child: const Icon(Icons.info_outline, color: AppColors.white, size: 18),
+              ),
             ],
           ),
           const SizedBox(height: 12),

@@ -63,6 +63,13 @@ class ChallengeProvider extends ChangeNotifier {
     return _challenges.fold<int>(0, (sum, c) => sum + c.streak);
   }
 
+  int get longestStreak {
+    if (_challenges.isEmpty) return 0;
+    return _challenges.fold<int>(0, (max, c) => c.streak > max ? c.streak : max);
+  }
+
+  int get totalRecoveries => _willpowerSpent ~/ _recoveryCost;
+
   // 모든 챌린지 completedDays 합산 (패널티 없음, 항상 증가)
   int get willpower =>
       _challenges.fold(0, (sum, c) => sum + c.completedDays.length);

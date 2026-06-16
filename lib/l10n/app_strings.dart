@@ -244,6 +244,32 @@ class AppStrings {
     es:'¡Sigue así! La constancia\nes la clave del éxito.',
   );
   String get totalStreaks => _s(en:'TOTAL STREAKS', ko:'총 스트릭', ja:'総ストリーク', es:'RACHAS TOTALES');
+  String get totalStreaksInfo => _s(
+    en:'Sum of current streak counts across all your active challenges.',
+    ko:'모든 활성 챌린지의 현재 스트릭 합계입니다.',
+    ja:'すべてのアクティブチャレンジの現在のストリーク合計です。',
+    es:'Suma de las rachas actuales de todos tus desafíos activos.',
+  );
+  String get longestStreakLabel => _s(en:'LONGEST STREAK', ko:'최장 스트릭', ja:'最長ストリーク', es:'RACHA MÁS LARGA');
+  String get longestStreakInfo => _s(
+    en:'The highest streak count among all your active challenges.',
+    ko:'모든 활성 챌린지 중 가장 긴 현재 스트릭입니다.',
+    ja:'すべてのアクティブチャレンジの中で最も長い現在のストリークです。',
+    es:'La racha actual más larga entre todos tus desafíos activos.',
+  );
+  String get streakRecoveryLabel => _s(en:'RECOVERIES', ko:'스트릭 복구', ja:'ストリーク回復', es:'RECUPERACIONES');
+  String get streakRecoveryInfo => _s(
+    en:'Total number of times you have recovered a streak by spending Willpower.',
+    ko:'의지력을 사용해 스트릭을 복구한 총 횟수입니다.',
+    ja:'意志力を使ってストリークを回復した合計回数です。',
+    es:'Número total de veces que recuperaste una racha usando fuerza de voluntad.',
+  );
+  String get badgeCollectionInfo => _s(
+    en:'Badges earned by achieving milestones and completing challenges.',
+    ko:'챌린지 달성 및 완료로 획득한 배지 컬렉션입니다.',
+    ja:'チャレンジの達成や完了で獲得したバッジのコレクションです。',
+    es:'Insignias ganadas al alcanzar hitos y completar desafíos.',
+  );
   String get completed => _s(en:'COMPLETED', ko:'완료', ja:'完了', es:'COMPLETADO');
   String get completedInfo => _s(
     en:'Total number of challenges you have successfully completed.',
