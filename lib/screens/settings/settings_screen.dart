@@ -941,7 +941,7 @@ class _CollapsibleCard extends StatefulWidget {
 }
 
 class _CollapsibleCardState extends State<_CollapsibleCard> {
-  bool _expanded = true;
+  bool _expanded = false;
 
   @override
   Widget build(BuildContext context) {
