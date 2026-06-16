@@ -1059,7 +1059,12 @@ class _LegalCard extends StatelessWidget {
 
 String _legalUrl(BuildContext context, String page) {
   final lang = context.read<SettingsProvider>().language;
-  final suffix = lang == 'Korean' ? '' : '_en';
+  final suffix = switch (lang) {
+    'Korean'   => '',
+    'Japanese' => '_ja',
+    'Spanish'  => '_es',
+    _          => '_en',
+  };
   return 'https://woodys67.github.io/streakly/$page$suffix.html';
 }
 
