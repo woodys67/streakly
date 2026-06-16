@@ -546,106 +546,85 @@ class _SettingsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: context.colorSurface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: context.colorOutline, width: 1.5),
-      ),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(s.appSettings,
-                  style: Theme.of(context).textTheme.titleLarge),
-            ),
-          ),
-          _LanguageSetting(settings: settings, label: s.languages),
-          const _Divider(),
-          _ToggleSetting(
-            icon: Icons.notifications_outlined,
-            title: s.notificationSettings,
-            value: settings.notificationsEnabled,
-            onChanged: (_) async {
-              final challenges = context.read<ChallengeProvider>().challenges;
-              await settings.toggleNotifications();
-              if (settings.notificationsEnabled) {
-                final granted = await NotificationService.requestPermission();
-                if (!granted) {
-                  await settings.toggleNotifications();
-                  if (context.mounted) {
-                    await showDialog<void>(
-                      context: context,
-                      builder: (ctx) => AlertDialog(
-                        title: Text(s.notificationPermissionDeniedTitle),
-                        content: Text(s.notificationPermissionDeniedBody),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.of(ctx).pop(),
-                            child: Text(s.cancel),
-                          ),
-                          TextButton(
-                            onPressed: () async {
-                              Navigator.of(ctx).pop();
-                              if (Platform.isIOS) {
-                                final uri = Uri.parse('app-settings:');
-                                if (await canLaunchUrl(uri)) {
-                                  await launchUrl(uri);
-                                } else {
-                                  AppSettings.openAppSettings(
-                                    type: AppSettingsType.settings,
-                                  );
-                                }
+    return _CollapsibleCard(
+      title: s.appSettings,
+      children: [
+        _LanguageSetting(settings: settings, label: s.languages),
+        const _Divider(),
+        _ToggleSetting(
+          icon: Icons.notifications_outlined,
+          title: s.notificationSettings,
+          value: settings.notificationsEnabled,
+          onChanged: (_) async {
+            final challenges = context.read<ChallengeProvider>().challenges;
+            await settings.toggleNotifications();
+            if (settings.notificationsEnabled) {
+              final granted = await NotificationService.requestPermission();
+              if (!granted) {
+                await settings.toggleNotifications();
+                if (context.mounted) {
+                  await showDialog<void>(
+                    context: context,
+                    builder: (ctx) => AlertDialog(
+                      title: Text(s.notificationPermissionDeniedTitle),
+                      content: Text(s.notificationPermissionDeniedBody),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(ctx).pop(),
+                          child: Text(s.cancel),
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            Navigator.of(ctx).pop();
+                            if (Platform.isIOS) {
+                              final uri = Uri.parse('app-settings:');
+                              if (await canLaunchUrl(uri)) {
+                                await launchUrl(uri);
                               } else {
                                 AppSettings.openAppSettings(
-                                  type: AppSettingsType.notification,
+                                  type: AppSettingsType.settings,
                                 );
                               }
-                            },
-                            child: Text(s.goToSettings),
-                          ),
-                        ],
-                      ),
-                    );
-                  }
-                  return;
+                            } else {
+                              AppSettings.openAppSettings(
+                                type: AppSettingsType.notification,
+                              );
+                            }
+                          },
+                          child: Text(s.goToSettings),
+                        ),
+                      ],
+                    ),
+                  );
                 }
-                await NotificationService.rescheduleAll(challenges);
+                return;
               }
-            },
+              await NotificationService.rescheduleAll(challenges);
+            }
+          },
+        ),
+        const _Divider(),
+        _ToggleSetting(
+          icon: Icons.dark_mode_outlined,
+          title: s.darkMode,
+          value: settings.darkMode,
+          onChanged: (_) => settings.toggleDarkMode(),
+        ),
+        const _Divider(),
+        ListTile(
+          contentPadding: const EdgeInsets.symmetric(horizontal: 20),
+          leading: Icon(Icons.restart_alt,
+              color: context.colorTextSecondary, size: 22),
+          title: Text(
+            s.resetApp,
+            style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+                color: context.colorTextSecondary),
           ),
-          // TODO: 팀 챌린지 오픈 시 아래 주석 해제
-          // const _Divider(),
-          // _NavigationSetting(
-          //   icon: Icons.workspace_premium_outlined,
-          //   title: s.teamChallengeSubscribe,
-          //   onTap: () => _onSubscribeTap(context),
-          // ),
-          const _Divider(),
-          _ToggleSetting(
-            icon: Icons.dark_mode_outlined,
-            title: s.darkMode,
-            value: settings.darkMode,
-            onChanged: (_) => settings.toggleDarkMode(),
-          ),
-          const _Divider(),
-          ListTile(
-            contentPadding: const EdgeInsets.symmetric(horizontal: 20),
-            leading: Icon(Icons.restart_alt,
-                color: context.colorTextSecondary, size: 22),
-            title: Text(
-              s.resetApp,
-              style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
-                  color: context.colorTextSecondary),
-            ),
-            onTap: onReset,
-          ),
-        ],
-      ),
+          onTap: onReset,
+        ),
+      ],
     );
   }
 
@@ -951,10 +930,18 @@ class _Divider extends StatelessWidget {
   }
 }
 
-class _AppGuideCard extends StatelessWidget {
-  final dynamic s;
+class _CollapsibleCard extends StatefulWidget {
+  final String title;
+  final List<Widget> children;
 
-  const _AppGuideCard({required this.s});
+  const _CollapsibleCard({required this.title, required this.children});
+
+  @override
+  State<_CollapsibleCard> createState() => _CollapsibleCardState();
+}
+
+class _CollapsibleCardState extends State<_CollapsibleCard> {
+  bool _expanded = true;
 
   @override
   Widget build(BuildContext context) {
@@ -965,29 +952,66 @@ class _AppGuideCard extends StatelessWidget {
         border: Border.all(color: context.colorOutline, width: 1.5),
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(s.appGuide, style: Theme.of(context).textTheme.titleLarge),
+          InkWell(
+            onTap: () => setState(() => _expanded = !_expanded),
+            borderRadius: BorderRadius.circular(16),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(widget.title,
+                        style: Theme.of(context).textTheme.titleLarge),
+                  ),
+                  AnimatedRotation(
+                    turns: _expanded ? 0.5 : 0,
+                    duration: const Duration(milliseconds: 200),
+                    child: Icon(Icons.keyboard_arrow_down,
+                        color: context.colorTextSecondary, size: 20),
+                  ),
+                ],
+              ),
             ),
           ),
-          _GuideItem(icon: Icons.lightbulb_outline,             title: s.guideHowToUse,        content: GuideContent.howToUse(s)),
-          const _Divider(),
-          _GuideItem(icon: Icons.add_circle_outline,            title: s.guideCreateChallenge, content: GuideContent.createChallenge(s)),
-          const _Divider(),
-          _GuideItem(icon: Icons.local_fire_department_outlined, title: s.guideStreakSystem,   content: GuideContent.streakSystem(s)),
-          const _Divider(),
-          _GuideItem(icon: Icons.replay_outlined,               title: s.guideStreakRecovery,  content: GuideContent.streakRecovery(s)),
-          const _Divider(),
-          _GuideItem(icon: Icons.pause_circle_outline,          title: s.guidePauseTicket,     content: GuideContent.pauseTicket(s)),
-          const _Divider(),
-          _GuideItem(icon: Icons.bolt_outlined,                 title: s.guideWillpower,       content: GuideContent.willpower(s)),
-          const _Divider(),
-          _GuideItem(icon: Icons.military_tech_outlined,        title: s.guideBadge,           content: GuideContent.badge(s)),
+          AnimatedSize(
+            duration: const Duration(milliseconds: 220),
+            curve: Curves.easeInOut,
+            child: _expanded
+                ? Column(children: widget.children)
+                : const SizedBox(width: double.infinity),
+          ),
         ],
       ),
+    );
+  }
+}
+
+class _AppGuideCard extends StatelessWidget {
+  final dynamic s;
+
+  const _AppGuideCard({required this.s});
+
+  @override
+  Widget build(BuildContext context) {
+    return _CollapsibleCard(
+      title: s.appGuide,
+      children: [
+        _GuideItem(icon: Icons.lightbulb_outline,              title: s.guideHowToUse,        content: GuideContent.howToUse(s)),
+        const _Divider(),
+        _GuideItem(icon: Icons.add_circle_outline,             title: s.guideCreateChallenge, content: GuideContent.createChallenge(s)),
+        const _Divider(),
+        _GuideItem(icon: Icons.local_fire_department_outlined, title: s.guideStreakSystem,    content: GuideContent.streakSystem(s)),
+        const _Divider(),
+        _GuideItem(icon: Icons.replay_outlined,                title: s.guideStreakRecovery,  content: GuideContent.streakRecovery(s)),
+        const _Divider(),
+        _GuideItem(icon: Icons.pause_circle_outline,           title: s.guidePauseTicket,     content: GuideContent.pauseTicket(s)),
+        const _Divider(),
+        _GuideItem(icon: Icons.bolt_outlined,                  title: s.guideWillpower,       content: GuideContent.willpower(s)),
+        const _Divider(),
+        _GuideItem(icon: Icons.military_tech_outlined,         title: s.guideBadge,           content: GuideContent.badge(s)),
+      ],
     );
   }
 }
@@ -1025,34 +1049,21 @@ class _LegalCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: context.colorSurface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: context.colorOutline, width: 1.5),
-      ),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(s.legalInfo, style: Theme.of(context).textTheme.titleLarge),
-            ),
-          ),
-          _NavigationSetting(
-            icon: Icons.privacy_tip_outlined,
-            title: s.privacyPolicy,
-            onTap: () => _launchLegalUrl(context, _legalUrl(context, 'privacy_policy')),
-          ),
-          const _Divider(),
-          _NavigationSetting(
-            icon: Icons.description_outlined,
-            title: s.termsOfService,
-            onTap: () => _launchLegalUrl(context, _legalUrl(context, 'terms_of_service')),
-          ),
-        ],
-      ),
+    return _CollapsibleCard(
+      title: s.legalInfo,
+      children: [
+        _NavigationSetting(
+          icon: Icons.privacy_tip_outlined,
+          title: s.privacyPolicy,
+          onTap: () => _launchLegalUrl(context, _legalUrl(context, 'privacy_policy')),
+        ),
+        const _Divider(),
+        _NavigationSetting(
+          icon: Icons.description_outlined,
+          title: s.termsOfService,
+          onTap: () => _launchLegalUrl(context, _legalUrl(context, 'terms_of_service')),
+        ),
+      ],
     );
   }
 }
@@ -1095,40 +1106,29 @@ class _AccountCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final s = context.read<SettingsProvider>().strings;
-    return Container(
-      decoration: BoxDecoration(
-        color: context.colorSurface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: context.colorOutline, width: 1.5),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-            child: Text(s.accountSection, style: Theme.of(context).textTheme.titleLarge),
-          ),
-          _AccountRow(
-            icon: Icons.logout,
-            iconBgColor: AppColors.primary.withValues(alpha: 0.12),
-            iconColor: AppColors.primary,
-            label: signOutLabel,
-            labelColor: context.colorTextPrimary,
-            chevronColor: context.colorTextSecondary,
-            onTap: onSignOut,
-          ),
-          Divider(height: 1, indent: 72, color: context.colorOutline),
-          _AccountRow(
-            icon: Icons.person_remove_outlined,
-            iconBgColor: AppColors.error.withValues(alpha: 0.10),
-            iconColor: AppColors.error,
-            label: deleteAccountLabel,
-            labelColor: AppColors.error,
-            chevronColor: AppColors.error,
-            onTap: onDelete,
-          ),
-        ],
-      ),
+    return _CollapsibleCard(
+      title: s.accountSection,
+      children: [
+        _AccountRow(
+          icon: Icons.logout,
+          iconBgColor: AppColors.primary.withValues(alpha: 0.12),
+          iconColor: AppColors.primary,
+          label: signOutLabel,
+          labelColor: context.colorTextPrimary,
+          chevronColor: context.colorTextSecondary,
+          onTap: onSignOut,
+        ),
+        Divider(height: 1, indent: 72, color: context.colorOutline),
+        _AccountRow(
+          icon: Icons.person_remove_outlined,
+          iconBgColor: AppColors.error.withValues(alpha: 0.10),
+          iconColor: AppColors.error,
+          label: deleteAccountLabel,
+          labelColor: AppColors.error,
+          chevronColor: AppColors.error,
+          onTap: onDelete,
+        ),
+      ],
     );
   }
 }
