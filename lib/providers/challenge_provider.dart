@@ -188,6 +188,23 @@ class ChallengeProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> _saveBestStreak() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('${_bp}best_streak', _bestStreak);
+
+    final user = _currentUser;
+    if (user != null) {
+      try {
+        await _db
+            .from('users')
+            .update({'best_streak': _bestStreak})
+            .eq('id', user.id);
+      } catch (e) {
+        debugPrint('[Streakly] best_streak 서버 저장 오류: $e');
+      }
+    }
+  }
+
   double get overallSuccessRate {
     if (_challenges.isEmpty) return 0;
     final total = _challenges.fold<double>(0, (sum, c) => sum + c.successRate);
@@ -260,12 +277,15 @@ class ChallengeProvider extends ChangeNotifier {
     try {
       final userRow = await _db
           .from('users')
-          .select('willpower_spent')
+          .select('willpower_spent, best_streak')
           .eq('id', userId)
           .maybeSingle();
       _willpowerSpent = (userRow?['willpower_spent'] as int?) ?? 0;
+      final serverBest = (userRow?['best_streak'] as int?) ?? 0;
+      final localBest = _bestStreak;
+      _bestStreak = serverBest > localBest ? serverBest : localBest;
     } catch (e) {
-      debugPrint('[Streakly] willpower_spent 서버 로드 오류: $e');
+      debugPrint('[Streakly] users 서버 로드 오류: $e');
       _willpowerSpent = 0;
     }
   }
@@ -666,15 +686,18 @@ class ChallengeProvider extends ChangeNotifier {
       return result;
     }
 
-    // 로컬 데이터가 서버로 업로드된 경우 willpower_spent도 함께 마이그레이션
+    // 로컬 데이터가 서버로 업로드된 경우 willpower_spent, best_streak도 함께 마이그레이션
     if (result.status == MigrationStatus.success) {
       try {
         await _db
             .from('users')
-            .update({'willpower_spent': _willpowerSpent})
+            .update({
+              'willpower_spent': _willpowerSpent,
+              'best_streak': _bestStreak,
+            })
             .eq('id', effectiveId);
       } catch (e) {
-        debugPrint('[Streakly] willpower_spent 마이그레이션 오류: $e');
+        debugPrint('[Streakly] users 마이그레이션 오류: $e');
       }
     }
 
@@ -857,7 +880,7 @@ class ChallengeProvider extends ChangeNotifier {
     final currentBest = _challenges.fold<int>(0, (m, c) => c.streak > m ? c.streak : m);
     if (currentBest > _bestStreak) {
       _bestStreak = currentBest;
-      await prefs.setInt('${_bp}best_streak', _bestStreak);
+      await _saveBestStreak();
     }
 
     // streakBrokeRecently: 이전 스트릭이 0이었고 완료된 날이 있었으면 부활 중
