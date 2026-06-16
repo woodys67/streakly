@@ -47,7 +47,6 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/flame.png
-    - assets/images/wordmark.png
     - assets/images/avatar_flame.png
     - assets/images/avatar_bolt.png
     - assets/images/avatar_trophy.png

@@ -16,7 +16,19 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Image.asset('assets/images/wordmark.png', height: 28),
+        title: Row(
+          children: [
+            Image.asset('assets/images/flame.png', width: 22, height: 22),
+            const SizedBox(width: 8),
+            Text(
+              'Streakly',
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+          ],
+        ),
         actions: const [],
       ),
       body: Consumer2<ChallengeProvider, SettingsProvider>(
