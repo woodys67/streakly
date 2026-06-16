@@ -22,6 +22,7 @@ class ChallengeProvider extends ChangeNotifier {
   int _selectedChallengeIndex = 0;
   bool _isLoading = false;
   int _willpowerSpent = 0;
+  int _bestStreak = 0;
   BadgeProvider? _badgeProvider;
 
   void setBadgeProvider(BadgeProvider bp) => _badgeProvider = bp;
@@ -63,10 +64,7 @@ class ChallengeProvider extends ChangeNotifier {
     return _challenges.fold<int>(0, (sum, c) => sum + c.streak);
   }
 
-  int get longestStreak {
-    if (_challenges.isEmpty) return 0;
-    return _challenges.fold<int>(0, (max, c) => c.streak > max ? c.streak : max);
-  }
+  int get longestStreak => _bestStreak;
 
   int get totalRecoveries => _willpowerSpent ~/ _recoveryCost;
 
@@ -243,6 +241,7 @@ class ChallengeProvider extends ChangeNotifier {
       _challenges = [];
     }
     _willpowerSpent = prefs.getInt(_willpowerSpentKey) ?? 0;
+    _bestStreak = prefs.getInt('${_bp}best_streak') ?? 0;
   }
 
   Future<void> _loadFromServerById(String userId) async {
@@ -855,10 +854,10 @@ class ChallengeProvider extends ChangeNotifier {
     }
 
     // 이전 최고 스트릭 갱신
-    final storedBest = prefs.getInt('${_bp}best_streak') ?? 0;
     final currentBest = _challenges.fold<int>(0, (m, c) => c.streak > m ? c.streak : m);
-    if (currentBest > storedBest) {
-      await prefs.setInt('${_bp}best_streak', currentBest);
+    if (currentBest > _bestStreak) {
+      _bestStreak = currentBest;
+      await prefs.setInt('${_bp}best_streak', _bestStreak);
     }
 
     // streakBrokeRecently: 이전 스트릭이 0이었고 완료된 날이 있었으면 부활 중

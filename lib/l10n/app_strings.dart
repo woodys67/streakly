@@ -252,10 +252,10 @@ class AppStrings {
   );
   String get longestStreakLabel => _s(en:'LONGEST STREAK', ko:'최장 스트릭', ja:'最長ストリーク', es:'RACHA MÁS LARGA');
   String get longestStreakInfo => _s(
-    en:'The highest streak count among all your active challenges.',
-    ko:'모든 활성 챌린지 중 가장 긴 현재 스트릭입니다.',
-    ja:'すべてのアクティブチャレンジの中で最も長い現在のストリークです。',
-    es:'La racha actual más larga entre todos tus desafíos activos.',
+    en:'Your all-time personal best streak record across all challenges.',
+    ko:'모든 챌린지를 통틀어 역대 가장 긴 스트릭 기록입니다.',
+    ja:'すべてのチャレンジを通じた歴代最長ストリーク記録です。',
+    es:'Tu récord histórico de racha más larga en todos los desafíos.',
   );
   String get streakRecoveryLabel => _s(en:'RECOVERIES', ko:'스트릭 복구', ja:'ストリーク回復', es:'RECUPERACIONES');
   String get streakRecoveryInfo => _s(
