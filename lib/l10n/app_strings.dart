@@ -37,7 +37,7 @@ class AppStrings {
   String get navHome => _s(en:'Home', ko:'홈', ja:'ホーム', es:'Inicio');
   String get navChallenges => _s(en:'Challenges', ko:'챌린지', ja:'チャレンジ', es:'Desafíos');
   String get navRecords => _s(en:'Records', ko:'기록', ja:'記録', es:'Registros');
-  String get navSettings => _s(en:'Settings', ko:'설정', ja:'設定', es:'Ajustes');
+  String get navSettings => _s(en:'Profile', ko:'프로필', ja:'プロフィール', es:'Perfil');
   // ── Common ───────────────────────────────────────────────────
   String get cancel => _s(en:'Cancel', ko:'취소', ja:'キャンセル', es:'Cancelar');
   String get save => _s(en:'Save', ko:'저장', ja:'保存', es:'Guardar');

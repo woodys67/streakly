@@ -50,8 +50,8 @@ class StreaklyBottomNav extends StatelessWidget {
             label: s.navRecords,
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.settings_outlined),
-            activeIcon: const Icon(Icons.settings),
+            icon: const Icon(Icons.person_outline),
+            activeIcon: const Icon(Icons.person),
             label: s.navSettings,
           ),
         ],
