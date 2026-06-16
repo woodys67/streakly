@@ -32,6 +32,16 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  flutter_native_splash: ^2.4.3
+
+flutter_native_splash:
+  color: "#FFFFFF"
+  color_dark: "#121212"
+  image: assets/images/flame.png
+  image_dark: assets/images/flame.png
+  android: true
+  ios: true
+  web: false
 
 flutter:
   uses-material-design: true

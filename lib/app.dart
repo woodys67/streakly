@@ -116,29 +116,7 @@ class _AppInitializerState extends State<_AppInitializer> {
   @override
   Widget build(BuildContext context) {
     if (!_initialized) {
-      return Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset('assets/images/flame.png', width: 56, height: 56),
-              const SizedBox(height: 16),
-              const Text(
-                'Streakly',
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.primary,
-                ),
-              ),
-              const SizedBox(height: 24),
-              const CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
-              ),
-            ],
-          ),
-        ),
-      );
+      return const Scaffold();
     }
 
     final auth = context.watch<AuthProvider>();
