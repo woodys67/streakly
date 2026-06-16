@@ -1043,17 +1043,34 @@ class _LegalCard extends StatelessWidget {
           _NavigationSetting(
             icon: Icons.privacy_tip_outlined,
             title: s.privacyPolicy,
-            onTap: null, // TODO: 링크 연결 예정
+            onTap: () => _launchLegalUrl(context, _legalUrl(context, 'privacy_policy')),
           ),
           const _Divider(),
           _NavigationSetting(
             icon: Icons.description_outlined,
             title: s.termsOfService,
-            onTap: null, // TODO: 링크 연결 예정
+            onTap: () => _launchLegalUrl(context, _legalUrl(context, 'terms_of_service')),
           ),
         ],
       ),
     );
+  }
+}
+
+String _legalUrl(BuildContext context, String page) {
+  final lang = context.read<SettingsProvider>().language;
+  final suffix = lang == 'ko' ? '' : '_en';
+  return 'https://woodys67.github.io/streakly/$page$suffix.html';
+}
+
+Future<void> _launchLegalUrl(BuildContext context, String url) async {
+  final uri = Uri.parse(url);
+  if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('페이지를 열 수 없습니다.')),
+      );
+    }
   }
 }
 
