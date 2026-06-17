@@ -23,7 +23,21 @@ class RecordsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(context.watch<SettingsProvider>().strings.recordsTitle)),
+      appBar: AppBar(
+        title: Row(
+          children: [
+            Image.asset('assets/images/flame.png', width: 22, height: 22),
+            const SizedBox(width: 8),
+            Text(
+              'Streakly',
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+          ],
+        ),
+      ),
       body: Consumer<StreakRaceProvider>(
         builder: (context, streakRace, _) =>
         Consumer4<ChallengeProvider, SettingsProvider, BadgeProvider, SubscriptionProvider>(
