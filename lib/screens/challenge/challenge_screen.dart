@@ -5,6 +5,8 @@ import '../../models/challenge.dart';
 import '../../models/routine.dart';
 import '../../providers/challenge_provider.dart';
 import '../../providers/settings_provider.dart';
+import '../../providers/subscription_provider.dart';
+import '../../widgets/subscription_bottom_sheet.dart';
 import '../../widgets/circular_progress.dart';
 import '../../widgets/challenge_calendar.dart';
 import '../../widgets/daily_log_card.dart';
@@ -189,26 +191,11 @@ class ChallengeScreen extends StatelessWidget {
       return;
     }
 
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(s.pauseTicketTitle),
-        content: Text(s.pauseTicketDesc),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(false),
-            child: Text(s.cancel),
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.of(ctx).pop(true),
-            style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary),
-            child: Text(s.pauseTicketBuy, style: const TextStyle(color: AppColors.white)),
-          ),
-        ],
-      ),
-    );
-
-    if (confirmed != true || !context.mounted) return;
+    final isPremium = context.read<SubscriptionProvider>().isPremium;
+    if (!isPremium) {
+      await SubscriptionBottomSheet.show(context);
+      return;
+    }
 
     final now = DateTime.now();
     final range = await showDateRangePicker(

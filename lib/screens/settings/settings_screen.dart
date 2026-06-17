@@ -9,7 +9,9 @@ import '../../providers/auth_provider.dart';
 import '../../providers/settings_provider.dart';
 import '../../providers/badge_provider.dart';
 import '../../providers/challenge_provider.dart';
+import '../../providers/subscription_provider.dart';
 import '../../services/notification_service.dart';
+import '../../widgets/subscription_bottom_sheet.dart';
 import '../auth/sign_in_screen.dart';
 import '../auth/sign_up_screen.dart';
 import 'guide_detail_screen.dart';
@@ -37,8 +39,8 @@ class SettingsScreen extends StatelessWidget {
         ),
         actions: const [],
       ),
-      body: Consumer2<SettingsProvider, AuthProvider>(
-        builder: (context, settings, auth, _) {
+      body: Consumer3<SettingsProvider, AuthProvider, SubscriptionProvider>(
+        builder: (context, settings, auth, subscription, _) {
           final s = settings.strings;
           return SingleChildScrollView(
             padding: const EdgeInsets.all(20),
@@ -55,18 +57,25 @@ class SettingsScreen extends StatelessWidget {
                   onNameTap: () => _editName(context, settings, s),
                   onLoginTap: () => _goToSignIn(context),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 12),
+                _SubscriptionCard(
+                  subscription: subscription,
+                  s: s,
+                  onSubscribe: () => SubscriptionBottomSheet.show(context),
+                  onCancel: () => _confirmCancelSubscription(context, subscription, s),
+                ),
+                const SizedBox(height: 12),
                 _SettingsCard(
                   settings: settings,
                   auth: auth,
                   s: s,
                   onReset: () => _confirmReset(context, settings, s),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 12),
                 _AppGuideCard(s: s),
-                const SizedBox(height: 24),
+                const SizedBox(height: 12),
                 _LegalCard(s: s),
-                const SizedBox(height: 24),
+                const SizedBox(height: 12),
                 if (!auth.isGuest) ...[
                   _AccountCard(
                     signOutLabel: s.signOut,
@@ -75,7 +84,7 @@ class SettingsScreen extends StatelessWidget {
                     onDelete: () => _confirmDeleteAccount(context, auth, settings, s),
                   ),
                 ],
-                const SizedBox(height: 16),
+                const SizedBox(height: 8),
                 _AppVersionText(versionLabel: s.appVersion),
               ],
             ),
@@ -278,6 +287,32 @@ class SettingsScreen extends StatelessWidget {
       await auth.signOut();
       await settings.signOut();
     }
+  }
+
+  Future<void> _confirmCancelSubscription(
+    BuildContext context,
+    SubscriptionProvider subscription,
+    dynamic s,
+  ) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(s.subscribeManage),
+        content: Text(s.subscribeCancelConfirm),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text(s.cancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            style: TextButton.styleFrom(foregroundColor: AppColors.error),
+            child: Text(s.subscribeCancelAction),
+          ),
+        ],
+      ),
+    );
+    if (confirmed == true) await subscription.cancel();
   }
 }
 
@@ -798,6 +833,115 @@ class _SettingsCard extends StatelessWidget {
 // ─────────────────────────────────────────────────────────
 // Small reusable widgets
 // ─────────────────────────────────────────────────────────
+
+class _SubscriptionCard extends StatelessWidget {
+  final SubscriptionProvider subscription;
+  final dynamic s;
+  final VoidCallback onSubscribe;
+  final VoidCallback onCancel;
+
+  const _SubscriptionCard({
+    required this.subscription,
+    required this.s,
+    required this.onSubscribe,
+    required this.onCancel,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isPremium = subscription.isPremium;
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const Icon(Icons.workspace_premium, color: AppColors.primary, size: 22),
+                const SizedBox(width: 10),
+                Text(
+                  s.subscribeProTitle,
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                const Spacer(),
+                if (isPremium)
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      s.premiumLabel,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            if (isPremium) ...[
+              Text(
+                subscription.planType == 'annual'
+                    ? s.subscribeCurrentPlanAnnual
+                    : s.subscribeCurrentPlanMonthly,
+                style: TextStyle(fontSize: 14, color: context.colorTextSecondary),
+              ),
+              const SizedBox(height: 12),
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton(
+                  onPressed: onCancel,
+                  style: OutlinedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    side: const BorderSide(color: AppColors.error),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                  ),
+                  child: Text(
+                    s.subscribeManage,
+                    style: const TextStyle(color: AppColors.error, fontSize: 14),
+                  ),
+                ),
+              ),
+            ] else ...[
+              Text(
+                s.subscribeProSubtitle,
+                style: TextStyle(fontSize: 13, color: context.colorTextSecondary),
+              ),
+              const SizedBox(height: 14),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: onSubscribe,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                  ),
+                  child: Text(
+                    s.subscribeNow,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
 
 class _LanguageSetting extends StatelessWidget {
   final SettingsProvider settings;

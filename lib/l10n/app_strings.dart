@@ -45,7 +45,7 @@ class AppStrings {
   String get ok => _s(en:'OK', ko:'확인', ja:'OK', es:'Aceptar');
   String get recoverStreak => _s(en:'Recover Streak', ko:'스트릭 복구', ja:'ストリーク回復', es:'Recuperar racha');
   // ── Pause Ticket ─────────────────────────────────────────────
-  String get pauseTicketButton => _s(en:'Use Pause Ticket', ko:'정지권 사용', ja:'一時停止チケット使用', es:'Usar ticket de pausa');
+  String get pauseTicketButton => _s(en:'Use Pause Ticket', ko:'일시정지', ja:'一時停止チケット使用', es:'Usar ticket de pausa');
   String get pauseTicketTitle => _s(en:'Challenge Pause Ticket', ko:'챌린지 정지권', ja:'チャレンジ一時停止チケット', es:'Ticket de pausa');
   String get pauseTicketDesc => _s(
     en:'During the selected period, your streak will not break even if you miss a day.\n\nIdeal for vacations or special occasions.\n\n₩1,900',
@@ -264,6 +264,21 @@ class AppStrings {
     ja:'意志力を使ってストリークを回復した合計回数です。',
     es:'Número total de veces que recuperaste una racha usando fuerza de voluntad.',
   );
+  // ── Streak Race ──────────────────────────────────────────────────
+  String get streakRaceTitle => _s(en:'Streak Race', ko:'스트릭 레이스', ja:'ストリークレース', es:'Streak Race');
+  String get streakRaceSubtitle => _s(en:'This month\'s streak points ranking', ko:'이번 달 스트릭 포인트 랭킹', ja:'今月のストリークポイントランキング', es:'Ranking de puntos de racha del mes');
+  String get streakRaceMyRank => _s(en:'My rank', ko:'내 순위', ja:'自分の順位', es:'Mi posición');
+  String get streakRaceProOnly => _s(en:'Streakly Pro Exclusive', ko:'Streakly Pro 전용', ja:'Streakly Pro限定', es:'Exclusivo de Streakly Pro');
+  String get streakRaceProDesc => _s(en:'Subscribe to compete in the global streak race.', ko:'구독하고 전 세계 유저와 스트릭을 경쟁하세요.', ja:'購読してグローバルなストリーク競争に参加しよう。', es:'Suscríbete para competir en la carrera global.');
+  String get streakRaceRefresh => _s(en:'Updated 4× daily', ko:'하루 4회 갱신 (0시·6시·12시·18시)', ja:'1日4回更新', es:'Actualizado 4× al día');
+  String get streakRaceEmpty => _s(en:'No rankings yet. Be the first!', ko:'아직 순위가 없어요. 첫 번째가 되어보세요!', ja:'まだランキングがありません。最初になろう！', es:'Sin rankings aún. ¡Sé el primero!');
+  String get streakRaceDayUnit => _s(en:'p', ko:'p', ja:'p', es:'p');
+  String get streakRaceMe => _s(en:'Me', ko:'나', ja:'私', es:'Yo');
+  String get streakRaceOutOf50 => _s(en:'50+', ko:'50위 밖', ja:'50位外', es:'Más de 50');
+  String get streakRaceGuestPrompt => _s(en:'Join the race!', ko:'랭킹에 참여하려면 로그인하세요', ja:'ランキングに参加するにはログイン', es:'¡Únete a la carrera!');
+  String get streakRaceGuestDesc => _s(en:'Log in to appear on the leaderboard.', ko:'내 스트릭이 순위에 반영됩니다.', ja:'ストリークがランキングに反映されます。', es:'Tu racha aparecerá en el ranking.');
+  String get streakRaceGuestLogin => _s(en:'Log in', ko:'로그인', ja:'ログイン', es:'Iniciar sesión');
+
   String get badgeCollectionInfo => _s(
     en:'Badges earned by achieving milestones and completing challenges.',
     ko:'챌린지 달성 및 완료로 획득한 배지 컬렉션입니다.',
@@ -380,6 +395,77 @@ class AppStrings {
     es:'Suscríbete al modo Team Challenge\ny compite con amigos.',
   );
   String get subscribeNow => _s(en:'Subscribe Now', ko:'지금 구독하기', ja:'今すぐ購読', es:'Suscribirse ahora');
+  // ── Subscription ────────────────────────────────────────────
+  String get subscribeProTitle => _s(en:'Streakly Pro', ko:'Streakly Pro', ja:'Streakly Pro', es:'Streakly Pro');
+  String get subscribeProSubtitle => _s(
+    en:'Protect your streak, challenge without limits.',
+    ko:'스트릭을 지키고, 한계 없이 도전하세요.',
+    ja:'ストリークを守り、制限なく挑戦しましょう。',
+    es:'Protege tu racha y desafía sin límites.',
+  );
+  String get subscribeBenefitUnlimitedChallenges => _s(
+    en:'Unlimited challenges (free: up to 3)',
+    ko:'챌린지 무제한 생성 (무료: 최대 3개)',
+    ja:'チャレンジ無制限（無料：最大3つ）',
+    es:'Desafíos ilimitados (gratis: hasta 3)',
+  );
+  String get subscribeBenefitNoAds => _s(
+    en:'Ad-free experience',
+    ko:'광고 없는 깔끔한 화면',
+    ja:'広告なしの快適な画面',
+    es:'Experiencia sin anuncios',
+  );
+  String get subscribeBenefitInstantRecovery => _s(
+    en:'Instant streak recovery (no ad)',
+    ko:'광고 없이 즉시 스트릭 복구',
+    ja:'広告なしでスト리ーク即時回復',
+    es:'Recuperación de racha instantánea (sin anuncio)',
+  );
+  String get subscribeBenefitPause => _s(
+    en:'Unlimited challenge pause',
+    ko:'챌린지 일시정지 무제한',
+    ja:'チャレンジ一時停止無制限',
+    es:'Pausar desafío ilimitado',
+  );
+  String get subscribeMonthly => _s(en:'Monthly', ko:'월간 구독', ja:'月間プラン', es:'Mensual');
+  String get subscribeAnnual => _s(en:'Annual', ko:'연간 구독', ja:'年間プラン', es:'Anual');
+  String get subscribeAnnualBadge => _s(en:'BEST VALUE', ko:'BEST', ja:'おすすめ', es:'MEJOR');
+  String get subscribeLater => _s(en:'Maybe later', ko:'나중에', ja:'あとで', es:'Quizás después');
+  String get subscribeLimitTitle => _s(
+    en:'Challenge limit reached',
+    ko:'챌린지 한도 초과',
+    ja:'チャレンジ数の上限に達しました',
+    es:'Límite de desafíos alcanzado',
+  );
+  String get subscribeLimitDesc => _s(
+    en:'Free plan allows up to 3 active challenges.',
+    ko:'무료 플랜은 최대 3개의 챌린지를 동시에 진행할 수 있습니다.',
+    ja:'無料プランは最大3つのチャレンジを同時に進められます。',
+    es:'El plan gratuito permite hasta 3 desafíos activos.',
+  );
+  String get subscribePauseGateTitle => _s(
+    en:'Pause is a Pro feature',
+    ko:'일시정지는 Pro 기능입니다',
+    ja:'一時停止はPro機能です',
+    es:'Pausar es una función Pro',
+  );
+  String get subscribePauseGateDesc => _s(
+    en:'Protect your streak during vacation or special occasions.',
+    ko:'휴가나 경조사 등 부득이한 상황에서 스트릭을 지키세요.',
+    ja:'休暇や特別な行事の際にストリークを守りましょう。',
+    es:'Protege tu racha durante vacaciones u ocasiones especiales.',
+  );
+  String get subscribeCurrentPlanMonthly => _s(en:'Pro · Monthly', ko:'Pro · 월간 구독 중', ja:'Pro · 月間プラン中', es:'Pro · Mensual activo');
+  String get subscribeCurrentPlanAnnual => _s(en:'Pro · Annual', ko:'Pro · 연간 구독 중', ja:'Pro · 年間プラン中', es:'Pro · Anual activo');
+  String get subscribeManage => _s(en:'Manage Subscription', ko:'구독 관리', ja:'購読を管理', es:'Gestionar suscripción');
+  String get subscribeCancelConfirm => _s(
+    en:'Cancel subscription and return to free plan?',
+    ko:'구독을 해지하고 무료 플랜으로 전환할까요?',
+    ja:'購読をキャンセルして無料プランに戻しますか？',
+    es:'¿Cancelar suscripción y volver al plan gratuito?',
+  );
+  String get subscribeCancelAction => _s(en:'Cancel Plan', ko:'해지', ja:'解約', es:'Cancelar');
+  // ────────────────────────────────────────────────────────────
   String get signOut => _s(en:'Sign Out', ko:'로그아웃', ja:'サインアウト', es:'Cerrar sesión');
   String get streaklyMember => _s(en:'Streakly Member', ko:'Streakly 멤버', ja:'Streaklyメンバー', es:'Miembro de Streakly');
   String get signOutConfirm => _s(

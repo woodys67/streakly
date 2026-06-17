@@ -64,6 +64,18 @@ class ChallengeProvider extends ChangeNotifier {
     return _challenges.fold<int>(0, (sum, c) => sum + c.streak);
   }
 
+  int get monthlyPoints {
+    final now = DateTime.now();
+    int points = 0;
+    for (final c in _challenges) {
+      for (final dayNum in c.completedDays) {
+        final date = c.startDate.add(Duration(days: dayNum - 1));
+        if (date.year == now.year && date.month == now.month) points++;
+      }
+    }
+    return points;
+  }
+
   int get longestStreak => _bestStreak;
 
   int get totalRecoveries => _willpowerSpent ~/ _recoveryCost;

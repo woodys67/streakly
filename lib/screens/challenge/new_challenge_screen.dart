@@ -4,7 +4,9 @@ import '../../theme/app_theme.dart';
 import '../../models/routine.dart';
 import '../../providers/challenge_provider.dart';
 import '../../providers/settings_provider.dart';
+import '../../providers/subscription_provider.dart';
 import '../../widgets/add_subroutine_modal.dart';
+import '../../widgets/subscription_bottom_sheet.dart';
 
 class NewChallengeScreen extends StatefulWidget {
   const NewChallengeScreen({super.key});
@@ -78,6 +80,14 @@ class _NewChallengeScreenState extends State<NewChallengeScreen> {
 
   Future<void> _startChallenge() async {
     final s = context.read<SettingsProvider>().strings;
+
+    final isPremium = context.read<SubscriptionProvider>().isPremium;
+    final activeCount = context.read<ChallengeProvider>().activeChallenges.length;
+    if (!isPremium && activeCount >= 3) {
+      await SubscriptionBottomSheet.show(context);
+      return;
+    }
+
     final name = _mainRoutineController.text.trim();
     if (name.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(

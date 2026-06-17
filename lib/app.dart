@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -6,6 +7,8 @@ import 'providers/auth_provider.dart';
 import 'providers/badge_provider.dart';
 import 'providers/challenge_provider.dart';
 import 'providers/settings_provider.dart';
+import 'providers/subscription_provider.dart';
+import 'providers/streak_race_provider.dart';
 import 'screens/auth/landing_screen.dart';
 import 'screens/home/home_screen.dart';
 import 'screens/challenge/challenge_screen.dart';
@@ -28,6 +31,15 @@ class StreaklyApp extends StatelessWidget {
           update: (_, badge, challenge) => challenge!..setBadgeProvider(badge),
         ),
         ChangeNotifierProvider(create: (_) => SettingsProvider()),
+        ChangeNotifierProvider(create: (_) => SubscriptionProvider()),
+        ChangeNotifierProxyProvider2<ChallengeProvider, SettingsProvider, StreakRaceProvider>(
+          create: (_) => StreakRaceProvider(),
+          update: (_, challenge, settings, race) =>
+              race!..syncFromDependencies(
+                monthlyPoints: challenge.monthlyPoints,
+                displayName: settings.userName,
+              ),
+        ),
       ],
       child: Consumer<SettingsProvider>(
         builder: (context, settings, _) {
@@ -90,6 +102,8 @@ class _AppInitializerState extends State<_AppInitializer> {
     final challenges = context.read<ChallengeProvider>();
     final settings = context.read<SettingsProvider>();
     final badges = context.read<BadgeProvider>();
+    final subscription = context.read<SubscriptionProvider>();
+    final streakRace = context.read<StreakRaceProvider>();
 
     final prefs = await SharedPreferences.getInstance();
     _seenOnboarding = prefs.getBool('has_seen_onboarding') ?? false;
@@ -98,7 +112,11 @@ class _AppInitializerState extends State<_AppInitializer> {
       challenges.loadChallenges(),
       settings.loadSettings(),
       badges.load(),
+      subscription.load(),
     ]);
+
+    // Load streak race after challenges & subscription are ready
+    unawaited(streakRace.load());
     if (mounted) {
       _authProvider = auth;
       _prevAuthenticated = auth.isAuthenticated;
@@ -139,6 +157,7 @@ class _MainNavigation extends StatefulWidget {
 class _MainNavigationState extends State<_MainNavigation> {
   int _currentIndex = 0;
   bool _showingBadgeDialog = false;
+  BadgeProvider? _badgeProvider;
 
   static const List<Widget> _screens = [
     HomeScreen(),
@@ -151,13 +170,14 @@ class _MainNavigationState extends State<_MainNavigation> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<BadgeProvider>().addListener(_onBadgeUpdate);
+      _badgeProvider = context.read<BadgeProvider>();
+      _badgeProvider!.addListener(_onBadgeUpdate);
     });
   }
 
   @override
   void dispose() {
-    context.read<BadgeProvider>().removeListener(_onBadgeUpdate);
+    _badgeProvider?.removeListener(_onBadgeUpdate);
     super.dispose();
   }
 

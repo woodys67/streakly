@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../theme/app_theme.dart';
 import '../../providers/challenge_provider.dart';
 import '../../providers/settings_provider.dart';
+import '../../providers/subscription_provider.dart';
 import '../../widgets/streak_card.dart';
 import '../../widgets/routine_item.dart';
 import '../../widgets/circular_progress.dart';
@@ -115,6 +116,21 @@ class HomeScreen extends StatelessWidget {
     String challengeId,
   ) async {
     final s = settings.strings;
+    final isPremium = context.read<SubscriptionProvider>().isPremium;
+
+    if (isPremium) {
+      await provider.recoverStreak(challengeId);
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(s.streakRecovered),
+            backgroundColor: AppColors.primary,
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
+      return;
+    }
 
     final confirmed = await showDialog<bool>(
       context: context,
