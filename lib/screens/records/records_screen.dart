@@ -43,7 +43,6 @@ class RecordsScreen extends StatelessWidget {
         Consumer4<ChallengeProvider, SettingsProvider, BadgeProvider, SubscriptionProvider>(
         builder: (context, challengeProvider, settingsProvider, badgeProvider, subscription, _) {
           final s = settingsProvider.strings;
-          final userName = settingsProvider.userName;
           final totalStreak = challengeProvider.totalStreak;
           final longestStreak = challengeProvider.longestStreak;
           final totalRecoveries = challengeProvider.totalRecoveries;
@@ -55,8 +54,6 @@ class RecordsScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _ProfileHeader(userName: userName),
-                const SizedBox(height: 20),
                 Consumer<AuthProvider>(
                   builder: (context, auth, _) => _StreakRaceSection(
                     isGuest: auth.isGuest,
@@ -279,55 +276,6 @@ class _BadgeSummaryCard extends StatelessWidget {
   }
 }
 
-class _ProfileHeader extends StatelessWidget {
-  final String userName;
-
-  const _ProfileHeader({required this.userName});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Container(
-          width: 56,
-          height: 56,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: AppColors.primary.withValues(alpha: 0.15),
-            border: Border.all(color: AppColors.primary, width: 2),
-          ),
-          child: const Icon(Icons.person, color: AppColors.primary, size: 28),
-        ),
-        const SizedBox(width: 16),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              userName,
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              decoration: BoxDecoration(
-                color: AppColors.primary.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Text(
-                context.watch<SettingsProvider>().strings.habitBuilder,
-                style: const TextStyle(
-                  color: AppColors.primary,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
 
 class _MetricCard extends StatelessWidget {
   final String title;
@@ -347,7 +295,7 @@ class _MetricCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: BorderRadius.circular(16),
@@ -358,7 +306,7 @@ class _MetricCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Icon(icon, color: AppColors.white, size: 24),
+              Icon(icon, color: AppColors.white, size: 18),
               Tooltip(
                 message: tooltip,
                 triggerMode: TooltipTriggerMode.tap,
@@ -370,15 +318,15 @@ class _MetricCard extends StatelessWidget {
                 ),
                 textStyle: const TextStyle(color: Colors.white, fontSize: 13),
                 preferBelow: false,
-                child: const Icon(Icons.info_outline, color: AppColors.white, size: 18),
+                child: const Icon(Icons.info_outline, color: AppColors.white, size: 16),
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 6),
           Text(
             value,
             style: const TextStyle(
-              fontSize: 28,
+              fontSize: 20,
               fontWeight: FontWeight.bold,
               color: AppColors.white,
             ),
