@@ -101,6 +101,11 @@ class AppStrings {
   String get appleLoginFailed => _s(en:'Apple login failed.', ko:'Apple 로그인에 실패했습니다.', ja:'Appleログインに失敗しました。', es:'Error al iniciar sesión con Apple.');
   String get appleLoginError => _s(en:'An error occurred during Apple login.', ko:'Apple 로그인 중 오류가 발생했습니다.', ja:'Appleログイン中にエラーが発生しました。', es:'Error durante el inicio de sesión con Apple.');
   String get googleLoginFailed => _s(en:'Google login failed.', ko:'Google 로그인에 실패했습니다.', ja:'Googleログインに失敗しました。', es:'Error al iniciar sesión con Google.');
+  String get invalidCredentials => _s(en:'Incorrect email or password.', ko:'이메일 또는 비밀번호가 올바르지 않습니다.', ja:'メールアドレスまたはパスワードが正しくありません。', es:'Correo electrónico o contraseña incorrectos.');
+  String get userAlreadyRegistered => _s(en:'This email is already registered.', ko:'이미 가입된 이메일입니다.', ja:'このメールアドレスはすでに登録されています。', es:'Este correo ya está registrado.');
+  String get passwordTooShort => _s(en:'Password must be at least 6 characters.', ko:'비밀번호는 6자 이상이어야 합니다.', ja:'パスワードは6文字以上にしてください。', es:'La contraseña debe tener al menos 6 caracteres.');
+  String get rateLimitExceeded => _s(en:'Too many attempts. Please try again later.', ko:'잠시 후 다시 시도해주세요.', ja:'しばらくしてからもう一度お試しください。', es:'Demasiados intentos. Inténtalo más tarde.');
+  String get unknownAuthError => _s(en:'An error occurred. Please try again.', ko:'오류가 발생했습니다. 다시 시도해주세요.', ja:'エラーが発生しました。もう一度お試しください。', es:'Ocurrió un error. Por favor, inténtalo de nuevo.');
   // ── Home Screen ──────────────────────────────────────────────
   String get todaysRoutines => _s(en:"Today's Routines", ko:'오늘의 루틴', ja:'今日のルーティン', es:'Rutinas de hoy');
   String doneCount(int done, int total) => _s(

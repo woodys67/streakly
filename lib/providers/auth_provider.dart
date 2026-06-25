@@ -99,12 +99,29 @@ class AuthProvider extends ChangeNotifier {
   }
 
   String _parseAuthError(String raw) {
+    String msg = raw;
     try {
       final decoded = jsonDecode(raw) as Map<String, dynamic>;
-      return decoded['message'] as String? ?? raw;
-    } catch (_) {
-      return raw;
+      msg = decoded['message'] as String? ?? raw;
+    } catch (_) {}
+
+    final lower = msg.toLowerCase();
+    if (lower.contains('invalid login credentials') || lower.contains('invalid credentials')) {
+      return 'invalid_credentials';
     }
+    if (lower.contains('user already registered') || lower.contains('already registered')) {
+      return 'user_already_registered';
+    }
+    if (lower.contains('password should be') || lower.contains('password must be') || lower.contains('at least')) {
+      return 'password_too_short';
+    }
+    if (lower.contains('rate limit') || lower.contains('too many requests') || lower.contains('email rate')) {
+      return 'rate_limit_exceeded';
+    }
+    if (lower.contains('email not confirmed')) {
+      return 'email_not_confirmed';
+    }
+    return 'unknown_error';
   }
 
   Future<bool> signInWithEmail(String email, String password) async {
@@ -121,9 +138,9 @@ class AuthProvider extends ChangeNotifier {
     } on AuthException catch (e) {
       if (e.message.toLowerCase().contains('email not confirmed')) {
         _isEmailNotConfirmed = true;
-        _error = '이메일 인증이 필요합니다. 받은 편지함을 확인해주세요.';
+        _error = 'email_not_confirmed';
       } else {
-        _error = e.message;
+        _error = _parseAuthError(e.message);
       }
       return false;
     } finally {
@@ -137,7 +154,7 @@ class AuthProvider extends ChangeNotifier {
     try {
       await _client.auth.resend(type: OtpType.signup, email: email);
     } on AuthException catch (e) {
-      _error = e.message;
+      _error = _parseAuthError(e.message);
     } finally {
       _setLoading(false);
     }
@@ -151,7 +168,7 @@ class AuthProvider extends ChangeNotifier {
       _user = res.user;
       return _user != null;
     } on AuthException catch (e) {
-      _error = e.message;
+      _error = _parseAuthError(e.message);
       return false;
     } finally {
       _setLoading(false);
@@ -164,7 +181,7 @@ class AuthProvider extends ChangeNotifier {
     try {
       await _client.auth.resetPasswordForEmail(email);
     } on AuthException catch (e) {
-      _error = e.message;
+      _error = _parseAuthError(e.message);
     } finally {
       _setLoading(false);
     }
@@ -204,7 +221,7 @@ class AuthProvider extends ChangeNotifier {
       }
       return false;
     } on AuthException catch (e) {
-      _error = e.message;
+      _error = _parseAuthError(e.message);
       return false;
     } catch (_) {
       return false;
@@ -238,7 +255,7 @@ class AuthProvider extends ChangeNotifier {
       _user = res.user;
       return _user != null;
     } on AuthException catch (e) {
-      _error = e.message;
+      _error = _parseAuthError(e.message);
       return false;
     } catch (_) {
       return false;
@@ -268,10 +285,10 @@ class AuthProvider extends ChangeNotifier {
       _user = null;
       return true;
     } on AuthException catch (e) {
-      _error = e.message;
+      _error = _parseAuthError(e.message);
       return false;
     } catch (e) {
-      _error = e.toString();
+      _error = 'unknown_error';
       return false;
     } finally {
       _setLoading(false);

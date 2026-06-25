@@ -14,10 +14,15 @@ import 'forgot_password_screen.dart';
 /// auth_provider에서 설정되는 에러 키를 현재 언어 문자열로 변환.
 String _localizeAuthError(String? errorKey, AppStrings s) {
   switch (errorKey) {
-    case 'email_not_confirmed': return s.emailNotConfirmedError;
-    case 'apple_login_failed':  return s.appleLoginFailed;
-    case 'apple_login_error':   return s.appleLoginError;
-    case 'google_login_failed': return s.googleLoginFailed;
+    case 'email_not_confirmed':   return s.emailNotConfirmedError;
+    case 'apple_login_failed':    return s.appleLoginFailed;
+    case 'apple_login_error':     return s.appleLoginError;
+    case 'google_login_failed':   return s.googleLoginFailed;
+    case 'invalid_credentials':   return s.invalidCredentials;
+    case 'user_already_registered': return s.userAlreadyRegistered;
+    case 'password_too_short':    return s.passwordTooShort;
+    case 'rate_limit_exceeded':   return s.rateLimitExceeded;
+    case 'unknown_error':         return s.unknownAuthError;
     default: return errorKey ?? '';
   }
 }

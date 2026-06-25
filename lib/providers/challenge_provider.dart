@@ -753,16 +753,6 @@ class ChallengeProvider extends ChangeNotifier {
     return ((completed / total) * 100).round();
   }
 
-  int getBadgesEarned() {
-    int badges = 0;
-    for (final challenge in _challenges) {
-      if (challenge.completedDays.length >= 7) badges++;
-      if (challenge.completedDays.length >= 14) badges++;
-      if (challenge.isCompleted) badges++;
-    }
-    return badges;
-  }
-
   // ─────────────────────────────────────────
   // 배지 payload 헬퍼
   // ─────────────────────────────────────────
