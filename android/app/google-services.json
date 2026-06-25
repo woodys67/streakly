@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "360553833196",
+    "project_id": "streakly-fabef",
+    "storage_bucket": "streakly-fabef.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:360553833196:android:971cc48417af72a56d3bc9",
+        "android_client_info": {
+          "package_name": "com.streakly.streakly"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD73T1lEZtroI0vmrEPPT5PwuKrsj06K68"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
