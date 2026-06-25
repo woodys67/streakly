@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../theme/app_theme.dart';
@@ -24,6 +25,7 @@ class _NativeAdCardState extends State<NativeAdCard> {
   @override
   void initState() {
     super.initState();
+    if (kDebugMode) return; // validator 다이얼로그 방지
     _ad = NativeAd(
       adUnitId: _adUnitId,
       factoryId: 'adFactorySmall',

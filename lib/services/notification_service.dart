@@ -8,6 +8,11 @@ class NotificationService {
   static final _plugin = FlutterLocalNotificationsPlugin();
 
   static Future<void> init() async {
+    await initPlugin();
+    await requestPermission();
+  }
+
+  static Future<void> initPlugin() async {
     const android = AndroidInitializationSettings('@mipmap/ic_launcher');
     const ios = DarwinInitializationSettings(
       requestAlertPermission: false,
@@ -17,7 +22,6 @@ class NotificationService {
     await _plugin.initialize(
       const InitializationSettings(android: android, iOS: ios),
     );
-    await requestPermission();
   }
 
   /// iOS/Android 알림 권한을 요청하고 허용 여부를 반환한다.

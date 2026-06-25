@@ -29,10 +29,10 @@ class GuideContent {
 
 | 탭 | 역할 |
 |---|---|
-| 🏠 홈 | 오늘의 루틴 목록, 스트릭 카드, 주간 달성률 |
+| 🏠 홈 | 의지력 카드, 오늘의 루틴 목록 |
 | 🚩 챌린지 | 진행 중인 챌린지 관리 및 달력 |
-| 📊 기록 | 완료 챌린지, 배지 컬렉션, 통계 |
-| ⚙️ 설정 | 언어·알림·계정 설정 |
+| 📊 기록 | 스트릭 레이스, 배지 컬렉션, 통계, 완료 챌린지 |
+| 👤 프로필 | 계정, 구독, 앱 설정, 앱 가이드 |
 
 ---
 
@@ -60,10 +60,10 @@ class GuideContent {
 
 | Tab | Role |
 |---|---|
-| 🏠 Home | Today's routines, streak card, weekly rate |
+| 🏠 Home | Willpower card, today's routine list |
 | 🚩 Challenges | Manage active challenges & calendar |
-| 📊 Records | Completed challenges, badges, stats |
-| ⚙️ Settings | Language, notifications, account |
+| 📊 Records | Streak Race, badge collection, stats, completed challenges |
+| 👤 Profile | Account, subscription, app settings, app guide |
 
 ---
 
@@ -91,10 +91,10 @@ Tap the **＋ button** in the bottom-right corner of the Home screen.
 
 | タブ | 役割 |
 |---|---|
-| 🏠 ホーム | 今日のルーティン、ストリークカード、週間達成率 |
+| 🏠 ホーム | 意志力カード、今日のルーティン一覧 |
 | 🚩 チャレンジ | 進行中のチャレンジ管理・カレンダー |
-| 📊 記録 | 完了チャレンジ、バッジ、統計 |
-| ⚙️ 設定 | 言語・通知・アカウント |
+| 📊 記録 | ストリークレース、バッジ、統計、完了チャレンジ |
+| 👤 プロフィール | アカウント、サブスク、アプリ設定、ガイド |
 
 ---
 
@@ -104,6 +104,12 @@ Tap the **＋ button** in the bottom-right corner of the Home screen.
 2. カード左側の**円ボタン**をタップして完了します。
 3. サブルーティンがある場合、すべてチェックするとその日が達成されます。
 4. 完了カードは**緑色の枠**と取り消し線で表示されます。
+
+---
+
+## 新しいチャレンジを始める
+
+ホーム画面右下の**＋ボタン**をタップします。
 ''',
     'zhCN': '''
 ## 基本流程
@@ -116,10 +122,10 @@ Tap the **＋ button** in the bottom-right corner of the Home screen.
 
 | 标签 | 功能 |
 |---|---|
-| 🏠 主页 | 今日任务、连续卡、周完成率 |
+| 🏠 主页 | 意志力卡片、今日任务列表 |
 | 🚩 挑战 | 管理进行中的挑战和日历 |
-| 📊 记录 | 已完成挑战、徽章、统计 |
-| ⚙️ 设置 | 语言、通知、账户 |
+| 📊 记录 | 连续竞赛、徽章收集、统计、已完成挑战 |
+| 👤 个人资料 | 账户、订阅、应用设置、应用指南 |
 
 ---
 
@@ -129,6 +135,12 @@ Tap the **＋ button** in the bottom-right corner of the Home screen.
 2. 点击卡片左侧的**圆形按钮**标记完成。
 3. 如有子任务，需全部完成才算当天达成。
 4. 完成的卡片显示**绿色边框**和删除线。
+
+---
+
+## 开始新挑战
+
+点击主页右下角的**＋按钮**。
 ''',
     'es': '''
 ## Flujo básico
@@ -141,10 +153,10 @@ Tap the **＋ button** in the bottom-right corner of the Home screen.
 
 | Pestaña | Función |
 |---|---|
-| 🏠 Inicio | Rutinas de hoy, tarjeta de racha, tasa semanal |
+| 🏠 Inicio | Tarjeta de fuerza de voluntad, rutinas de hoy |
 | 🚩 Retos | Gestionar retos activos y calendario |
-| 📊 Registros | Retos completados, insignias, estadísticas |
-| ⚙️ Ajustes | Idioma, notificaciones, cuenta |
+| 📊 Registros | Carrera de rachas, insignias, estadísticas, retos completados |
+| 👤 Perfil | Cuenta, suscripción, ajustes, guía |
 
 ---
 
@@ -172,10 +184,10 @@ Toca el **botón ＋** en la esquina inferior derecha de la pantalla de Inicio.
 
 | Tab | Funktion |
 |---|---|
-| 🏠 Startseite | Heutige Routinen, Streak-Karte, Wochenrate |
+| 🏠 Startseite | Willenskraft-Karte, heutige Routinen |
 | 🚩 Challenges | Aktive Challenges & Kalender verwalten |
-| 📊 Aufzeichnungen | Abgeschlossene Challenges, Abzeichen, Statistiken |
-| ⚙️ Einstellungen | Sprache, Benachrichtigungen, Konto |
+| 📊 Aufzeichnungen | Streak-Rennen, Abzeichen, Statistiken, abgeschlossene Challenges |
+| 👤 Profil | Konto, Abonnement, App-Einstellungen, Guide |
 
 ---
 
@@ -203,10 +215,10 @@ Tippe auf den **＋-Button** unten rechts auf der Startseite.
 
 | Aba | Função |
 |---|---|
-| 🏠 Início | Rotinas de hoje, cartão de sequência, taxa semanal |
+| 🏠 Início | Cartão de força de vontade, rotinas de hoje |
 | 🚩 Desafios | Gerenciar desafios ativos e calendário |
-| 📊 Registros | Desafios concluídos, medalhas, estatísticas |
-| ⚙️ Configurações | Idioma, notificações, conta |
+| 📊 Registros | Corrida de sequências, medalhas, estatísticas, desafios concluídos |
+| 👤 Perfil | Conta, assinatura, configurações, guia |
 
 ---
 
@@ -234,10 +246,10 @@ Toque no **botão ＋** no canto inferior direito da tela Início.
 
 | Вкладка | Функция |
 |---|---|
-| 🏠 Главная | Сегодняшние задачи, карточка серии, недельный процент |
+| 🏠 Главная | Карточка силы воли, сегодняшние задачи |
 | 🚩 Задачи | Управление активными задачами и календарь |
-| 📊 Записи | Завершённые задачи, значки, статистика |
-| ⚙️ Настройки | Язык, уведомления, аккаунт |
+| 📊 Записи | Гонка серий, значки, статистика, завершённые задачи |
+| 👤 Профиль | Аккаунт, подписка, настройки, руководство |
 
 ---
 
@@ -607,17 +619,17 @@ Defina quando receber um lembrete antes da sua rotina.
 
 ## 스트릭 마일스톤 배지
 
-| 스트릭 | 배지 | 희귀도 |
-|---|---|---|
-| 1일 | 🔥 첫 불꽃 | Common |
-| 3일 | 🔥 불씨 | Common |
-| 7일 | 🔥 작은 불꽃 | Common |
-| 14일 | 🪵 모닥불 | Rare |
-| 21일 | ✨ 화톳불 | Rare |
-| 30일 | ⚡ 용광로 | Epic |
-| 50일 | 🌋 불의 지배자 | Epic |
-| 66일 | ☀️ 태양 (습관 완전 정착) | Epic |
-| 100일 | 🌟 영원한 불꽃 | Legendary |
+| 스트릭 | 배지 | 이름 | 희귀도 |
+|---|---|---|---|
+| 1일 | ![](assets/images/badges/streak_001.png) | 첫 불꽃 | Common |
+| 3일 | ![](assets/images/badges/streak_002.png) | 불씨 | Common |
+| 7일 | ![](assets/images/badges/streak_003.png) | 작은 불꽃 | Common |
+| 14일 | ![](assets/images/badges/streak_004.png) | 모닥불 | Rare |
+| 21일 | ![](assets/images/badges/streak_005.png) | 화톳불 | Rare |
+| 30일 | ![](assets/images/badges/streak_006.png) | 용광로 | Epic |
+| 50일 | ![](assets/images/badges/streak_007.png) | 불의 지배자 | Epic |
+| 66일 | ![](assets/images/badges/streak_008.png) | 태양 | Epic |
+| 100일 | ![](assets/images/badges/streak_009.png) | 영원한 불꽃 | Legendary |
 ''',
     'en': '''
 ## What is a Streak?
@@ -653,17 +665,17 @@ The **Total Streaks** card shows the sum of current streaks across all challenge
 
 ## Streak Milestone Badges
 
-| Streak | Badge | Rarity |
-|---|---|---|
-| 1 day | 🔥 First Spark | Common |
-| 3 days | 🔥 Ember | Common |
-| 7 days | 🔥 Kindling | Common |
-| 14 days | 🪵 Campfire | Rare |
-| 21 days | ✨ Bonfire | Rare |
-| 30 days | ⚡ Furnace | Epic |
-| 50 days | 🌋 Fire Lord | Epic |
-| 66 days | ☀️ The Sun (habit fully formed) | Epic |
-| 100 days | 🌟 Eternal Flame | Legendary |
+| Streak | Badge | Name | Rarity |
+|---|---|---|---|
+| 1 day | ![](assets/images/badges/streak_001.png) | First Spark | Common |
+| 3 days | ![](assets/images/badges/streak_002.png) | Ember | Common |
+| 7 days | ![](assets/images/badges/streak_003.png) | Kindling | Common |
+| 14 days | ![](assets/images/badges/streak_004.png) | Campfire | Rare |
+| 21 days | ![](assets/images/badges/streak_005.png) | Bonfire | Rare |
+| 30 days | ![](assets/images/badges/streak_006.png) | Furnace | Epic |
+| 50 days | ![](assets/images/badges/streak_007.png) | Fire Lord | Epic |
+| 66 days | ![](assets/images/badges/streak_008.png) | The Sun | Epic |
+| 100 days | ![](assets/images/badges/streak_009.png) | Eternal Flame | Legendary |
 ''',
     'ja': '''
 ## ストリークとは？
@@ -688,17 +700,17 @@ The **Total Streaks** card shows the sum of current streaks across all challenge
 
 ## ストリークマイルストーンバッジ
 
-| ストリーク | バッジ | レアリティ |
-|---|---|---|
-| 1日 | 🔥 First Spark | Common |
-| 3日 | 🔥 Ember | Common |
-| 7日 | 🔥 Kindling | Common |
-| 14日 | 🪵 Campfire | Rare |
-| 21日 | ✨ Bonfire | Rare |
-| 30日 | ⚡ Furnace | Epic |
-| 50日 | 🌋 Fire Lord | Epic |
-| 66日 | ☀️ The Sun | Epic |
-| 100日 | 🌟 Eternal Flame | Legendary |
+| ストリーク | バッジ | 名前 | レアリティ |
+|---|---|---|---|
+| 1日 | ![](assets/images/badges/streak_001.png) | First Spark | Common |
+| 3日 | ![](assets/images/badges/streak_002.png) | Ember | Common |
+| 7日 | ![](assets/images/badges/streak_003.png) | Kindling | Common |
+| 14日 | ![](assets/images/badges/streak_004.png) | Campfire | Rare |
+| 21日 | ![](assets/images/badges/streak_005.png) | Bonfire | Rare |
+| 30日 | ![](assets/images/badges/streak_006.png) | Furnace | Epic |
+| 50日 | ![](assets/images/badges/streak_007.png) | Fire Lord | Epic |
+| 66日 | ![](assets/images/badges/streak_008.png) | The Sun | Epic |
+| 100日 | ![](assets/images/badges/streak_009.png) | Eternal Flame | Legendary |
 ''',
     'zhCN': '''
 ## 什么是连续？
@@ -723,17 +735,17 @@ The **Total Streaks** card shows the sum of current streaks across all challenge
 
 ## 连续里程碑徽章
 
-| 连续 | 徽章 | 稀有度 |
-|---|---|---|
-| 1天 | 🔥 第一个火花 | Common |
-| 3天 | 🔥 余烬 | Common |
-| 7天 | 🔥 引火物 | Common |
-| 14天 | 🪵 篝火 | Rare |
-| 21天 | ✨ 营火 | Rare |
-| 30天 | ⚡ 熔炉 | Epic |
-| 50天 | 🌋 火焰领主 | Epic |
-| 66天 | ☀️ 太阳（习惯完全养成）| Epic |
-| 100天 | 🌟 永恒火焰 | Legendary |
+| 连续 | 徽章 | 名称 | 稀有度 |
+|---|---|---|---|
+| 1天 | ![](assets/images/badges/streak_001.png) | 第一个火花 | Common |
+| 3天 | ![](assets/images/badges/streak_002.png) | 余烬 | Common |
+| 7天 | ![](assets/images/badges/streak_003.png) | 引火物 | Common |
+| 14天 | ![](assets/images/badges/streak_004.png) | 篝火 | Rare |
+| 21天 | ![](assets/images/badges/streak_005.png) | 营火 | Rare |
+| 30天 | ![](assets/images/badges/streak_006.png) | 熔炉 | Epic |
+| 50天 | ![](assets/images/badges/streak_007.png) | 火焰领主 | Epic |
+| 66天 | ![](assets/images/badges/streak_008.png) | 太阳 | Epic |
+| 100天 | ![](assets/images/badges/streak_009.png) | 永恒火焰 | Legendary |
 ''',
     'es': '''
 ## ¿Qué es una racha?
@@ -769,17 +781,17 @@ La tarjeta **Rachas Totales** muestra la suma de las rachas actuales de todos lo
 
 ## Insignias de hitos de racha
 
-| Racha | Insignia | Rareza |
-|---|---|---|
-| 1 día | 🔥 Primera Chispa | Common |
-| 3 días | 🔥 Brasa | Common |
-| 7 días | 🔥 Yesca | Common |
-| 14 días | 🪵 Hoguera | Rare |
-| 21 días | ✨ Fogata | Rare |
-| 30 días | ⚡ Horno | Epic |
-| 50 días | 🌋 Señor del Fuego | Epic |
-| 66 días | ☀️ El Sol (hábito consolidado) | Epic |
-| 100 días | 🌟 Llama Eterna | Legendary |
+| Racha | Insignia | Nombre | Rareza |
+|---|---|---|---|
+| 1 día | ![](assets/images/badges/streak_001.png) | Primera Chispa | Common |
+| 3 días | ![](assets/images/badges/streak_002.png) | Brasa | Common |
+| 7 días | ![](assets/images/badges/streak_003.png) | Yesca | Common |
+| 14 días | ![](assets/images/badges/streak_004.png) | Hoguera | Rare |
+| 21 días | ![](assets/images/badges/streak_005.png) | Fogata | Rare |
+| 30 días | ![](assets/images/badges/streak_006.png) | Horno | Epic |
+| 50 días | ![](assets/images/badges/streak_007.png) | Señor del Fuego | Epic |
+| 66 días | ![](assets/images/badges/streak_008.png) | El Sol | Epic |
+| 100 días | ![](assets/images/badges/streak_009.png) | Llama Eterna | Legendary |
 ''',
     'de': '''
 ## Was ist ein Streak?
@@ -815,17 +827,17 @@ Die Karte **Gesamtserien** zeigt die Summe der aktuellen Streaks aller Challenge
 
 ## Streak-Meilenstein-Abzeichen
 
-| Streak | Abzeichen | Seltenheit |
-|---|---|---|
-| 1 Tag | 🔥 Erster Funke | Common |
-| 3 Tage | 🔥 Glut | Common |
-| 7 Tage | 🔥 Zunder | Common |
-| 14 Tage | 🪵 Lagerfeuer | Rare |
-| 21 Tage | ✨ Freudenfeuer | Rare |
-| 30 Tage | ⚡ Hochofen | Epic |
-| 50 Tage | 🌋 Feuerherrscher | Epic |
-| 66 Tage | ☀️ Die Sonne (Gewohnheit gefestigt) | Epic |
-| 100 Tage | 🌟 Ewige Flamme | Legendary |
+| Streak | Abzeichen | Name | Seltenheit |
+|---|---|---|---|
+| 1 Tag | ![](assets/images/badges/streak_001.png) | Erster Funke | Common |
+| 3 Tage | ![](assets/images/badges/streak_002.png) | Glut | Common |
+| 7 Tage | ![](assets/images/badges/streak_003.png) | Zunder | Common |
+| 14 Tage | ![](assets/images/badges/streak_004.png) | Lagerfeuer | Rare |
+| 21 Tage | ![](assets/images/badges/streak_005.png) | Freudenfeuer | Rare |
+| 30 Tage | ![](assets/images/badges/streak_006.png) | Hochofen | Epic |
+| 50 Tage | ![](assets/images/badges/streak_007.png) | Feuerherrscher | Epic |
+| 66 Tage | ![](assets/images/badges/streak_008.png) | Die Sonne | Epic |
+| 100 Tage | ![](assets/images/badges/streak_009.png) | Ewige Flamme | Legendary |
 ''',
     'pt': '''
 ## O que é uma sequência?
@@ -861,17 +873,17 @@ O cartão **Sequências Totais** mostra a soma das sequências atuais de todos o
 
 ## Insígnias de marcos de sequência
 
-| Sequência | Insígnia | Raridade |
-|---|---|---|
-| 1 dia | 🔥 Primeira Faísca | Common |
-| 3 dias | 🔥 Brasa | Common |
-| 7 dias | 🔥 Isca | Common |
-| 14 dias | 🪵 Fogueira | Rare |
-| 21 dias | ✨ Fogueira Grande | Rare |
-| 30 dias | ⚡ Fornalha | Epic |
-| 50 dias | 🌋 Senhor do Fogo | Epic |
-| 66 dias | ☀️ O Sol (hábito consolidado) | Epic |
-| 100 dias | 🌟 Chama Eterna | Legendary |
+| Sequência | Insígnia | Nome | Raridade |
+|---|---|---|---|
+| 1 dia | ![](assets/images/badges/streak_001.png) | Primeira Faísca | Common |
+| 3 dias | ![](assets/images/badges/streak_002.png) | Brasa | Common |
+| 7 dias | ![](assets/images/badges/streak_003.png) | Isca | Common |
+| 14 dias | ![](assets/images/badges/streak_004.png) | Fogueira | Rare |
+| 21 dias | ![](assets/images/badges/streak_005.png) | Fogueira Grande | Rare |
+| 30 dias | ![](assets/images/badges/streak_006.png) | Fornalha | Epic |
+| 50 dias | ![](assets/images/badges/streak_007.png) | Senhor do Fogo | Epic |
+| 66 dias | ![](assets/images/badges/streak_008.png) | O Sol | Epic |
+| 100 dias | ![](assets/images/badges/streak_009.png) | Chama Eterna | Legendary |
 ''',
     'ru': '''
 ## Что такое серия?
@@ -907,17 +919,17 @@ O cartão **Sequências Totais** mostra a soma das sequências atuais de todos o
 
 ## Значки за достижения серий
 
-| Серия | Значок | Редкость |
-|---|---|---|
-| 1 день | 🔥 Первая искра | Common |
-| 3 дня | 🔥 Уголёк | Common |
-| 7 дней | 🔥 Растопка | Common |
-| 14 дней | 🪵 Костёр | Rare |
-| 21 день | ✨ Большой костёр | Rare |
-| 30 дней | ⚡ Доменная печь | Epic |
-| 50 дней | 🌋 Властелин огня | Epic |
-| 66 дней | ☀️ Солнце (привычка сформирована) | Epic |
-| 100 дней | 🌟 Вечное пламя | Legendary |
+| Серия | Значок | Название | Редкость |
+|---|---|---|---|
+| 1 день | ![](assets/images/badges/streak_001.png) | Первая искра | Common |
+| 3 дня | ![](assets/images/badges/streak_002.png) | Уголёк | Common |
+| 7 дней | ![](assets/images/badges/streak_003.png) | Растопка | Common |
+| 14 дней | ![](assets/images/badges/streak_004.png) | Костёр | Rare |
+| 21 день | ![](assets/images/badges/streak_005.png) | Большой костёр | Rare |
+| 30 дней | ![](assets/images/badges/streak_006.png) | Доменная печь | Epic |
+| 50 дней | ![](assets/images/badges/streak_007.png) | Властелин огня | Epic |
+| 66 дней | ![](assets/images/badges/streak_008.png) | Солнце | Epic |
+| 100 дней | ![](assets/images/badges/streak_009.png) | Вечное пламя | Legendary |
 ''',
   };
 

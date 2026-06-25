@@ -46,6 +46,10 @@ class _NewChallengeScreenState extends State<NewChallengeScreen> {
     final picked = await showTimePicker(
       context: context,
       initialTime: _reminderTime ?? const TimeOfDay(hour: 8, minute: 0),
+      builder: (context, child) => MediaQuery(
+        data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+        child: child!,
+      ),
     );
     if (picked != null) {
       setState(() => _reminderTime = picked);

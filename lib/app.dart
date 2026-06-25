@@ -87,6 +87,8 @@ class _AppInitializerState extends State<_AppInitializer> {
     if (auth == null) return;
     if (_prevAuthenticated && !auth.isAuthenticated) {
       _onSignedOut();
+    } else if (!_prevAuthenticated && auth.isAuthenticated) {
+      _onSignedIn();
     }
     _prevAuthenticated = auth.isAuthenticated;
   }
@@ -95,6 +97,11 @@ class _AppInitializerState extends State<_AppInitializer> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('has_seen_onboarding');
     if (mounted) setState(() => _seenOnboarding = false);
+  }
+
+  Future<void> _onSignedIn() async {
+    if (!mounted) return;
+    await context.read<BadgeProvider>().load();
   }
 
   Future<void> _initialize() async {

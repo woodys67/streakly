@@ -116,35 +116,10 @@ class SettingsScreen extends StatelessWidget {
     SettingsProvider settings,
     dynamic s,
   ) async {
-    final controller = TextEditingController(text: settings.userName);
     await showDialog<void>(
       context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(s.editName),
-        content: TextField(
-          controller: controller,
-          autofocus: true,
-          textCapitalization: TextCapitalization.words,
-          decoration: InputDecoration(hintText: s.nameHint),
-          onSubmitted: (_) => Navigator.of(dialogContext).pop(),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(),
-            child: Text(s.cancel),
-          ),
-          TextButton(
-            onPressed: () {
-              final name = controller.text.trim();
-              if (name.isNotEmpty) settings.setUserName(name);
-              Navigator.of(dialogContext).pop();
-            },
-            child: Text(s.save),
-          ),
-        ],
-      ),
+      builder: (_) => _EditNameDialog(settings: settings, s: s),
     );
-    WidgetsBinding.instance.addPostFrameCallback((_) => controller.dispose());
   }
 
   Future<void> _confirmReset(
@@ -1362,6 +1337,67 @@ class _AppVersionTextState extends State<_AppVersionText> {
         fontSize: 12,
         color: AppColors.textSecondary,
       ),
+    );
+  }
+}
+
+class _EditNameDialog extends StatefulWidget {
+  final dynamic settings;
+  final dynamic s;
+  const _EditNameDialog({required this.settings, required this.s});
+
+  @override
+  State<_EditNameDialog> createState() => _EditNameDialogState();
+}
+
+class _EditNameDialogState extends State<_EditNameDialog> {
+  late final TextEditingController _controller;
+  final _focusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(text: widget.settings.userName);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _focusNode.requestFocus();
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  void _save() {
+    final name = _controller.text.trim();
+    if (name.isNotEmpty) widget.settings.setUserName(name);
+    Navigator.of(context).pop();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final s = widget.s;
+    return AlertDialog(
+      title: Text(s.editName),
+      content: TextField(
+        controller: _controller,
+        focusNode: _focusNode,
+        textCapitalization: TextCapitalization.words,
+        decoration: InputDecoration(hintText: s.nameHint),
+        onSubmitted: (_) => _save(),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(s.cancel),
+        ),
+        TextButton(
+          onPressed: _save,
+          child: Text(s.save),
+        ),
+      ],
     );
   }
 }

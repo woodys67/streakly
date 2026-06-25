@@ -38,6 +38,10 @@ class _AddSubroutineModalState extends State<AddSubroutineModal> {
     final picked = await showTimePicker(
       context: context,
       initialTime: _selectedTime,
+      builder: (context, child) => MediaQuery(
+        data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+        child: child!,
+      ),
     );
     if (picked != null) setState(() => _selectedTime = picked);
   }
@@ -61,9 +65,9 @@ class _AddSubroutineModalState extends State<AddSubroutineModal> {
       padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
       child: Container(
         padding: const EdgeInsets.all(24),
-        decoration: const BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        decoration: BoxDecoration(
+          color: context.colorSurface,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -74,10 +78,10 @@ class _AddSubroutineModalState extends State<AddSubroutineModal> {
               children: [
                 Text(
                   s.addSubRoutineTitle,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
+                    color: context.colorTextPrimary,
                   ),
                 ),
                 IconButton(
@@ -89,10 +93,10 @@ class _AddSubroutineModalState extends State<AddSubroutineModal> {
             const SizedBox(height: 20),
             Text(
               s.subRoutineNameLabel,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
-                color: AppColors.textSecondary,
+                color: context.colorTextSecondary,
                 letterSpacing: 0.8,
               ),
             ),
@@ -107,10 +111,10 @@ class _AddSubroutineModalState extends State<AddSubroutineModal> {
             const SizedBox(height: 16),
             Text(
               s.notificationTimeLabel,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
-                color: AppColors.textSecondary,
+                color: context.colorTextSecondary,
                 letterSpacing: 0.8,
               ),
             ),
@@ -123,16 +127,16 @@ class _AddSubroutineModalState extends State<AddSubroutineModal> {
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
                       decoration: BoxDecoration(
-                        border: Border.all(color: AppColors.border),
+                        border: Border.all(color: context.colorOutline),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Row(
                         children: [
-                          const Icon(Icons.access_time, color: AppColors.textSecondary, size: 20),
+                          Icon(Icons.access_time, color: context.colorTextSecondary, size: 20),
                           const SizedBox(width: 12),
                           Text(
                             _formattedTime,
-                            style: const TextStyle(fontSize: 16, color: AppColors.textPrimary),
+                            style: TextStyle(fontSize: 16, color: context.colorTextPrimary),
                           ),
                         ],
                       ),
@@ -145,13 +149,13 @@ class _AddSubroutineModalState extends State<AddSubroutineModal> {
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                     decoration: BoxDecoration(
-                      color: _alertOn ? AppColors.success : AppColors.border,
+                      color: _alertOn ? AppColors.success : context.colorOutline,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
                       _alertOn ? s.alertOn : s.alertOff,
                       style: TextStyle(
-                        color: _alertOn ? AppColors.white : AppColors.textSecondary,
+                        color: _alertOn ? AppColors.white : context.colorTextSecondary,
                         fontWeight: FontWeight.bold,
                         fontSize: 13,
                       ),
@@ -175,7 +179,7 @@ class _AddSubroutineModalState extends State<AddSubroutineModal> {
                   Expanded(
                     child: Text(
                       s.proTip,
-                      style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+                      style: TextStyle(fontSize: 12, color: context.colorTextSecondary),
                     ),
                   ),
                 ],

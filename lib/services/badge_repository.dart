@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/user_badge.dart';
@@ -14,6 +15,7 @@ class BadgeRepository {
     if (user == null || user.isAnonymous == true) return local;
 
     try {
+      debugPrint('[Badge] Supabase 로드 시도 user=${user.id}');
       final rows = await Supabase.instance.client
           .from('user_badges')
           .select('badge_id, earned_at')
@@ -21,8 +23,11 @@ class BadgeRepository {
       final cloud = (rows as List)
           .map((r) => UserBadge.fromJson(r as Map<String, dynamic>))
           .toList();
+      debugPrint('[Badge] 클라우드 배지 ${cloud.length}개: ${cloud.map((b) => b.badgeId).toList()}');
+      debugPrint('[Badge] 로컬 배지 ${local.length}개: ${local.map((b) => b.badgeId).toList()}');
       return _merge(local, cloud);
-    } catch (_) {
+    } catch (e) {
+      debugPrint('[Badge] Supabase 로드 실패: $e');
       return local;
     }
   }

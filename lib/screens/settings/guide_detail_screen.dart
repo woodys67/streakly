@@ -31,6 +31,13 @@ class GuideDetailScreen extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 40),
         styleSheet: _buildStyleSheet(context),
         selectable: false,
+        imageBuilder: (uri, title, alt) {
+          if (uri.scheme == 'asset' || !uri.hasScheme) {
+            final path = uri.toString();
+            return Image.asset(path, width: 28, height: 28);
+          }
+          return Image.network(uri.toString(), width: 28, height: 28);
+        },
       ),
     );
   }

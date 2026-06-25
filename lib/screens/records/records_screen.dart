@@ -61,6 +61,10 @@ class RecordsScreen extends StatelessWidget {
                     myDisplayName: settingsProvider.userName,
                   ),
                 ),
+                if (!subscription.isPremium) ...[
+                  const SizedBox(height: 16),
+                  const NativeAdCard(),
+                ],
                 const SizedBox(height: 16),
                 _BadgeSummaryCard(badgeProvider: badgeProvider),
                 const SizedBox(height: 16),
@@ -111,8 +115,6 @@ class RecordsScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
-                if (!subscription.isPremium) const NativeAdCard(),
                 const SizedBox(height: 24),
                 Text(
                   s.completedChallenges,
@@ -433,40 +435,12 @@ class _StreakRaceSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final s = context.read<SettingsProvider>().strings;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                const Text('🏆', style: TextStyle(fontSize: 18)),
-                const SizedBox(width: 6),
-                Text(
-                  s.streakRaceTitle,
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-              ],
-            ),
-            GestureDetector(
-              onTap: () => streakRace.refresh(),
-              child: Icon(Icons.refresh, size: 20, color: context.colorTextSecondary),
-            ),
-          ],
-        ),
-        const SizedBox(height: 4),
-        Text(
-          s.streakRaceSubtitle,
-          style: TextStyle(fontSize: 12, color: context.colorTextSecondary),
-        ),
-        const SizedBox(height: 12),
-        _StreakRaceContent(
-          streakRace: streakRace,
-          myDisplayName: myDisplayName,
-          isGuest: isGuest,
-        ),
-      ],
+    return _StreakRaceContent(
+      streakRace: streakRace,
+      myDisplayName: myDisplayName,
+      isGuest: isGuest,
+      title: s.streakRaceTitle,
+      subtitle: s.streakRaceSubtitle,
     );
   }
 }
@@ -475,11 +449,15 @@ class _StreakRaceContent extends StatelessWidget {
   final StreakRaceProvider streakRace;
   final String myDisplayName;
   final bool isGuest;
+  final String title;
+  final String subtitle;
 
   const _StreakRaceContent({
     required this.streakRace,
     required this.myDisplayName,
     required this.isGuest,
+    required this.title,
+    required this.subtitle,
   });
 
   @override
@@ -507,6 +485,38 @@ class _StreakRaceContent extends StatelessWidget {
       ),
       child: Column(
         children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 14, 12, 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    const Text('🏆', style: TextStyle(fontSize: 18)),
+                    const SizedBox(width: 6),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          title,
+                          style: Theme.of(context).textTheme.headlineSmall,
+                        ),
+                        Text(
+                          subtitle,
+                          style: TextStyle(fontSize: 12, color: context.colorTextSecondary),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                GestureDetector(
+                  onTap: () => streakRace.refresh(),
+                  child: Icon(Icons.refresh, size: 20, color: context.colorTextSecondary),
+                ),
+              ],
+            ),
+          ),
+          Divider(height: 1, color: context.colorOutline),
           if (isLoading && leaderboard.isEmpty)
             const Padding(
               padding: EdgeInsets.all(32),
@@ -571,22 +581,21 @@ class _PodiumSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final maxPoints = entries.isNotEmpty ? entries.first.monthlyPoints : 1;
     return Padding(
-      padding: const EdgeInsets.all(10),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      child: Column(
         children: List.generate(entries.length, (i) {
           final entry = entries[i];
           final isMe = !isGuest && entry.userId == myUserId;
-          return Expanded(
-            child: Padding(
-              padding: EdgeInsets.only(left: i == 0 ? 0 : 8),
-              child: _PodiumCard(
-                entry: entry,
-                isMe: isMe,
-                dayUnit: dayUnit,
-                meLabel: meLabel,
-              ),
+          return Padding(
+            padding: EdgeInsets.only(bottom: i < entries.length - 1 ? 14 : 0),
+            child: _GaugeRow(
+              entry: entry,
+              isMe: isMe,
+              dayUnit: dayUnit,
+              meLabel: meLabel,
+              maxPoints: maxPoints,
             ),
           );
         }),
@@ -595,86 +604,101 @@ class _PodiumSection extends StatelessWidget {
   }
 }
 
-class _PodiumCard extends StatelessWidget {
+class _GaugeRow extends StatelessWidget {
   final StreakRaceEntry entry;
   final bool isMe;
   final String dayUnit;
   final String meLabel;
+  final int maxPoints;
 
-  const _PodiumCard({
+  const _GaugeRow({
     required this.entry,
     required this.isMe,
     required this.dayUnit,
     required this.meLabel,
+    required this.maxPoints,
   });
 
   @override
   Widget build(BuildContext context) {
     const medals = ['🥇', '🥈', '🥉'];
-    final medal = entry.rank >= 1 && entry.rank <= 3
-        ? medals[entry.rank - 1]
-        : '${entry.rank}';
+    final rank = entry.rank;
+    final medal = rank >= 1 && rank <= 3 ? medals[rank - 1] : '$rank';
+    final progress = maxPoints > 0 ? (entry.monthlyPoints / maxPoints).clamp(0.0, 1.0) : 0.0;
 
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
-      decoration: BoxDecoration(
-        color: isMe
-            ? AppColors.primary.withValues(alpha: 0.08)
-            : context.colorOutline.withValues(alpha: 0.18),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(medal, style: const TextStyle(fontSize: 20)),
-          const SizedBox(height: 5),
-          Text(
-            entry.displayName,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: isMe ? FontWeight.bold : FontWeight.w500,
-              color: isMe ? AppColors.primary : context.colorTextPrimary,
-            ),
-            textAlign: TextAlign.center,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          if (isMe) ...[
-            const SizedBox(height: 3),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-              decoration: BoxDecoration(
-                color: AppColors.primary,
-                borderRadius: BorderRadius.circular(8),
+    final barColor = rank == 1
+        ? const Color(0xFFFFB800)
+        : rank == 2
+            ? const Color(0xFF9E9E9E)
+            : const Color(0xFFCD7F32);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text(medal, style: const TextStyle(fontSize: 18)),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Flexible(
+                    child: Text(
+                      entry.displayName,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: isMe ? FontWeight.bold : FontWeight.w500,
+                        color: isMe ? AppColors.primary : context.colorTextPrimary,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  if (isMe) ...[
+                    const SizedBox(width: 6),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        meLabel,
+                        style: const TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
               ),
-              child: Text(
-                meLabel,
-                style: const TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
+            ),
+            const SizedBox(width: 8),
+            Text(
+              '${entry.monthlyPoints} $dayUnit',
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.bold,
+                color: isMe ? AppColors.primary : context.colorTextSecondary,
               ),
             ),
           ],
-          const SizedBox(height: 5),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-            decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Text(
-              '${entry.monthlyPoints} $dayUnit',
-              style: const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
-                color: AppColors.primary,
-              ),
+        ),
+        const SizedBox(height: 6),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(4),
+          child: LinearProgressIndicator(
+            value: progress,
+            minHeight: 8,
+            backgroundColor: context.colorOutline.withValues(alpha: 0.25),
+            valueColor: AlwaysStoppedAnimation<Color>(
+              isMe ? AppColors.primary : barColor,
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
@@ -710,20 +734,16 @@ class _RankRow extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
         children: [
-          SizedBox(
-            width: 36,
-            child: isTop3
-                ? Text(medals[rank - 1], style: const TextStyle(fontSize: 18))
-                : Text(
-                    '$rank',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: isMe ? AppColors.primary : context.colorTextSecondary,
-                    ),
-                    textAlign: TextAlign.center,
+          isTop3
+              ? Text(medals[rank - 1], style: const TextStyle(fontSize: 18))
+              : Text(
+                  '$rank',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: isMe ? AppColors.primary : context.colorTextSecondary,
                   ),
-          ),
+                ),
           const SizedBox(width: 8),
           Expanded(
             child: Row(

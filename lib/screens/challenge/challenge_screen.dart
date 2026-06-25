@@ -274,9 +274,11 @@ class ChallengeScreen extends StatelessWidget {
     String challengeId,
     dynamic s,
   ) async {
-    await showDialog<void>(
+    await showModalBottomSheet<void>(
       context: context,
-      builder: (_) => _AddLogDialog(challengeId: challengeId, provider: provider, s: s),
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => _AddLogSheet(challengeId: challengeId, provider: provider, s: s),
     );
   }
 
@@ -310,18 +312,18 @@ class ChallengeScreen extends StatelessWidget {
   }
 }
 
-class _AddLogDialog extends StatefulWidget {
+class _AddLogSheet extends StatefulWidget {
   final String challengeId;
   final ChallengeProvider provider;
   final dynamic s;
 
-  const _AddLogDialog({required this.challengeId, required this.provider, required this.s});
+  const _AddLogSheet({required this.challengeId, required this.provider, required this.s});
 
   @override
-  State<_AddLogDialog> createState() => _AddLogDialogState();
+  State<_AddLogSheet> createState() => _AddLogSheetState();
 }
 
-class _AddLogDialogState extends State<_AddLogDialog> {
+class _AddLogSheetState extends State<_AddLogSheet> {
   final _controller = TextEditingController();
 
   @override
@@ -330,33 +332,69 @@ class _AddLogDialogState extends State<_AddLogDialog> {
     super.dispose();
   }
 
+  void _save() {
+    final content = _controller.text.trim();
+    if (content.isNotEmpty) {
+      widget.provider.addDailyLog(widget.challengeId, content);
+    }
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     final s = widget.s;
-    return AlertDialog(
-      title: Text(s.shareThoughtTitle),
-      content: TextField(
-        controller: _controller,
-        maxLines: 4,
-        decoration: InputDecoration(hintText: s.shareThoughtHint),
-        autofocus: true,
+    return Padding(
+      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(24, 24, 24, 32),
+        decoration: BoxDecoration(
+          color: context.colorSurface,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  s.shareThoughtTitle,
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _controller,
+              maxLines: 4,
+              autofocus: true,
+              keyboardType: TextInputType.multiline,
+              textInputAction: TextInputAction.newline,
+              decoration: InputDecoration(hintText: s.shareThoughtHint),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text(s.cancel),
+                ),
+                const SizedBox(width: 8),
+                ElevatedButton(
+                  onPressed: _save,
+                  child: Text(s.save),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text(s.cancel),
-        ),
-        ElevatedButton(
-          onPressed: () {
-            final content = _controller.text.trim();
-            if (content.isNotEmpty) {
-              widget.provider.addDailyLog(widget.challengeId, content);
-            }
-            Navigator.of(context).pop();
-          },
-          child: Text(s.save),
-        ),
-      ],
     );
   }
 }
