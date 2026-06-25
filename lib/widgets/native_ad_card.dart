@@ -16,28 +16,35 @@ class _NativeAdCardState extends State<NativeAdCard> {
 
   static String get _adUnitId {
     if (Platform.isAndroid) {
-      return 'ca-app-pub-3940256099942544/2247696110';
+      return 'ca-app-pub-7794167160748856/3780859686';
     }
-    return 'ca-app-pub-3940256099942544/3986624511';
+    return 'ca-app-pub-7794167160748856/1238456829';
   }
 
   @override
   void initState() {
     super.initState();
+    _loadAd();
+  }
+
+  void _loadAd() {
     _ad = NativeAd(
       adUnitId: _adUnitId,
       factoryId: 'adFactorySmall',
       listener: NativeAdListener(
-        onAdLoaded: (_) => setState(() => _loaded = true),
+        onAdLoaded: (_) {
+          if (!mounted) return;
+          setState(() => _loaded = true);
+        },
         onAdFailedToLoad: (ad, error) {
-          debugPrint('[AdService] 네이티브 광고 로드 실패: $error');
+          debugPrint('[NativeAd] 로드 실패 (code=${error.code}): ${error.message}');
           ad.dispose();
-          _ad = null;
+          if (!mounted) return;
+          setState(() => _ad = null);
         },
       ),
       request: const AdRequest(),
-    );
-    _ad!.load();
+    )..load();
   }
 
   @override

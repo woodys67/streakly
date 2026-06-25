@@ -8,12 +8,11 @@ class AdService {
   factory AdService() => _instance;
   AdService._internal();
 
-  // TODO: 출시 전 실제 AdMob 광고 단위 ID로 교체
   static String get _rewardedAdUnitId {
     if (Platform.isAndroid) {
-      return 'ca-app-pub-3940256099942544/5224354917'; // Android 테스트 ID
+      return 'ca-app-pub-7794167160748856/8322739924';
     }
-    return 'ca-app-pub-3940256099942544/1712485313'; // iOS 테스트 ID
+    return 'ca-app-pub-7794167160748856/1234587398';
   }
 
   RewardedAd? _rewardedAd;
@@ -21,6 +20,9 @@ class AdService {
 
   Future<void> initialize() async {
     await MobileAds.instance.initialize();
+    await MobileAds.instance.updateRequestConfiguration(
+      RequestConfiguration(testDeviceIds: ['82F1319C316ECC5A63C1B7FA65FE074B']),
+    );
     loadRewardedAd();
   }
 
