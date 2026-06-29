@@ -45,7 +45,7 @@ class AppStrings {
   String get ok => _s(en:'OK', ko:'확인', ja:'OK', es:'Aceptar');
   String get recoverStreak => _s(en:'Recover Streak', ko:'스트릭 복구', ja:'ストリーク回復', es:'Recuperar racha');
   // ── Pause Ticket ─────────────────────────────────────────────
-  String get pauseTicketButton => _s(en:'Use Pause Ticket', ko:'일시정지', ja:'一時停止チケット使用', es:'Usar ticket de pausa');
+  String get pauseTicketButton => _s(en:'Pause', ko:'일시정지', ja:'一時停止', es:'Pausar');
   String get pauseTicketTitle => _s(en:'Challenge Pause Ticket', ko:'챌린지 정지권', ja:'チャレンジ一時停止チケット', es:'Ticket de pausa');
   String get pauseTicketDesc => _s(
     en:'During the selected period, your streak will not break even if you miss a day.\n\nIdeal for vacations or special occasions.\n\n₩1,900',
@@ -421,10 +421,10 @@ class AppStrings {
     es:'Experiencia sin anuncios',
   );
   String get subscribeBenefitInstantRecovery => _s(
-    en:'Instant streak recovery (no ad)',
-    ko:'광고 없이 즉시 스트릭 복구',
-    ja:'広告なしでスト리ーク即時回復',
-    es:'Recuperación de racha instantánea (sin anuncio)',
+    en:'Instant streak recovery',
+    ko:'스트릭 즉시 복구',
+    ja:'ストリーク即時回復',
+    es:'Recuperación de racha instantánea',
   );
   String get subscribeBenefitPause => _s(
     en:'Unlimited challenge pause',

@@ -1,6 +1,5 @@
 import Flutter
 import UIKit
-import google_mobile_ads
 
 @main
 @objc class AppDelegate: FlutterAppDelegate, FlutterImplicitEngineDelegate {
@@ -13,10 +12,5 @@ import google_mobile_ads
 
   func didInitializeImplicitFlutterEngine(_ engineBridge: FlutterImplicitEngineBridge) {
     GeneratedPluginRegistrant.register(with: engineBridge.pluginRegistry)
-    FLTGoogleMobileAdsPlugin.registerNativeAdFactory(
-      engineBridge.pluginRegistry,
-      factoryId: "adFactorySmall",
-      nativeAdFactory: NativeAdFactoryImpl()
-    )
   }
 }

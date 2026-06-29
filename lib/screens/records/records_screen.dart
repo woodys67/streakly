@@ -12,7 +12,6 @@ import '../../providers/streak_race_provider.dart';
 import '../../services/badge_catalog.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/circular_progress.dart';
-import '../../widgets/native_ad_card.dart';
 import '../auth/landing_screen.dart';
 import 'badge_collection_screen.dart';
 import 'completed_challenge_detail_screen.dart';
@@ -61,10 +60,6 @@ class RecordsScreen extends StatelessWidget {
                     myDisplayName: settingsProvider.userName,
                   ),
                 ),
-                if (!subscription.isPremium) ...[
-                  const SizedBox(height: 16),
-                  const NativeAdCard(),
-                ],
                 const SizedBox(height: 16),
                 _BadgeSummaryCard(badgeProvider: badgeProvider),
                 const SizedBox(height: 16),

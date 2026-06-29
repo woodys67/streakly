@@ -71,8 +71,6 @@ class SubscriptionBottomSheet extends StatelessWidget {
           const SizedBox(height: 20),
           _BenefitRow(icon: Icons.flag_outlined, label: s.subscribeBenefitUnlimitedChallenges),
           const SizedBox(height: 10),
-          _BenefitRow(icon: Icons.block, label: s.subscribeBenefitNoAds),
-          const SizedBox(height: 10),
           _BenefitRow(icon: Icons.refresh, label: s.subscribeBenefitInstantRecovery),
           const SizedBox(height: 10),
           _BenefitRow(icon: Icons.pause_circle_outline, label: s.subscribeBenefitPause),

@@ -1,14 +1,11 @@
-import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
-import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'config/supabase_config.dart';
 import 'app.dart';
 import 'services/notification_service.dart';
-import 'services/ad_service.dart';
 
 Future<void> main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -33,19 +30,6 @@ Future<void> main() async {
     debugPrint('[Main] Notification init failed: $e');
   }
 
-  if (Platform.isIOS) {
-    try {
-      await AppTrackingTransparency.requestTrackingAuthorization();
-    } catch (e) {
-      debugPrint('[Main] ATT request failed: $e');
-    }
-  }
-
-  try {
-    await AdService().initialize().timeout(const Duration(seconds: 5));
-  } catch (e) {
-    debugPrint('[Main] AdService init failed: $e');
-  }
 
   final elapsed = DateTime.now().difference(splashStart);
   const minSplash = Duration(seconds: 2);
