@@ -940,8 +940,10 @@ O cartão **Sequências Totais** mostra a soma das sequências atuais de todos o
     'ko': '''
 ## 스트릭 복구란?
 
-어제 루틴을 빠뜨렸을 때, **짧은 광고를 시청해 스트릭을 되살리는** 기능입니다.
+어제 루틴을 빠뜨렸을 때, **Pro 구독자가 스트릭을 즉시 되살리는** 기능입니다.
 "어차피 끊겼으니 포기"라고 생각하지 말고 지속성을 유지하세요.
+
+> 스트릭 복구는 **Pro 전용** 기능입니다.
 
 ---
 
@@ -958,8 +960,7 @@ O cartão **Sequências Totais** mostra a soma das sequências atuais de todos o
 
 1. 홈 화면에서 오늘 **미완료** 상태인 루틴 카드를 확인합니다.
 2. 카드 우측 하단의 **스트릭 복구** 버튼을 탭합니다.
-3. 확인 다이얼로그에서 **광고 시청** 버튼을 누릅니다.
-4. 광고가 끝나면 어제 날짜가 완료 처리됩니다.
+3. 복구가 즉시 완료됩니다.
 
 ---
 
@@ -976,8 +977,10 @@ O cartão **Sequências Totais** mostra a soma das sequências atuais de todos o
     'en': '''
 ## What is Streak Recovery?
 
-When you miss yesterday's routine, you can **watch a short ad to restore your streak**.
+When you miss yesterday's routine, **Pro subscribers can instantly restore their streak**.
 Don't give up — keep your habit going.
+
+> Streak Recovery is a **Pro-only** feature.
 
 ---
 
@@ -994,8 +997,7 @@ Don't give up — keep your habit going.
 
 1. Find the **incomplete** routine card on the Home screen.
 2. Tap the **Recover Streak** button at the bottom-right of the card.
-3. Tap **Watch Ad** in the confirmation dialog.
-4. Once the ad ends, yesterday is marked as complete.
+3. Recovery completes instantly.
 
 ---
 
@@ -1012,8 +1014,10 @@ Don't give up — keep your habit going.
     'ja': '''
 ## ストリーク回復とは？
 
-昨日のルーティンを逃したとき、**短い広告を見てストリークを復活させる**機能です。
+昨日のルーティンを逃したとき、**Proサブスクライバーがストリークを即座に復活させる**機能です。
 「どうせ途切れたから諦める」と思わず、継続を続けましょう。
+
+> ストリーク回復は **Pro専用**機能です。
 
 ---
 
@@ -1030,8 +1034,7 @@ Don't give up — keep your habit going.
 
 1. ホーム画面で今日**未完了**のルーティンカードを確認します。
 2. カード右下の **ストリーク回復** ボタンをタップします。
-3. 確認ダイアログで**広告を見る**ボタンを押します。
-4. 広告終了後、昨日が完了処理されます。
+3. 即座に回復が完了します。
 
 ---
 
@@ -1048,8 +1051,10 @@ Don't give up — keep your habit going.
     'zhCN': '''
 ## 什么是连续恢复？
 
-当您漏掉昨天的任务时，可以**观看短广告恢复连续记录**。
+当您漏掉昨天的任务时，**Pro订阅者可以立即恢复连续记录**。
 不要"反正断了就放弃"，继续坚持吧。
+
+> 连续恢复是 **Pro专属**功能。
 
 ---
 
@@ -1066,8 +1071,7 @@ Don't give up — keep your habit going.
 
 1. 在主页找到今天**未完成**的任务卡片。
 2. 点击卡片右下角的 **恢复连续** 按钮。
-3. 在确认对话框中点击**观看广告**。
-4. 广告结束后，昨天标记为完成。
+3. 立即完成恢复。
 
 ---
 
@@ -1084,8 +1088,10 @@ Don't give up — keep your habit going.
     'es': '''
 ## ¿Qué es la recuperación de racha?
 
-Cuando pierdes la rutina de ayer, puedes **ver un anuncio corto para restaurar tu racha**.
+Cuando pierdes la rutina de ayer, los **suscriptores Pro pueden restaurar su racha al instante**.
 No pienses "ya la rompí, para qué seguir" — ¡sigue adelante!
+
+> La recuperación de racha es una función **exclusiva de Pro**.
 
 ---
 
@@ -1102,8 +1108,7 @@ No pienses "ya la rompí, para qué seguir" — ¡sigue adelante!
 
 1. Encuentra la tarjeta de rutina **incompleta** en la pantalla de Inicio.
 2. Toca el botón **Recuperar racha** en la parte inferior derecha de la tarjeta.
-3. Toca **Ver anuncio** en el diálogo de confirmación.
-4. Al terminar el anuncio, ayer se marca como completado.
+3. La recuperación se completa al instante.
 
 ---
 
@@ -1120,8 +1125,10 @@ No pienses "ya la rompí, para qué seguir" — ¡sigue adelante!
     'de': '''
 ## Was ist die Streak-Wiederherstellung?
 
-Wenn du die gestrige Routine verpasst hast, kannst du **eine kurze Werbung ansehen, um deinen Streak wiederherzustellen**.
+Wenn du die gestrige Routine verpasst hast, können **Pro-Abonnenten ihren Streak sofort wiederherstellen**.
 Denk nicht "Ich hab's eh schon verpasst" — mach einfach weiter!
+
+> Streak-Wiederherstellung ist eine **Pro-exklusive** Funktion.
 
 ---
 
@@ -1138,8 +1145,7 @@ Denk nicht "Ich hab's eh schon verpasst" — mach einfach weiter!
 
 1. Finde die **unvollständige** Routine-Karte auf der Startseite.
 2. Tippe auf den **Serie wiederherstellen**-Button unten rechts auf der Karte.
-3. Tippe auf **Werbung ansehen** im Bestätigungsdialog.
-4. Nach dem Werbeende wird Gestern als erledigt markiert.
+3. Die Wiederherstellung wird sofort abgeschlossen.
 
 ---
 
@@ -1156,8 +1162,10 @@ Denk nicht "Ich hab's eh schon verpasst" — mach einfach weiter!
     'pt': '''
 ## O que é a recuperação de sequência?
 
-Quando você perde a rotina de ontem, pode **assistir a um anúncio curto para restaurar sua sequência**.
+Quando você perde a rotina de ontem, **assinantes Pro podem restaurar sua sequência instantaneamente**.
 Não desista pensando "já quebrei" — continue em frente!
+
+> A recuperação de sequência é um recurso **exclusivo do Pro**.
 
 ---
 
@@ -1174,8 +1182,7 @@ Não desista pensando "já quebrei" — continue em frente!
 
 1. Encontre o cartão de rotina **incompleto** na tela Início.
 2. Toque no botão **Recuperar sequência** no canto inferior direito do cartão.
-3. Toque em **Assistir anúncio** no diálogo de confirmação.
-4. Após o anúncio, ontem é marcado como concluído.
+3. A recuperação é concluída instantaneamente.
 
 ---
 
@@ -1192,8 +1199,10 @@ Não desista pensando "já quebrei" — continue em frente!
     'ru': '''
 ## Что такое восстановление серии?
 
-Если вы пропустили вчерашнюю рутину, можно **посмотреть короткую рекламу, чтобы восстановить серию**.
+Если вы пропустили вчерашнюю рутину, **подписчики Pro могут мгновенно восстановить серию**.
 Не думайте "всё равно уже прервал" — продолжайте!
+
+> Восстановление серии — функция **только для Pro**.
 
 ---
 
@@ -1210,8 +1219,7 @@ Não desista pensando "já quebrei" — continue em frente!
 
 1. Найдите **невыполненную** карточку задачи на главном экране.
 2. Нажмите кнопку **Восстановить серию** в правом нижнем углу карточки.
-3. В диалоге нажмите **Смотреть рекламу**.
-4. После просмотра рекламы вчера засчитывается как выполненное.
+3. Восстановление завершается мгновенно.
 
 ---
 
@@ -1905,15 +1913,15 @@ Vá para a aba **📊 Registros** → toque no cartão Coleção de medalhas.
   };
 
   // ─────────────────────────────────────────────────────────────
-  // 정지권
+  // 일시정지
   // ─────────────────────────────────────────────────────────────
   static const Map<String, String> _pauseTicket = {
     'ko': '''
-## 정지권이란?
+## 일시정지란?
 
 휴가, 경조사 등 부득이한 사정으로 챌린지를 수행하기 어려운 기간을 **미리 지정**해두면, 해당 기간 동안 루틴을 하지 않아도 **스트릭이 끊기지 않는** 기능입니다.
 
-> 정지권은 유료 단건 구매 상품입니다.
+> 일시정지는 유료 단건 구매 상품입니다.
 
 ---
 
@@ -1929,10 +1937,10 @@ Vá para a aba **📊 Registros** → toque no cartão Coleção de medalhas.
 ## 사용 방법
 
 1. 하단 탭 **🚩 챌린지** 화면으로 이동합니다.
-2. **정지권 사용** 버튼을 탭합니다.
+2. **일시정지** 버튼을 탭합니다.
 3. 안내 및 가격을 확인하고 **구매하기** 버튼을 탭합니다.
 4. 정지할 기간(시작일 ~ 종료일)을 선택합니다.
-5. 선택 완료 후 해당 기간에 정지권이 적용됩니다.
+5. 선택 완료 후 해당 기간에 일시정지가 적용됩니다.
 
 ---
 
@@ -1950,19 +1958,19 @@ Vá para a aba **📊 Registros** → toque no cartão Coleção de medalhas.
 
 ## 스트릭 복구와의 차이
 
-| 구분 | 정지권 | 스트릭 복구 |
+| 구분 | 일시정지 | 스트릭 복구 |
 |---|---|---|
 | 시점 | **사전** 설정 | **사후** 복구 |
-| 방법 | 유료 구매 | 광고 시청 |
+| 방법 | 유료 구매 | Pro 즉시 복구 |
 | 기간 | 여러 날 지정 가능 | 직전 하루만 |
 | 제한 | 없음 | 챌린지당 7일 1회 |
 ''',
     'en': '''
-## What is a Pause Ticket?
+## What is Pause?
 
-A Pause Ticket lets you **designate a period in advance** — such as a vacation or special occasion — during which your streak will **not break** even if you skip your routine.
+Pause lets you **designate a period in advance** — such as a vacation or special occasion — during which your streak will **not break** even if you skip your routine.
 
-> Pause Tickets are available as a one-time paid purchase.
+> Pause is available as a one-time paid purchase.
 
 ---
 
@@ -1978,7 +1986,7 @@ A Pause Ticket lets you **designate a period in advance** — such as a vacation
 ## How to Use
 
 1. Go to the **🚩 Challenge** tab.
-2. Tap the **Use Pause Ticket** button.
+2. Tap the **Pause** button.
 3. Review the description and price, then tap **Buy**.
 4. Select your pause period (start date ~ end date).
 5. The pause is applied immediately after selection.
@@ -1997,21 +2005,21 @@ You can cancel a pause before it ends.
 
 ---
 
-## Pause Ticket vs. Streak Recovery
+## Pause vs. Streak Recovery
 
-| | Pause Ticket | Streak Recovery |
+| | Pause | Streak Recovery |
 |---|---|---|
 | Timing | **Before** (set in advance) | **After** (retroactive) |
-| Method | Paid purchase | Watch an ad |
+| Method | Paid purchase | Pro instant recovery |
 | Duration | Multiple days | Previous day only |
 | Limit | None | Once per 7 days per challenge |
 ''',
     'ja': '''
-## 一時停止チケットとは？
+## 一時停止とは？
 
 休暇や冠婚葬祭など、やむを得ない事情でチャレンジが難しい期間を**事前に指定**することで、その期間中ルーティンをこなさなくても**ストリークが途切れない**機能です。
 
-> 一時停止チケットは有料の単品購入商品です。
+> 一時停止は有料の単品購入商品です。
 
 ---
 
@@ -2027,7 +2035,7 @@ You can cancel a pause before it ends.
 ## 使い方
 
 1. **🚩 チャレンジ**タブへ移動します。
-2. **一時停止チケット使用**ボタンをタップします。
+2. **一時停止**ボタンをタップします。
 3. 説明と価格を確認し、**購入する**をタップします。
 4. 一時停止する期間（開始日〜終了日）を選択します。
 5. 選択完了後、その期間に一時停止が適用されます。
@@ -2048,19 +2056,19 @@ You can cancel a pause before it ends.
 
 ## ストリーク回復との違い
 
-| 項目 | 一時停止チケット | ストリーク回復 |
+| 項目 | 一時停止 | ストリーク回復 |
 |---|---|---|
 | タイミング | **事前**設定 | **事後**回復 |
-| 方法 | 有料購入 | 広告視聴 |
+| 方法 | 有料購入 | Pro即時回復 |
 | 期間 | 複数日指定可能 | 直前の1日のみ |
 | 制限 | なし | チャレンジごと7日1回 |
 ''',
     'es': '''
-## ¿Qué es un Ticket de pausa?
+## ¿Qué es Pausar?
 
-Un Ticket de pausa te permite **designar un período con antelación** — como vacaciones o una ocasión especial — durante el cual tu racha **no se romperá** aunque te saltes la rutina.
+Pausar te permite **designar un período con antelación** — como vacaciones o una ocasión especial — durante el cual tu racha **no se romperá** aunque te saltes la rutina.
 
-> Los Tickets de pausa son una compra de pago única.
+> Pausar está disponible como una compra de pago única.
 
 ---
 
@@ -2076,7 +2084,7 @@ Un Ticket de pausa te permite **designar un período con antelación** — como 
 ## Cómo usarlo
 
 1. Ve a la pestaña **🚩 Retos**.
-2. Toca el botón **Usar Ticket de pausa**.
+2. Toca el botón **Pausar**.
 3. Revisa la descripción y el precio, luego toca **Comprar**.
 4. Selecciona el período de pausa (fecha inicio ~ fecha fin).
 5. La pausa se aplica de inmediato tras la selección.
@@ -2095,12 +2103,12 @@ Puedes cancelar la pausa antes de que termine.
 
 ---
 
-## Ticket de pausa vs. Recuperación de racha
+## Pausar vs. Recuperación de racha
 
-| | Ticket de pausa | Recuperación de racha |
+| | Pausar | Recuperación de racha |
 |---|---|---|
 | Momento | **Antes** (configuración previa) | **Después** (retroactivo) |
-| Método | Compra de pago | Ver un anuncio |
+| Método | Compra de pago | Recuperación Pro instantánea |
 | Duración | Varios días | Solo el día anterior |
 | Límite | Ninguno | Una vez cada 7 días por reto |
 ''',

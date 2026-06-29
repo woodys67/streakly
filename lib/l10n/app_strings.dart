@@ -345,7 +345,7 @@ class AppStrings {
   String get guideStreakRecovery => _s(en:'Streak Recovery', ko:'스트릭 복구', ja:'ストリーク回復', es:'Recuperación de racha');
   String get guideWillpower => _s(en:'Willpower & Level', ko:'의지력 & 레벨', ja:'意志力 & レベル', es:'Fuerza de voluntad y nivel');
   String get guideBadge => _s(en:'Badge System', ko:'배지 시스템', ja:'バッジシステム', es:'Sistema de insignias');
-  String get guidePauseTicket => _s(en:'Pause Ticket', ko:'정지권', ja:'一時停止チケット', es:'Ticket de pausa');
+  String get guidePauseTicket => _s(en:'Pause', ko:'일시정지', ja:'一時停止', es:'Pausar');
   // 앱 소개 — 항목 설명
   String get guideHowToUseBody => _s(
     en:'Tap + to create a challenge and check off your routine every day. Complete all sub-routines to mark the day done. Check your progress on the Home screen.',
