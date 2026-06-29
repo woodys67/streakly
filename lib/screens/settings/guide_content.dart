@@ -1921,7 +1921,7 @@ Vá para a aba **📊 Registros** → toque no cartão Coleção de medalhas.
 
 휴가, 경조사 등 부득이한 사정으로 챌린지를 수행하기 어려운 기간을 **미리 지정**해두면, 해당 기간 동안 루틴을 하지 않아도 **스트릭이 끊기지 않는** 기능입니다.
 
-> 일시정지는 유료 단건 구매 상품입니다.
+> 일시정지는 **Pro 전용** 기능입니다.
 
 ---
 
@@ -1938,9 +1938,8 @@ Vá para a aba **📊 Registros** → toque no cartão Coleção de medalhas.
 
 1. 하단 탭 **🚩 챌린지** 화면으로 이동합니다.
 2. **일시정지** 버튼을 탭합니다.
-3. 안내 및 가격을 확인하고 **구매하기** 버튼을 탭합니다.
-4. 정지할 기간(시작일 ~ 종료일)을 선택합니다.
-5. 선택 완료 후 해당 기간에 일시정지가 적용됩니다.
+3. 정지할 기간(시작일 ~ 종료일)을 선택합니다.
+4. 선택 완료 후 해당 기간에 일시정지가 적용됩니다.
 
 ---
 
@@ -1952,8 +1951,6 @@ Vá para a aba **📊 Registros** → toque no cartão Coleção de medalhas.
 2. 배너 오른쪽의 **정지 해제** 버튼을 탭합니다.
 3. 확인 다이얼로그에서 동의하면 즉시 해제됩니다.
 
-> ⚠️ 정지를 해제해도 환불은 제공되지 않습니다.
-
 ---
 
 ## 스트릭 복구와의 차이
@@ -1961,7 +1958,7 @@ Vá para a aba **📊 Registros** → toque no cartão Coleção de medalhas.
 | 구분 | 일시정지 | 스트릭 복구 |
 |---|---|---|
 | 시점 | **사전** 설정 | **사후** 복구 |
-| 방법 | 유료 구매 | Pro 즉시 복구 |
+| 방법 | Pro 전용 | Pro 즉시 복구 |
 | 기간 | 여러 날 지정 가능 | 직전 하루만 |
 | 제한 | 없음 | 챌린지당 7일 1회 |
 ''',
@@ -1970,7 +1967,7 @@ Vá para a aba **📊 Registros** → toque no cartão Coleção de medalhas.
 
 Pause lets you **designate a period in advance** — such as a vacation or special occasion — during which your streak will **not break** even if you skip your routine.
 
-> Pause is available as a one-time paid purchase.
+> Pause is a **Pro-only** feature.
 
 ---
 
@@ -1987,9 +1984,8 @@ Pause lets you **designate a period in advance** — such as a vacation or speci
 
 1. Go to the **🚩 Challenge** tab.
 2. Tap the **Pause** button.
-3. Review the description and price, then tap **Buy**.
-4. Select your pause period (start date ~ end date).
-5. The pause is applied immediately after selection.
+3. Select your pause period (start date ~ end date).
+4. The pause is applied immediately after selection.
 
 ---
 
@@ -2001,8 +1997,6 @@ You can cancel a pause before it ends.
 2. Tap the **End Pause** button on the right.
 3. Confirm in the dialog — the pause ends immediately.
 
-> ⚠️ No refund is issued when ending a pause early.
-
 ---
 
 ## Pause vs. Streak Recovery
@@ -2010,7 +2004,7 @@ You can cancel a pause before it ends.
 | | Pause | Streak Recovery |
 |---|---|---|
 | Timing | **Before** (set in advance) | **After** (retroactive) |
-| Method | Paid purchase | Pro instant recovery |
+| Method | Pro subscription | Pro instant recovery |
 | Duration | Multiple days | Previous day only |
 | Limit | None | Once per 7 days per challenge |
 ''',
@@ -2019,7 +2013,7 @@ You can cancel a pause before it ends.
 
 休暇や冠婚葬祭など、やむを得ない事情でチャレンジが難しい期間を**事前に指定**することで、その期間中ルーティンをこなさなくても**ストリークが途切れない**機能です。
 
-> 一時停止は有料の単品購入商品です。
+> 一時停止は **Pro専用** 機能です。
 
 ---
 
@@ -2036,9 +2030,8 @@ You can cancel a pause before it ends.
 
 1. **🚩 チャレンジ**タブへ移動します。
 2. **一時停止**ボタンをタップします。
-3. 説明と価格を確認し、**購入する**をタップします。
-4. 一時停止する期間（開始日〜終了日）を選択します。
-5. 選択完了後、その期間に一時停止が適用されます。
+3. 一時停止する期間（開始日〜終了日）を選択します。
+4. 選択完了後、その期間に一時停止が適用されます。
 
 ---
 
@@ -2050,8 +2043,6 @@ You can cancel a pause before it ends.
 2. バナー右側の**一時停止を解除**ボタンをタップします。
 3. 確認ダイアログで同意すると即座に解除されます。
 
-> ⚠️ 早期解除しても返金はされません。
-
 ---
 
 ## ストリーク回復との違い
@@ -2059,7 +2050,7 @@ You can cancel a pause before it ends.
 | 項目 | 一時停止 | ストリーク回復 |
 |---|---|---|
 | タイミング | **事前**設定 | **事後**回復 |
-| 方法 | 有料購入 | Pro即時回復 |
+| 方法 | Pro限定 | Pro即時回復 |
 | 期間 | 複数日指定可能 | 直前の1日のみ |
 | 制限 | なし | チャレンジごと7日1回 |
 ''',
@@ -2068,7 +2059,7 @@ You can cancel a pause before it ends.
 
 Pausar te permite **designar un período con antelación** — como vacaciones o una ocasión especial — durante el cual tu racha **no se romperá** aunque te saltes la rutina.
 
-> Pausar está disponible como una compra de pago única.
+> Pausar es una función **exclusiva de Pro**.
 
 ---
 
@@ -2085,9 +2076,8 @@ Pausar te permite **designar un período con antelación** — como vacaciones o
 
 1. Ve a la pestaña **🚩 Retos**.
 2. Toca el botón **Pausar**.
-3. Revisa la descripción y el precio, luego toca **Comprar**.
-4. Selecciona el período de pausa (fecha inicio ~ fecha fin).
-5. La pausa se aplica de inmediato tras la selección.
+3. Selecciona el período de pausa (fecha inicio ~ fecha fin).
+4. La pausa se aplica de inmediato tras la selección.
 
 ---
 
@@ -2099,8 +2089,6 @@ Puedes cancelar la pausa antes de que termine.
 2. Toca el botón **Cancelar pausa** a la derecha.
 3. Confirma en el diálogo — la pausa finaliza de inmediato.
 
-> ⚠️ No se realizará ningún reembolso al cancelar la pausa.
-
 ---
 
 ## Pausar vs. Recuperación de racha
@@ -2108,7 +2096,7 @@ Puedes cancelar la pausa antes de que termine.
 | | Pausar | Recuperación de racha |
 |---|---|---|
 | Momento | **Antes** (configuración previa) | **Después** (retroactivo) |
-| Método | Compra de pago | Recuperación Pro instantánea |
+| Método | Suscripción Pro | Recuperación Pro instantánea |
 | Duración | Varios días | Solo el día anterior |
 | Límite | Ninguno | Una vez cada 7 días por reto |
 ''',
