@@ -1,4 +1,4 @@
-package com.streakly.streakly
+package kr.dotone.streakly
 
 import io.flutter.embedding.android.FlutterActivity
 

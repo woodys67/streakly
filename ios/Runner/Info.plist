@@ -77,7 +77,15 @@
 				<string>Editor</string>
 				<key>CFBundleURLSchemes</key>
 				<array>
-					<string>REPLACE_WITH_REVERSED_GOOGLE_CLIENT_ID</string>
+					<string>com.googleusercontent.apps.1024221864426-6b2l6d8roj0r6jtijlccqg9du5vk8j8k</string>
+				</array>
+			</dict>
+			<dict>
+				<key>CFBundleTypeRole</key>
+				<string>Editor</string>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<string>kr.dotone.streakly</string>
 				</array>
 			</dict>
 		</array>

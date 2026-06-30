@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:360553833196:android:971cc48417af72a56d3bc9",
         "android_client_info": {
-          "package_name": "com.streakly.streakly"
+          "package_name": "kr.dotone.streakly"
         }
       },
       "oauth_client": [],

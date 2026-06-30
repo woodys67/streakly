@@ -1,9 +1,9 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
 import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -230,36 +230,52 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> signInWithGoogle() async {
+  /// Google 로그인 — Supabase OAuth 웹 플로우 사용.
+  Future<bool> signInWithGoogle() =>
+      _signInWithOAuthWebFlow(OAuthProvider.google, 'google_login_failed');
+
+  /// Supabase OAuth 웹 플로우 공통 처리.
+  ///
+  /// 네이티브 SDK(google_sign_in 등)는 idToken에 임의의 nonce를 삽입하는데 그 원본을
+  /// 알 수 없어 signInWithIdToken의 nonce 검증을 통과할 수 없다. 따라서 OAuth 웹
+  /// 플로우를 사용한다(서버가 nonce 관리). 실제 세션은 딥링크 콜백 후
+  /// onAuthStateChange(signedIn)로 완료되므로 Completer로 이벤트를 기다려
+  /// 기존 호출부와 동일하게 bool을 반환한다.
+  Future<bool> _signInWithOAuthWebFlow(
+      OAuthProvider provider, String failKey) async {
     _setLoading(true);
     _error = null;
+    StreamSubscription<AuthState>? sub;
     try {
-      final googleSignIn = GoogleSignIn(
-        clientId: SupabaseConfig.googleIosClientId,
-      );
-      final googleUser = await googleSignIn.signIn();
-      if (googleUser == null) return false; // user cancelled
+      final completer = Completer<bool>();
+      sub = _client.auth.onAuthStateChange.listen((data) {
+        if (data.event == AuthChangeEvent.signedIn && !completer.isCompleted) {
+          completer.complete(true);
+        }
+      });
 
-      final googleAuth = await googleUser.authentication;
-      final idToken = googleAuth.idToken;
-      if (idToken == null) {
-        _error = 'google_login_failed';
+      final launched = await _client.auth.signInWithOAuth(
+        provider,
+        redirectTo: SupabaseConfig.oauthRedirectUrl,
+        authScreenLaunchMode: LaunchMode.externalApplication,
+      );
+      if (!launched) {
+        _error = failKey;
         return false;
       }
 
-      final res = await _client.auth.signInWithIdToken(
-        provider: OAuthProvider.google,
-        idToken: idToken,
-        accessToken: googleAuth.accessToken,
-      );
-      _user = res.user;
-      return _user != null;
+      final ok = await completer.future
+          .timeout(const Duration(minutes: 3), onTimeout: () => false);
+      _user = _client.auth.currentUser;
+      return ok && isAuthenticated;
     } on AuthException catch (e) {
       _error = _parseAuthError(e.message);
       return false;
     } catch (_) {
+      _error = failKey;
       return false;
     } finally {
+      await sub?.cancel();
       _setLoading(false);
     }
   }
