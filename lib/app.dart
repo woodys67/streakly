@@ -96,11 +96,16 @@ class _AppInitializerState extends State<_AppInitializer> {
   Future<void> _onSignedOut() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('has_seen_onboarding');
-    if (mounted) setState(() => _seenOnboarding = false);
+    if (mounted) {
+      context.read<SubscriptionProvider>().setCurrentEmail(null);
+      setState(() => _seenOnboarding = false);
+    }
   }
 
   Future<void> _onSignedIn() async {
     if (!mounted) return;
+    final email = context.read<AuthProvider>().userEmail;
+    context.read<SubscriptionProvider>().setCurrentEmail(email);
     await context.read<BadgeProvider>().load();
   }
 
@@ -121,6 +126,11 @@ class _AppInitializerState extends State<_AppInitializer> {
       badges.load(),
       subscription.load(),
     ]);
+
+    // 이미 로그인된 상태로 앱 시작 시 테스트 계정 여부 반영
+    if (auth.isAuthenticated) {
+      subscription.setCurrentEmail(auth.userEmail);
+    }
 
     // Load streak race after challenges & subscription are ready
     unawaited(streakRace.load());

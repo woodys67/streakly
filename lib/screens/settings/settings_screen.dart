@@ -269,25 +269,14 @@ class SettingsScreen extends StatelessWidget {
     SubscriptionProvider subscription,
     dynamic s,
   ) async {
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(s.subscribeManage),
-        content: Text(s.subscribeCancelConfirm),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(false),
-            child: Text(s.cancel),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(true),
-            style: TextButton.styleFrom(foregroundColor: AppColors.error),
-            child: Text(s.subscribeCancelAction),
-          ),
-        ],
-      ),
-    );
-    if (confirmed == true) await subscription.cancel();
+    // 테스트 계정은 구독 관리 불필요
+    if (subscription.planType == 'test') return;
+
+    // 실제 구독 → OS 구독 관리 페이지로 이동
+    final url = Uri.parse(subscription.manageSubscriptionUrl);
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    }
   }
 }
 
@@ -864,26 +853,30 @@ class _SubscriptionCard extends StatelessWidget {
               Text(
                 subscription.planType == 'annual'
                     ? s.subscribeCurrentPlanAnnual
-                    : s.subscribeCurrentPlanMonthly,
+                    : subscription.planType == 'test'
+                        ? s.subscribeCurrentPlanTest
+                        : s.subscribeCurrentPlanMonthly,
                 style: TextStyle(fontSize: 14, color: context.colorTextSecondary),
               ),
               const SizedBox(height: 12),
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton(
-                  onPressed: onCancel,
-                  style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    side: const BorderSide(color: AppColors.error),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                  ),
-                  child: Text(
-                    s.subscribeManage,
-                    style: const TextStyle(color: AppColors.error, fontSize: 14),
+              // 테스트 계정은 구독 관리 버튼 숨김
+              if (subscription.planType != 'test')
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton(
+                    onPressed: onCancel,
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      side: const BorderSide(color: AppColors.error),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                    ),
+                    child: Text(
+                      s.subscribeManage,
+                      style: const TextStyle(color: AppColors.error, fontSize: 14),
+                    ),
                   ),
                 ),
-              ),
             ] else ...[
               Text(
                 s.subscribeProSubtitle,
@@ -893,21 +886,48 @@ class _SubscriptionCard extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: onSubscribe,
+                  onPressed: subscription.isLoading ? null : onSubscribe,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
                   ),
-                  child: Text(
-                    s.subscribeNow,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.white,
-                    ),
-                  ),
+                  child: subscription.isLoading
+                      ? const SizedBox(
+                          width: 18, height: 18,
+                          child: CircularProgressIndicator(
+                              strokeWidth: 2, color: AppColors.white))
+                      : Text(
+                          s.subscribeNow,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.white,
+                          ),
+                        ),
+                ),
+              ),
+              const SizedBox(height: 8),
+              // iOS App Store 가이드라인 필수: 구매 복원 버튼
+              SizedBox(
+                width: double.infinity,
+                child: TextButton(
+                  onPressed: subscription.isLoading
+                      ? null
+                      : () async {
+                          final wasEmpty = !subscription.isPremium;
+                          await subscription.restorePurchases();
+                          if (!context.mounted) return;
+                          final msg = subscription.isPremium && wasEmpty
+                              ? s.subscribeRestoreSuccess
+                              : s.subscribeRestoreEmpty;
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(SnackBar(content: Text(msg)));
+                        },
+                  child: Text(s.subscribeRestore,
+                      style: TextStyle(
+                          fontSize: 13, color: context.colorTextSecondary)),
                 ),
               ),
             ],
@@ -1195,7 +1215,7 @@ String _legalUrl(BuildContext context, String page) {
     'Spanish'  => '_es',
     _          => '_en',
   };
-  return 'https://woodys67.github.io/streakly/$page$suffix.html';
+  return 'https://dotone.kr/$page$suffix.html';
 }
 
 Future<void> _launchLegalUrl(BuildContext context, String url) async {

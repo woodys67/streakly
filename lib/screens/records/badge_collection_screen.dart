@@ -264,7 +264,7 @@ class _BadgeCell extends StatelessWidget {
                 ),
           const SizedBox(height: 4),
           Text(
-            isSecret ? '???' : badge.nameKo,
+            isSecret ? '???' : badge.localizedName(context.read<SettingsProvider>().strings.language),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,
@@ -327,7 +327,7 @@ class _BadgeDetailSheet extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            isSecret ? '???' : badge.nameKo,
+            isSecret ? '???' : badge.localizedName(context.read<SettingsProvider>().strings.language),
             style: const TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.bold,
@@ -344,7 +344,7 @@ class _BadgeDetailSheet extends StatelessWidget {
           _RarityRow(rarity: badge.rarity),
           const SizedBox(height: 12),
           Text(
-            isSecret ? context.read<SettingsProvider>().strings.badgeSecretCondition : badge.descKo,
+            isSecret ? context.read<SettingsProvider>().strings.badgeSecretCondition : badge.localizedDesc(context.read<SettingsProvider>().strings.language),
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 14, color: Colors.grey[700]),
           ),

@@ -462,6 +462,7 @@ class AppStrings {
   );
   String get subscribeCurrentPlanMonthly => _s(en:'Pro · Monthly', ko:'Pro · 월간 구독 중', ja:'Pro · 月間プラン中', es:'Pro · Mensual activo');
   String get subscribeCurrentPlanAnnual => _s(en:'Pro · Annual', ko:'Pro · 연간 구독 중', ja:'Pro · 年間プラン中', es:'Pro · Anual activo');
+  String get subscribeCurrentPlanTest => _s(en:'Pro · Test Account', ko:'Pro · 테스트 계정', ja:'Pro · テストアカウント', es:'Pro · Cuenta de prueba');
   String get subscribeManage => _s(en:'Manage Subscription', ko:'구독 관리', ja:'購読を管理', es:'Gestionar suscripción');
   String get subscribeCancelConfirm => _s(
     en:'Cancel subscription and return to free plan?',
@@ -470,6 +471,10 @@ class AppStrings {
     es:'¿Cancelar suscripción y volver al plan gratuito?',
   );
   String get subscribeCancelAction => _s(en:'Cancel Plan', ko:'해지', ja:'解約', es:'Cancelar');
+  String get subscribeRestore => _s(en:'Restore Purchases', ko:'구매 복원', ja:'購入を復元', es:'Restaurar compras');
+  String get subscribeRestoreSuccess => _s(en:'Subscription restored!', ko:'구독이 복원되었습니다!', ja:'購読が復元されました！', es:'¡Suscripción restaurada!');
+  String get subscribeRestoreEmpty => _s(en:'No purchases found to restore.', ko:'복원할 구독 내역이 없습니다.', ja:'復元できる購入履歴がありません。', es:'No se encontraron compras para restaurar.');
+  String get subscribeStoreUnavailable => _s(en:'Store is currently unavailable. Please try again later.', ko:'스토어에 연결할 수 없습니다. 잠시 후 다시 시도해주세요.', ja:'ストアに接続できません。後でもう一度お試しください。', es:'La tienda no está disponible. Inténtalo más tarde.');
   // ────────────────────────────────────────────────────────────
   String get signOut => _s(en:'Sign Out', ko:'로그아웃', ja:'サインアウト', es:'Cerrar sesión');
   String get streaklyMember => _s(en:'Streakly Member', ko:'Streakly 멤버', ja:'Streaklyメンバー', es:'Miembro de Streakly');

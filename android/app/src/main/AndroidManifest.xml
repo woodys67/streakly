@@ -1,4 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Google Play 인앱 결제 -->
+    <uses-permission android:name="com.android.vending.BILLING"/>
     <!-- 알림 표시 (Android 13+) -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <!-- 정확한 시간 알림 예약 (Android 12+) -->
@@ -7,7 +9,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
-        android:label="streakly"
+        android:label="Streakly"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

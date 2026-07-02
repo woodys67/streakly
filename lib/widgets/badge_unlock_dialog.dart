@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../l10n/app_strings.dart';
 import '../models/badge_definition.dart';
 import '../providers/settings_provider.dart';
 
@@ -121,7 +120,7 @@ class _BadgeCard extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            badge.nameKo,
+            badge.localizedName(context.read<SettingsProvider>().strings.language),
             style: const TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.bold,
@@ -140,7 +139,7 @@ class _BadgeCard extends StatelessWidget {
           _RarityChip(rarity: badge.rarity),
           const SizedBox(height: 12),
           Text(
-            badge.descKo,
+            badge.localizedDesc(context.read<SettingsProvider>().strings.language),
             textAlign: TextAlign.center,
             style: const TextStyle(fontSize: 14, color: Color(0xFF424242)),
           ),

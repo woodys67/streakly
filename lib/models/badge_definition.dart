@@ -25,4 +25,7 @@ class BadgeDefinition {
   });
 
   String get imagePath => 'assets/images/badges/$id.png';
+
+  String localizedName(String language) => language == 'Korean' ? nameKo : nameEn;
+  String localizedDesc(String language) => language == 'Korean' ? descKo : descEn;
 }
